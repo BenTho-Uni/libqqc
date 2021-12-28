@@ -25,7 +25,8 @@
 var NAVTREE =
 [
   [ "libqqc", "index.html", [
-    [ "Overview", "index.html#autotoc_md1", null ]
+    [ "Overview", "index.html#autotoc_md1", null ],
+    [ "Credits", "index.html#autotoc_md2", null ]
   ] ]
 ];
 
