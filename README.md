@@ -15,3 +15,9 @@
 [license-url]: https://github.com/BenTho-Uni/libqqc/blob/main/LICENSE
 
 libqqc is a library for high performance evaluation of quantum chemistry methods through quadrature schemes.
+
+# Credits
+
+The [Doxygen](https://www.doxygen.nl/index.html) documentation uses the [doxygen-awesome](https://jothepro.github.io/doxygen-awesome-css/index.html) theme.
+
+Badges by [Shields.io](https://shields.io).
