@@ -7,19 +7,19 @@
 using namespace std;
 
 namespace libqqc {
-int main (){
+    int main (int argc, char **argv[]){
 
-    cout << "Main reporting in" << endl;
+        cout << "Main reporting in" << endl;
 
-    ostringstream out;
-    out.str("");
+        ostringstream out;
+        out.str("");
 
-    function1(out);
-    cout << out.str() <<endl;
+        function1(out);
+        cout << out.str() <<endl;
 
-    function2(out);
-    cout << out.str() <<endl;
+        function2(out);
+        cout << out.str() <<endl;
 
-    return 0;
-}
+        return 0;
+    }
 } // namespace
