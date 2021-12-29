@@ -3,4 +3,4 @@
 mkdir build
 cd build
 
-cmake -DCMAKE_BUILD_TYPE=Release -DMAKE_CXX_FLAGS="-march=native" ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-march=native" ..
