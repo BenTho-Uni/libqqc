@@ -31,6 +31,15 @@
 *.out
 *.app
 
-#Documentation
+# Documentation
 docs/html/*
 docs/latex/*
+
+# Build
+build/*
+
+# Exe
+exe/*
+
+# Lib
+lib/*

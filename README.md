@@ -16,6 +16,23 @@
 
 libqqc is a library for high performance evaluation of quantum chemistry methods through quadrature schemes.
 
+## TODO:
+
+- [x] add primitive libr. structure
+- [x] add doxygen
+- [x] add workflow to build and deploy doxygen doc to github pages
+- [x] add files to test cmake setup
+- [x] add cmake setup for library
+- [x] add cmake setup for tests
+- [] add templates for libqqc/ and tests/ files for correct structure/documentation
+- [] add cmake structure for w/o Eigen, w/o OpenMP GPU offloading and  w/o MPI variant compiling (g++/mpic++)
+- [] add workflow for testing after commit
+- [] add missing badges
+- [] add data/h2o with bashscripts to download h3coh/, anthracene/, porphyrine/
+- [] transfer MP2 variants to libqqc
+- [] recheck performance on Justus 2.0
+- [] update Readme with scalings and results from Justus 2.0
+
 # Credits
 
 The [Doxygen](https://www.doxygen.nl/index.html) documentation uses the [doxygen-awesome](https://jothepro.github.io/doxygen-awesome-css/index.html) theme.
