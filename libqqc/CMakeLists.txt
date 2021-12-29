@@ -35,7 +35,8 @@ set(HDR
 
 #[[
     add_library(qqc ${SRC} ${HDR})
-    target_include_directories(qqc PUBLIC "${LIBQQC_SOURCE_DIR}" "${CMAKE_SOURCE_DIR}/eigen")
+    target_include_directories(qqc PUBLIC "${LIBQQC_SOURCE_DIR}" 
+        "${CMAKE_SOURCE_DIR}/eigen")
     target_compile_definitions(qqc PUBLIC EIGEN_DONT_PARALLELIZE)
     target_link_libraries(jqqc ${ARMADILLO_LIBRARIES} OpenMP::OpenMP_CXX)
     install(TARGETS jove DESTINATION "${CMAKE_SOURCE_DIR}/lib")

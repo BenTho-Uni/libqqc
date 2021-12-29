@@ -1,8 +1,6 @@
 # libqqc
 *Contributing Authors:* Benjamin Thomitzni
 
-## Overview
-
 | **Code** | [![][github-img]][github-url]  [![][license-img]][license-url]|
 | :----- | :----- |
 | **Documentation** | [![][docs-img]][docs-url] |
@@ -16,7 +14,39 @@
 
 libqqc is a library for high performance evaluation of quantum chemistry methods through quadrature schemes.
 
-## TODO:
+## Table of Contents
+
+- [libqqc](#libqqc)
+    - [Overview](#overview)
+        - [Performance](#performance)
+        - [Contents](#contents)
+    - [Installation](#installation)
+    - [Usage](#usage)
+    - [FAQ](#faq)
+    - [ToDo](#todo)
+- [Credits](#credits)
+
+## Overview
+
+### Performance
+
+### Contents
+
+#### /data: Example Data and Runs (Justus 2.0)
+
+#### /docs: Doxygen Documentation
+
+#### /libqqcs: Library Location
+
+#### /tests: Testing Suit 
+
+## Installation
+
+## Usage
+
+## FAQ
+
+## TODO
 
 - [x] add primitive libr. structure
 - [x] add doxygen
@@ -35,6 +65,7 @@ libqqc is a library for high performance evaluation of quantum chemistry methods
 
 # Credits
 
-The [Doxygen](https://www.doxygen.nl/index.html) documentation uses the [doxygen-awesome](https://jothepro.github.io/doxygen-awesome-css/index.html) theme.
+The [Doxygen](https://www.doxygen.nl/index.html) documentation uses the 
+[doxygen-awesome](https://jothepro.github.io/doxygen-awesome-css/index.html) theme.
 
 Badges by [Shields.io](https://shields.io).

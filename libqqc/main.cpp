@@ -15,7 +15,7 @@ namespace libqqc {
         out.str("");
 
         function1(out);
-        cout << out.str() <<endl;
+        cout <<out.str() <<endl;
 
         function2(out);
         cout << out.str() <<endl;
