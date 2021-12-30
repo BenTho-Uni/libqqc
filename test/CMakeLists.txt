@@ -11,6 +11,13 @@ set(HDR_FOLDER
     folder/test_file1.h
 )
 
+set(SRC_MPI
+    mpi_folder/test_file2_mpi.cpp
+)
+
+set(HDR_MPI
+    mpi_folder/test_file2_mpi.cpp
+)
 
 set(SRC
         ${SRC_FOLDER}
@@ -20,6 +27,18 @@ set(SRC
 set(HDR
         ${HDR_FOLDER}
 )
+
+if(LIBQQC_MPI)
+    set(SRC
+        ${SRC}
+        ${SRC_MPI}
+    )
+
+    set(HDR
+        ${HDR}
+        ${HDR_MPI}
+    )
+endif(LIBQQC_MPI)
 
 set(TARGETS
     libqqc_test

@@ -33,16 +33,15 @@ set(HDR
 )
 
 if(LIBQQC_MPI)
-set(SRC
-    ${SRC}
-    ${SRC_MPI}
-)
+    set(SRC
+        ${SRC}
+        ${SRC_MPI}
+    )
 
-set(HDR
-    ${HDR}
-    ${HDR_MPI}
-)
-
+    set(HDR
+        ${HDR}
+        ${HDR_MPI}
+    )
 endif(LIBQQC_MPI)
 
 #[[

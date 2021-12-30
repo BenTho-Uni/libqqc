@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.12)
 project(LIBQQC CXX)
 
 # Going through the configure options
@@ -12,12 +12,14 @@ endif(LIBQQC_OPENMP)
 
 if(LIBQQC_EIGEN)
     message("+++ Compiling with Eigen.")
+    add_compile_definitions(LIBQQC_WITH_EIGEN)
 else(LIBQQC_EIGEN)
     message("+++ Compiling without Eigen.")
 endif(LIBQQC_EIGEN)
 
 if(LIBQQC_GPU)
     message("+++ Compiling with OpenMP Offloading to GPU.")
+    add_compile_definitions(LIBQQC_WITH_GPU)
 else(LIBQQC_GPU)
     message("+++ Compiling without OpenMP Offloading to GPU.")
 endif(LIBQQC_GPU)
@@ -27,6 +29,7 @@ if(LIBQQC_MPI)
     find_package(MPI REQUIRED)
 # next line only needed when using OpenMPI
     add_definitions(-DOMPI_SKIP_MPICXX)
+    add_compile_definitions(LIBQQC_WITH_MPI)
 else(LIBQQC_MPI)
     message("+++ Compiling without MPI")
 endif(LIBQQC_MPI)
