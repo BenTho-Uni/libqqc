@@ -2,7 +2,6 @@
 #include <sstream>
 
 #include "folder/file1.h"
-#include "folder/file2_mpi.h"
 
 using namespace std;
 
@@ -16,9 +15,6 @@ namespace libqqc {
 
         function1(out);
         cout <<out.str() <<endl;
-
-        function2(out);
-        cout << out.str() <<endl;
 
         return 0;
     }

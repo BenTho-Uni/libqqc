@@ -15,11 +15,11 @@ set(HDR_ADDITIONAL
 
 # for compiling with MPI
 set(SRC_MPI
-    folder/file2_mpi.cpp
+    mpi_folder/file2_mpi.cpp
 )
 
 set(HDR_MPI
-    folder/file2_mpi.h
+    mpi_folder/file2_mpi.h
 )
 
 #SRC_ is a variable name
@@ -32,6 +32,19 @@ set(HDR
     ${SRC_ADDITIONAL}
 )
 
+if(LIBQQC_MPI)
+set(SRC
+    ${SRC}
+    ${SRC_MPI}
+)
+
+set(HDR
+    ${HDR}
+    ${HDR_MPI}
+)
+
+endif(LIBQQC_MPI)
+
 #[[
     add_library(qqc ${SRC} ${HDR})
     target_include_directories(qqc PUBLIC "${LIBQQC_SOURCE_DIR}" 
@@ -41,7 +54,7 @@ set(HDR
     install(TARGETS jove DESTINATION "${CMAKE_SOURCE_DIR}/lib")
 ]]
 
-add_library(qqc ${SRC} ${HDR} ${SRC_MPI} ${HDR_MPI})
+add_library(qqc ${SRC} ${HDR})
 target_include_directories(qqc PUBLIC "${LIBQQC_SOURCE_DIR}")
 if(LIBQQC_OPENMP) 
     target_link_libraries(qqc PUBLIC OpenMP::OpenMP_CXX)
