@@ -1,4 +1,3 @@
-
 #[[
     \brief CMake file for the general libqqc folder. 
     \authors Benjamin Thomitzni
@@ -42,17 +41,17 @@ set(HDR
     install(TARGETS jove DESTINATION "${CMAKE_SOURCE_DIR}/lib")
 ]]
 
-if(LIBQQC_WITH_MPI)
+if(LIBQQC_MPI)
     add_library(qqc ${SRC} ${HDR} ${SRC_MPI} ${HDR_MPI})
     target_include_directories(qqc PUBLIC "${LIBQQC_SOURCE_DIR}")
     target_link_libraries(qqc OpenMP::OpenMP_CXX)
     install(TARGETS libqqc DESTINATION "${CMAKE_SOURCE_DIR}/lib")
-else(LIBQQC_WITH_MPI)
+else(LIBQQC_MPI)
     add_library(qqc ${SRC} ${HDR})
     target_include_directories(qqc PUBLIC "${LIBQQC_SOURCE_DIR}")
     target_link_libraries(qqc OpenMP::OpenMP_CXX)
     install(TARGETS qqc DESTINATION "${CMAKE_SOURCE_DIR}/lib")
-endif(LIBQQC_WITH_MPI)
+endif(LIBQQC_MPI)
 
 
 

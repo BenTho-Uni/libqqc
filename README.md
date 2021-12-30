@@ -38,7 +38,7 @@ libqqc is a library for high performance evaluation of quantum chemistry methods
 
 #### /libqqcs: Library Location
 
-#### /tests: Testing Suit 
+#### /test: Testing Suit 
 
 ## Installation
 
@@ -53,8 +53,8 @@ libqqc is a library for high performance evaluation of quantum chemistry methods
 - [x] add workflow to build and deploy doxygen doc to github pages
 - [x] add files to test cmake setup
 - [x] add cmake setup for library
-- [x] add cmake setup for tests
-- [ ] add templates for libqqc/ and tests/ files for correct structure/documentation
+- [x] add cmake setup for test
+- [ ] add templates for libqqc/ and test/ files for correct structure/documentation
 - [ ] add cmake structure for w/o Eigen, w/o OpenMP GPU offloading and  w/o MPI variant compiling (g++/mpic++)
 - [ ] add workflow for testing after commit
 - [ ] add missing badges

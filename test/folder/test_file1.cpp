@@ -6,7 +6,7 @@
 #include <sstream>
 #include <string>
 
-// includes of the test headers
+// includes of the to be tested headers
 #include "../../libqqc/folder/file1.h"
 
 // namespaces

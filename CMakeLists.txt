@@ -10,11 +10,11 @@ find_package(Doxygen)
 # subdirectories for compiling
 add_subdirectory(libqqc)
 
-# generating variable if tests should be compiled, if, add directory
-option(LIBQQC_TESTS "building libqqc tests" ON) 
-if(LIBQQC_TESTS)
-    add_subdirectory(tests)
-endif(LIBQQC_TESTS)
+# generating variable if test should be compiled, if, add directory
+option(LIBQQC_TEST "building libqqc test" ON) 
+if(LIBQQC_TEST)
+    add_subdirectory(test)
+endif(LIBQQC_TEST)
 
 # find_package sets DOXYGEN_FOUND to true if found, compile doxygen
 if(DOXYGEN_FOUND)
