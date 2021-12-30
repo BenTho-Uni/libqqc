@@ -1,8 +1,33 @@
 cmake_minimum_required(VERSION 3.0)
 project(LIBQQC CXX)
 
-# required packages: OpenMP
-find_package(OpenMP REQUIRED)
+# Going through the configure options
+if(LIBQQC_OPENMP)
+    message("+++ Compiling with OpenMP.")
+    # required packages: OpenMP
+    find_package(OpenMP REQUIRED)
+else(LIBQQC_OPENMP)
+    message("+++ Compiling without OpenMP.")
+endif(LIBQQC_OPENMP)
+
+if(LIBQQC_EIGEN)
+    message("+++ Compiling with Eigen.")
+else(LIBQQC_EIGEN)
+    message("+++ Compiling without Eigen.")
+endif(LIBQQC_EIGEN)
+
+if(LIBQQC_GPU)
+    message("+++ Compiling with OpenMP Offloading to GPU.")
+else(LIBQQC_GPU)
+    message("+++ Compiling without OpenMP Offloading to GPU.")
+endif(LIBQQC_GPU)
+
+if(LIBQQC_MPI)
+    message("+++ Compiling with MPI.")
+else(LIBQQC_MPI)
+    message("+++ Compiling without MPI")
+endif(LIBQQC_MPI)
+
 
 # additional packages: Doxygen
 find_package(Doxygen)

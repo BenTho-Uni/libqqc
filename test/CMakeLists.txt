@@ -28,12 +28,9 @@ set(TARGETS
 add_library(qqc_test ${SRC} ${HDR})
 add_executable(libqqc_test ${SRC} ${HDR})
 
-if(LIBQQC_MPI)
-else(LIBQQC_MPI)
-        foreach(TARGET ${TARGETS})
-                target_link_libraries(${TARGET} qqc_test qqc)
-        endforeach(TARGET)
-        install(TARGETS libqqc_test DESTINATION "${CMAKE_SOURCE_DIR}/exe")
-endif(LIBQQC_MPI)
+foreach(TARGET ${TARGETS})
+        target_link_libraries(${TARGET} qqc_test qqc)
+endforeach(TARGET)
+install(TARGETS libqqc_test DESTINATION "${CMAKE_SOURCE_DIR}/exe")
 
 
