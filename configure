@@ -79,9 +79,11 @@ for var in "$@"; do
             ;;
         wEigen )    echo "Eigen not supported yet."
                     WITH_EIGEN=true
+                    exit 1
             ;;
         wGPU )      echo "GPU Offloading not supported yet."
                     WITH_GPU=true
+                    exit 1
             ;;
         wMPI )     echo "Compiling with ... OpenMPI"
                     WITH_MPI=true

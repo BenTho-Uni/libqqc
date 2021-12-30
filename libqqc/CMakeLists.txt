@@ -44,8 +44,11 @@ set(HDR
 add_library(qqc ${SRC} ${HDR} ${SRC_MPI} ${HDR_MPI})
 target_include_directories(qqc PUBLIC "${LIBQQC_SOURCE_DIR}")
 if(LIBQQC_OPENMP) 
-    target_link_libraries(qqc OpenMP::OpenMP_CXX)
+    target_link_libraries(qqc PUBLIC OpenMP::OpenMP_CXX)
 endif(LIBQQC_OPENMP)
+if(LIBQQC_MPI)
+    target_link_libraries(qqc PUBLIC MPI::MPI_CXX)
+endif(LIBQQC_MPI)
 install(TARGETS qqc DESTINATION "${CMAKE_SOURCE_DIR}/lib")
 
 

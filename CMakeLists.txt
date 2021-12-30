@@ -24,6 +24,9 @@ endif(LIBQQC_GPU)
 
 if(LIBQQC_MPI)
     message("+++ Compiling with MPI.")
+    find_package(MPI REQUIRED)
+# next line only needed when using OpenMPI
+    add_definitions(-DOMPI_SKIP_MPICXX)
 else(LIBQQC_MPI)
     message("+++ Compiling without MPI")
 endif(LIBQQC_MPI)
