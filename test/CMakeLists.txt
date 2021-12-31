@@ -11,6 +11,22 @@ set(HDR_FOLDER
     folder/test_file1.h
 )
 
+# for compiling with the Eigen library
+set(SRC_EIGEN
+    eigen_folder/test_file3_eigen.cpp
+)
+
+set(HDR_EIGEN
+    eigen_folder/test_file3_eigen.cpp
+)
+
+# for compiling for the GPU
+set(SRC_GPU
+)
+
+set(HDR_GPU
+)
+
 set(SRC_MPI
     mpi_folder/test_file2_mpi.cpp
 )
@@ -27,6 +43,30 @@ set(SRC
 set(HDR
         ${HDR_FOLDER}
 )
+
+if(LIBQQC_EIGEN)
+    set(SRC
+        ${SRC}
+        ${SRC_EIGEN}
+    )
+
+    set(HDR
+        ${HDR}
+        ${HDR_EIGEN}
+    )
+endif(LIBQQC_EIGEN)
+
+if(LIBQQC_GPU)
+    set(SRC
+        ${SRC}
+        ${SRC_GPU}
+    )
+
+    set(HDR
+        ${HDR}
+        ${HDR_GPU}
+    )
+endif(LIBQQC_GPU)
 
 if(LIBQQC_MPI)
     set(SRC

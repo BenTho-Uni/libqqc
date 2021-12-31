@@ -42,6 +42,38 @@ libqqc is a library for high performance evaluation of quantum chemistry methods
 
 ## Installation
 
+Packages needed
+- for building `cmake, gcc`
+- for documentation `doxygen`
+- for MPI `mpich`
+- for Eigen `Eigen`
+
+Setup is handled by `configure` script, see
+
+```
+./configure -h
+```
+
+for help. Current options:
+- `gcc` : Build with the GNU compiler
+- `noOpenMP` : Deactivate OpenMP
+- `wMPI` : compile with MPI wrappers to enable MPI
+- `wEigen` : compile `Eigen` library versions of calculations, needs 
+`EIGEN3_INCLUDE_DIR` set, e.g.
+```
+EIGEN3_INCLUDE_DIR=~/bin/eigen-3.4.0/Eigen/
+```
+- `wGPU` : enables GPU versions of calculations, NOT SUPPORTED YET
+
+after `cofigure`, change to build directory, and compile with `make`
+```
+cd build
+make
+make install
+```
+
+`make install` installs library and exe into upper `/lib` and `/exe` folder.
+
 ## Usage
 
 ## FAQ
