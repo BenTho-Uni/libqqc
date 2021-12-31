@@ -55,7 +55,7 @@ Setup is handled by `configure` script, see
 ```
 
 for help. Current options:
-- `gcc` : Build with the GNU compiler
+- `gcc` : Default, Build with the GNU compiler
 - `noOpenMP` : Deactivate OpenMP
 - `wMPI` : compile with MPI wrappers to enable MPI
 - `wEigen` : compile `Eigen` library versions of calculations, needs 
