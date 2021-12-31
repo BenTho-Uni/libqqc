@@ -25,14 +25,38 @@
 var NAVTREE =
 [
   [ "libqqc", "index.html", [
-    [ "Overview", "index.html#autotoc_md1", null ],
-    [ "Credits", "index.html#autotoc_md2", null ]
+    [ "Table of Contents", "index.html#autotoc_md1", null ],
+    [ "Overview", "index.html#autotoc_md2", [
+      [ "Performance", "index.html#autotoc_md3", null ],
+      [ "Contents", "index.html#autotoc_md4", [
+        [ "/data: Example Data and Runs (Justus 2.0)", "index.html#autotoc_md5", null ],
+        [ "/docs: Doxygen Documentation", "index.html#autotoc_md6", null ],
+        [ "/libqqcs: Library Location", "index.html#autotoc_md7", null ],
+        [ "/test: Testing Suit", "index.html#autotoc_md8", null ]
+      ] ]
+    ] ],
+    [ "Installation", "index.html#autotoc_md9", null ],
+    [ "Usage", "index.html#autotoc_md10", null ],
+    [ "FAQ", "index.html#autotoc_md11", null ],
+    [ "TODO", "index.html#autotoc_md12", null ],
+    [ "Credits", "index.html#autotoc_md13", null ],
+    [ "Classes", "annotated.html", [
+      [ "Class List", "annotated.html", "annotated_dup" ],
+      [ "Class Index", "classes.html", null ],
+      [ "Class Members", "functions.html", [
+        [ "All", "functions.html", null ],
+        [ "Functions", "functions_func.html", null ]
+      ] ]
+    ] ],
+    [ "Files", "files.html", [
+      [ "File List", "files.html", "files_dup" ]
+    ] ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"index.html"
+"annotated.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

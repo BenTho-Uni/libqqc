@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>libqqc: libqqc</title>
+<title>libqqc: /github/workspace/libqqc/folder Directory Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -77,7 +77,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(document).ready(function(){initNavTree('index.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('dir_500b3150f38ad86998b7272792428ed6.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -95,103 +95,16 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </iframe>
 </div>
 
-<div><div class="header">
-  <div class="headertitle"><div class="title">libqqc </div></div>
+<div class="header">
+  <div class="headertitle"><div class="title">folder Directory Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p ><a class="anchor" id="md__github_workspace_README"></a><em>Contributing Authors:</em> Benjamin Thomitzni</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadLeft"><b>Code</b>   </th><th class="markdownTableHeadLeft"><a href="https://github.com/BenTho-Uni/libqqc"><img src="https://img.shields.io/badge/GitHub-source-brightgreen?style=flat-square" alt="" class="inline"/></a> <a href="https://github.com/BenTho-Uni/libqqc/blob/main/LICENSE"><img src="https://img.shields.io/github/license/BenTho-Uni/libqqc?style=flat-square" alt="" class="inline"/></a>    </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft"><b>Documentation</b>   </td><td class="markdownTableBodyLeft"><a href="https://bentho-uni.github.io/libqqc/"><img src="https://img.shields.io/badge/docs-latest-blue?style=flat-square" alt="" class="inline"/></a>   </td></tr>
-</table>
-<p >libqqc is a library for high performance evaluation of quantum chemistry methods through quadrature schemes.</p>
-<h1><a class="anchor" id="autotoc_md1"></a>
-Table of Contents</h1>
-<ul>
-<li><a href="#libqqc">libqqc</a><ul>
-<li><a href="#overview">Overview</a><ul>
-<li><a href="#performance">Performance</a></li>
-<li><a href="#contents">Contents</a></li>
-</ul>
-</li>
-<li><a href="#installation">Installation</a></li>
-<li><a href="#usage">Usage</a></li>
-<li><a href="#faq">FAQ</a></li>
-<li><a href="#todo">ToDo</a></li>
-</ul>
-</li>
-<li><a href="#credits">Credits</a></li>
-</ul>
-<h1><a class="anchor" id="autotoc_md2"></a>
-Overview</h1>
-<h2><a class="anchor" id="autotoc_md3"></a>
-Performance</h2>
-<h2><a class="anchor" id="autotoc_md4"></a>
-Contents</h2>
-<h3><a class="anchor" id="autotoc_md5"></a>
-/data: Example Data and Runs (Justus 2.0)</h3>
-<h3><a class="anchor" id="autotoc_md6"></a>
-/docs: Doxygen Documentation</h3>
-<h3><a class="anchor" id="autotoc_md7"></a>
-/libqqcs: Library Location</h3>
-<h3><a class="anchor" id="autotoc_md8"></a>
-/test: Testing Suit</h3>
-<h1><a class="anchor" id="autotoc_md9"></a>
-Installation</h1>
-<p >Packages needed</p><ul>
-<li>for building <code>cmake, gcc</code></li>
-<li>for documentation <code>doxygen</code></li>
-<li>for MPI <code>mpich</code></li>
-<li>for Eigen <code>Eigen</code></li>
-</ul>
-<p >Setup is handled by <code>configure</code> script, see</p>
-<div class="fragment"><div class="line">./configure -h</div>
-</div><!-- fragment --><p >for help. Current options:</p><ul>
-<li><code>gcc</code> : Build with the GNU compiler</li>
-<li><code>noOpenMP</code> : Deactivate OpenMP</li>
-<li><code>wMPI</code> : compile with MPI wrappers to enable MPI</li>
-<li><code>wEigen</code> : compile <code>Eigen</code> library versions of calculations, needs <code>EIGEN3_INCLUDE_DIR</code> set, e.g. <div class="fragment"><div class="line">EIGEN3_INCLUDE_DIR=~/bin/eigen-3.4.0/Eigen/</div>
-</div><!-- fragment --></li>
-<li><code>wGPU</code> : enables GPU versions of calculations, NOT SUPPORTED YET</li>
-</ul>
-<p >after <code>cofigure</code>, change to build directory, and compile with <code>make</code> </p><div class="fragment"><div class="line">cd build</div>
-<div class="line">make</div>
-<div class="line">make install</div>
-</div><!-- fragment --><p ><code>make install</code> installs library and exe into upper <code>/lib</code> and <code>/exe</code> folder.</p>
-<h1><a class="anchor" id="autotoc_md10"></a>
-Usage</h1>
-<h1><a class="anchor" id="autotoc_md11"></a>
-FAQ</h1>
-<h1><a class="anchor" id="autotoc_md12"></a>
-TODO</h1>
-<ul>
-<li>[x] add primitive libr. structure</li>
-<li>[x] add doxygen</li>
-<li>[x] add workflow to build and deploy doxygen doc to github pages</li>
-<li>[x] add files to test cmake setup</li>
-<li>[x] add cmake setup for library</li>
-<li>[x] add cmake setup for test</li>
-<li>[ ] add templates for libqqc/ and test/ files for correct structure/documentation</li>
-<li>[ ] add cmake structure for w/o Eigen, w/o OpenMP GPU offloading and w/o MPI variant compiling (g++/mpic++)</li>
-<li>[ ] add workflow for testing after commit</li>
-<li>[ ] add missing badges</li>
-<li>[ ] add data/h2o with bashscripts to download h3coh/, anthracene/, porphyrine/</li>
-<li>[ ] transfer MP2 variants to libqqc</li>
-<li>[ ] recheck performance on Justus 2.0</li>
-<li>[ ] update Readme with scalings and results from Justus 2.0</li>
-</ul>
-<h1><a class="anchor" id="autotoc_md13"></a>
-Credits</h1>
-<p >The <a href="https://www.doxygen.nl/index.html">Doxygen</a> documentation uses the <a href="https://jothepro.github.io/doxygen-awesome-css/index.html">doxygen-awesome</a> theme.</p>
-<p >Badges by <a href="https://shields.io">Shields.io</a>. </p>
-</div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
+    <li class="navelem"><a class="el" href="dir_9658d5291f545197c45a91ce7c8b78da.html">libqqc</a></li><li class="navelem"><a class="el" href="dir_500b3150f38ad86998b7272792428ed6.html">folder</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2 </li>
   </ul>
 </div>
