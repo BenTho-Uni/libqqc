@@ -4,6 +4,8 @@
 //include needed libraries
 #include <iostream>
 #include <string>
+#include <chrono>
+#include <thread>
 
 // includes of the to be tested headers
 #include "../../libqqc/utils/ttimer.h"
@@ -17,10 +19,13 @@ namespace libqqc {
 
         //testing a clock
         Tclock this_clock("This is an example clock");
+        this_thread::sleep_for(chrono::milliseconds(100)); //sleeps for 100 ms
         this_clock.stop_clock();
-        cout << this_clock.print_time() << endl;
 
-        return true;
+        int time = chrono::duration_cast<std::chrono::milliseconds>
+                    (this_clock.wall_time()).count();
+
+        return ((time - 100) < 10) ? true : false;
 
     } // run_test
 
