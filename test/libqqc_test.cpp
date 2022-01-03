@@ -4,6 +4,7 @@
 
 // includes of the test headers
 #include "folder/test_file1.h"
+#include "utils/test_ttimer.h"
 
 #if LIBQQC_WITH_EIGEN
 #include "eigen_folder/test_file3_eigen.h"
@@ -24,6 +25,9 @@ int main (){
         test_file1 file1;
         cout << "Testing folder/file1, function1 ... " << flush << 
                 ((file1.run_test()) ? "passed" : "failed") << endl;
+        Test_Ttimer timer;
+        cout << "Testing utils/ttimer, tclock ..." << flush <<
+            ((timer.run_test()) ? "passed" : "failed") << endl;
 
 #if LIBQQC_WITH_EIGEN
         test_file3_eigen file3;
