@@ -89,7 +89,7 @@ make install
 - [x] add templates for libqqc/ and test/ files for correct structure/documentation
 - [x] add cmake structure for w/o Eigen, w/o OpenMP GPU offloading and  w/o MPI variant compiling (g++/mpic++)
 - [ ] add workflow for testing after commit
-- [ ] add timing objects
+- [x] add timing objects
 - [ ] add vault objects
 - [ ] add loaders
 - [ ] add missing badges
