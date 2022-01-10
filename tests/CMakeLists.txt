@@ -91,21 +91,21 @@ if(LIBQQC_MPI)
 endif(LIBQQC_MPI)
 
 set(TARGETS
-    libqqc_test
+    libqqc_tests
     )
 
-add_library(qqc_test ${SRC} ${HDR})
-add_executable(libqqc_test ${SRC} ${HDR})
+add_library(qqc_tests ${SRC} ${HDR})
+add_executable(libqqc_tests ${SRC} ${HDR})
 
 foreach(TARGET ${TARGETS})
-    target_link_libraries(${TARGET} qqc_test qqc)
+    target_link_libraries(${TARGET} qqc_tests qqc)
     if(LIBQQC_OPENMP) 
-        target_link_libraries(qqc_test PUBLIC OpenMP::OpenMP_CXX)
+        target_link_libraries(qqc_tests PUBLIC OpenMP::OpenMP_CXX)
     endif(LIBQQC_OPENMP)
     if(LIBQQC_MPI)
-        target_link_libraries(qqc_test PUBLIC MPI::MPI_CXX)
+        target_link_libraries(qqc_tests PUBLIC MPI::MPI_CXX)
     endif(LIBQQC_MPI)
 endforeach(TARGET)
-install(TARGETS libqqc_test DESTINATION "${CMAKE_SOURCE_DIR}/exe")
+install(TARGETS libqqc_tests DESTINATION "${CMAKE_SOURCE_DIR}/exe")
 
 
