@@ -32,7 +32,7 @@ var NAVTREE =
         [ "/data: Example Data and Runs (Justus 2.0)", "index.html#autotoc_md5", null ],
         [ "/docs: Doxygen Documentation", "index.html#autotoc_md6", null ],
         [ "/libqqcs: Library Location", "index.html#autotoc_md7", null ],
-        [ "/test: Testing Suit", "index.html#autotoc_md8", null ]
+        [ "/tests: Testing Suit", "index.html#autotoc_md8", null ]
       ] ]
     ] ],
     [ "Installation", "index.html#autotoc_md9", null ],
