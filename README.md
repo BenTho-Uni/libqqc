@@ -3,7 +3,7 @@
 
 | **Code** | [![][github-img]][github-url] [![][license-img]][license-url]|
 | :----- | :----- |
-| **State** | [![][ci-img]][ci-url] |
+| **Meta** | [![][ci-img]][ci-url] |
 | **Documentation** | [![][docs-img]][docs-url] |
 
 [docs-img]: https://img.shields.io/badge/docs-latest-blue?style=flat-square
