@@ -12,7 +12,7 @@
 [github-url]: https://github.com/BenTho-Uni/libqqc
 [license-img]: https://img.shields.io/github/license/BenTho-Uni/libqqc?style=flat-square
 [license-url]: https://github.com/BenTho-Uni/libqqc/blob/main/LICENSE
-[ci-img]: https://github.com/BenTho-Uni/libqqc/workflows/CI/badge.svg?branch=main&event=push
+[ci-img]: https://github.com/BenTho-Uni/libqqc/workflows/CI/badge.svg?branch=main&event=push&style=flat-square
 [ci-url]: https://github.com/BenTho-Uni/libqqc/actions
 
 libqqc is a library for high performance evaluation of quantum chemistry methods through quadrature schemes.
