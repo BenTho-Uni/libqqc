@@ -86,9 +86,12 @@ make install
 - [x] add files to test cmake setup
 - [x] add cmake setup for library
 - [x] add cmake setup for test
-- [ ] add templates for libqqc/ and test/ files for correct structure/documentation
+- [x] add templates for libqqc/ and test/ files for correct structure/documentation
 - [x] add cmake structure for w/o Eigen, w/o OpenMP GPU offloading and  w/o MPI variant compiling (g++/mpic++)
 - [ ] add workflow for testing after commit
+- [ ] add timing objects
+- [ ] add vault objects
+- [ ] add loaders
 - [ ] add missing badges
 - [ ] add data/h2o with bashscripts to download h3coh/, anthracene/, porphyrine/
 - [ ] transfer MP2 variants to libqqc

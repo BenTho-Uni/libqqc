@@ -68,15 +68,6 @@ namespace libqqc {
             bool get_mrun () {return mrun;}
 
             ///
-            /// @brief returns the print level of the clock
-            /// 
-            /// @details This function returns the print level of the clock
-            ///
-            /// @return int, print level
-            ///
-            int get_mprnt_lvl () {return mprnt_lvl;}
-
-            ///
             /// @brief starts the clock by saving the current time
             /// 
             /// @details This function saves the current time to start the clock
@@ -129,25 +120,28 @@ namespace libqqc {
                 return mcpu_stop - mcpu_start;
             }
 
-
             ///
             /// @brief prints time to an output stream and returns the string
             /// 
             /// @details This function prints the time differences to an output
             /// stream and returns a string 
             ///
+            /// @param[in] out_prnt_lvl outer print level to compare
             /// @return string with timings
             ///
 
-            string print_time () {
+            string print_time (int out_prnt_lvl) {
                 ostringstream out;
-                out << std::fixed << std::setprecision(0) 
-                    << "  " << mname <<" Timer - "
-                    <<"CPU: "
-                    <<1000.0 * cpu_time() / CLOCKS_PER_SEC << " ms ; "
-                    << "Wall: "
-                    << std::chrono::duration_cast<std::chrono::milliseconds>
-                    (wall_time()).count() << " ms\n";
+                if (mprnt_lvl <= out_prnt_lvl)
+                {
+                    out << std::fixed << std::setprecision(0) 
+                        << "  " << mname <<" Timer - "
+                        <<"CPU: "
+                        <<1000.0 * cpu_time() / CLOCKS_PER_SEC << " ms ; "
+                        << "Wall: "
+                        << std::chrono::duration_cast<std::chrono::milliseconds>
+                        (wall_time()).count() << " ms\n";
+                }
                 return out.str();
             }
 
@@ -164,6 +158,7 @@ namespace libqqc {
         private:
             int mprnt_lvl = 0; ///< the print level of the program
             vector<Tclock> mclocks = {}; ///< a vector of clocks
+            vector<int> mclock_ids = {}; ///< a vector of clock ids
 
         public: 
             ///
@@ -176,28 +171,107 @@ namespace libqqc {
              Ttimer(int prnt_lvl) : mprnt_lvl (prnt_lvl) {};
 
             ///
+            /// @brief Get all clocks from vector by id as a vector
+            ///
+            /// @details Returns a vector of Tclock objects from vector by id
+            ///
+            /// @param[in] id Id of the clock
+            /// @return vector<Tclock> object
+            vector<Tclock> get_clocks (int id){
+                vector <Tclock> result;
+                
+                //Loops over all IDs, if match then adds clocks to result
+                for (int i = 0; i < mclock_ids.size(); i++){
+                    if (id == mclock_ids[i]) result.push_back(mclocks[i]);
+                }//for
+
+                return result;
+            }
+
+            ///
             /// @brief Adds a clock and starts it
             ///
             /// @details Adds an entry to the m_clocks vector 
             ///
             /// @param[in] name Name of the clock
+            /// @param[in] id Associated Id of the clock
             /// @param[in] prnt_lvl Associated print level of this clock
             ///
-            void start_new_clock(string name, int prnt_lvl){
+            void start_new_clock(string name, int id, int prnt_lvl){
                 // building the new clock
                 Tclock new_clock (name, prnt_lvl);
                 // adding it to the clock vector
                 mclocks.push_back(new_clock);
+                mclock_ids.push_back(id);
             }
+
             ///
-            /// @brief [briefdescription]
+            /// @brief Stops the associated clock
             ///
-            /// @details [longdescription]
+            /// @details Takes in a clock id and stops the assiated clock. 
             ///
-            /// @param[in,out] param [param]
-            /// @return [return]
+            /// @param[in] id ID of the clock to be stoped
             ///
-            int member_fn(int param);
+            void stop_clocks(int id) {
+                //Looping over all clocḱ ID to find the instances in which the 
+                //ID is equal and stopping the Tclock element in mclocks with
+                //the same index
+                for (int i = 0; i < mclock_ids.size(); i++){
+                    if (id == mclock_ids[i]) mclocks[i].stop_clock();
+                }//for
+            };
+
+            ///
+            /// @brief Stops all clocks
+            ///
+            /// @details Loops through the clock vector and stops all of them 
+            ///
+            void stop_all_clocks() {
+                //Loop through all clocks and stop them
+                for (int i = 0; i < mclocks.size(); i++){
+                    mclocks[i].stop_clock();
+                }//for
+            };
+
+            ///
+            /// @brief Prints the id associated clocks outputs
+            ///
+            /// @details Prints the clocks associated with the given id 
+            /// if it is not running
+            ///
+            /// @param[in] id Associated id of the clocks
+            /// @return string returns output as string
+            ///
+            string print_clocks(int id) {
+                ostringstream out;
+                //Loops over all clock IDs to find the ones which fit
+                for (int i = 0; i < mclock_ids.size(); i++){
+                    if (id == mclock_ids[i]) {
+                        if (!mclocks[i].get_mrun()){
+                            out << mclocks[i].print_time(mprnt_lvl);
+                        } //if 
+                    } //if
+                }//for
+                return out.str();
+            };
+
+            ///
+            /// @brief Prints all clock outputs
+            ///
+            /// @details Loops over all clocks and prints their output if 
+            /// they are not longer running.
+            ///
+            string print_all_clocks() {
+                ostringstream out;
+                //Looping over all clocks and check if they are running,
+                //calls print memberfnct if not, skipps else
+                for (int i = 0; i < mclocks.size(); i++){
+                    if (!mclocks[i].get_mrun()) {
+                        out << mclocks[i].print_time(mprnt_lvl);
+                    }
+                }//for
+                return out.str();
+            };
     }; // class Ttimer
 
 } // namespace libqqc
