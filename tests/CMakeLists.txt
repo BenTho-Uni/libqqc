@@ -46,7 +46,7 @@ set(HDR_MPI
 set(SRC
     ${SRC_FOLDER}
     ${SRC_UTILS}
-    libqqc_test.cpp
+    libqqc_tests.cpp
     )
 
 set(HDR
@@ -92,10 +92,13 @@ endif(LIBQQC_MPI)
 
 set(TARGETS
     libqqc_tests
+    libqqc_utils_tests
     )
 
 add_library(qqc_tests ${SRC} ${HDR})
 add_executable(libqqc_tests ${SRC} ${HDR})
+add_executable(libqqc_utils_tests utils/libqqc_utils_tests.cpp ${SRC_UTILS} ${HDR_UTILS})
+add_test(LIBQQC_UTILS_TESTS libqqc_utils_tests)
 
 foreach(TARGET ${TARGETS})
     target_link_libraries(${TARGET} qqc_tests qqc)
