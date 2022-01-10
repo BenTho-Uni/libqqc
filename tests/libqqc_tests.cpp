@@ -56,6 +56,6 @@ int main (){
         ((file2.run_test()) ? "passed" : "failed") << endl;
 #endif
 
-    return 0;
+    return ((b_clock && b_timer) ? 0 : 1);
 }
 
