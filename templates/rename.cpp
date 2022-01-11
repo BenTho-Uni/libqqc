@@ -11,7 +11,7 @@ using namespace std;
 
 namespace libqqc {
 
-    int Rename::member_fn(int param){
+    int Rename :: member_fn(int param){
     
     } //Rename::member_fn
 
