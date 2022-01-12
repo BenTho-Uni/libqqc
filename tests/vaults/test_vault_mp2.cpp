@@ -1,21 +1,20 @@
 //include file header
-#include "test_rename.h"
+#include "test_vault_mp2.h"
 
 
 // includes of the to be tested headers
-#include "../../libqqc/folder/rename.h"
+#include "../../libqqc/vaults/vault_mp2.h"
 
 // namespaces
 
 using namespace std;
 
 namespace libqqc {
-    bool Test_Rename :: test_function() {
-        bool result = false;
-        return result;
+    bool Test_Vault_mp2 :: test_function() {
+
     }
 
-    bool Test_Rename :: run_all_tests(ostringstream &out) {
+    bool Test_Vault_mp2 :: run_all_tests(ostringstream &out) {
         out.str(""); //clearing the output string
         bool result = false;
 

@@ -1,5 +1,5 @@
-#ifndef LIBQQC_TEST_RENAME_H
-#define LIBQQC_TEST_RENAME_H
+#ifndef LIBQQC_TEST_VAULT_MP2_H
+#define LIBQQC_TEST_VAULT_MP2_H
 
 //include needed libraries
 #include <iostream>
@@ -11,13 +11,13 @@ using namespace std;
 namespace libqqc {
 
     ///
-    /// @brief Holding class for testing Rename functions
+    /// @brief Holding class for testing Vault_mp2 functions
     ///
     /// @details This class holds the setup for testing the 
-    /// Rename functions
+    /// Vault_mp2 functions
     ///
 
-    class Test_Rename {
+    class Test_Vault_mp2 {
         private: 
 
             ///
@@ -47,4 +47,4 @@ namespace libqqc {
 
 } // namespace
 
-#endif //LIBQQC_TEST_RENAME_H
+#endif //LIBQQC_TEST_VAULT_MP2_H

@@ -21,6 +21,14 @@ set(HDR_GRIDS
     grids/grid.h
 )
 
+set(SRC_LOADER
+    loader/loader_mp2.cpp
+)
+
+set(HDR_LOADER
+    loader/loader_mp2.h
+)
+
 set(SRC_UTILS
 )
 

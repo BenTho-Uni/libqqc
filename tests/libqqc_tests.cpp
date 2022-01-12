@@ -6,6 +6,7 @@
 
 // includes of the test headers
 #include "folder/test_file1.h"
+#include "loader/test_loader_mp2.h"
 #include "grids/test_grid.h"
 #include "utils/test_ttimer.h"
 
@@ -45,6 +46,13 @@ int main (){
     cout << "... " 
         << ((b_timer) ? "all passed" : "some failed") << endl;
 
+    Test_Loader_mp2 loader_mp2;
+    bool b_loader_mp2 = loader_mp2.run_all_tests(out);
+    cout << endl << "Testing loader/loader_mp2.h, Loader_mp2::" << flush << endl;
+    cout << out.str();
+    cout << "... " 
+        << ((b_loader_mp2) ? "all passed" : "some failed") << endl;
+
     Test_Grid grid;
     bool b_grid = grid.run_all_tests(out);
     cout << endl << "Testing grids/grid.h, Grid::" << flush << endl;
@@ -64,6 +72,6 @@ int main (){
         ((file2.run_test()) ? "passed" : "failed") << endl;
 #endif
 
-    return ((b_clock && b_timer && b_grid) ? 0 : 1);
+    return ((b_clock && b_timer && b_loader_mp2 && b_grid) ? 0 : 1);
 }
 
