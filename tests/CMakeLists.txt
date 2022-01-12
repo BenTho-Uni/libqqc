@@ -11,6 +11,14 @@ set(HDR_FOLDER
     folder/test_file1.h
     )
 
+set(SRC_GRIDS
+    grids/test_grid.cpp
+    )
+
+set(HDR_GRIDS
+    grids/test_grid.h
+    )
+
 set(SRC_UTILS
     utils/test_ttimer.cpp
     )
@@ -45,12 +53,14 @@ set(HDR_MPI
 
 set(SRC
     ${SRC_FOLDER}
+    ${SRC_GRIDS}
     ${SRC_UTILS}
     libqqc_tests.cpp
     )
 
 set(HDR
     ${HDR_FOLDER}
+    ${HDR_GRIDS}
     ${HDR_UTILS}
     )
 
@@ -92,12 +102,15 @@ endif(LIBQQC_MPI)
 
 set(TARGETS
     libqqc_tests
+    libqqc_grids_tests
     libqqc_utils_tests
     )
 
 add_library(qqc_tests ${SRC} ${HDR})
 add_executable(libqqc_tests ${SRC} ${HDR})
+add_executable(libqqc_grids_tests grids/libqqc_grids_tests.cpp ${SRC_GRIDS} ${HDR_GRIDS})
 add_executable(libqqc_utils_tests utils/libqqc_utils_tests.cpp ${SRC_UTILS} ${HDR_UTILS})
+add_test(LIBQQC_GRIDS_TESTS libqqc_grids_tests)
 add_test(LIBQQC_UTILS_TESTS libqqc_utils_tests)
 
 foreach(TARGET ${TARGETS})

@@ -56,7 +56,7 @@ namespace libqqc {
             ///
             /// @details Default constructor
             ///
-            Grid(); 
+            Grid() {}; 
 
             ///
             /// @brief Constructor setting the pts and weights of the grid

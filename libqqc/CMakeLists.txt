@@ -13,6 +13,14 @@ set(HDR_ADDITIONAL
     folder/file1.h
 )
 
+set(SRC_GRIDS
+    grids/grid.cpp
+)
+
+set(HDR_GRIDS
+    grids/grid.h
+)
+
 set(SRC_UTILS
 )
 
@@ -48,13 +56,15 @@ set(HDR_MPI
 #SRC_ is a variable name
 set(SRC
     ${SRC_ADDITIONAL}
+    ${SRC_GRIDS}
     ${SRC_UTILS}
     main.cpp
 )
 
 set(HDR
-    ${SRC_ADDITIONAL}
-    ${SRC_UTILS}
+    ${HDR_ADDITIONAL}
+    ${HDR_GRIDS}
+    ${HDR_UTILS}
 )
 
 if(LIBQQC_EIGEN)

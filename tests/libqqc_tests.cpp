@@ -6,6 +6,7 @@
 
 // includes of the test headers
 #include "folder/test_file1.h"
+#include "grids/test_grid.h"
 #include "utils/test_ttimer.h"
 
 #if LIBQQC_WITH_EIGEN
@@ -44,6 +45,13 @@ int main (){
     cout << "... " 
         << ((b_timer) ? "all passed" : "some failed") << endl;
 
+    Test_Grid grid;
+    bool b_grid = grid.run_all_tests(out);
+    cout << endl << "Testing grids/grid.h, Grid::" << flush << endl;
+    cout << out.str();
+    cout << "... " 
+        << ((b_grid) ? "all passed" : "some failed") << endl;
+
 #if LIBQQC_WITH_EIGEN
     test_file3_eigen file3;
     cout << "Testing eigen_folder/file3_eigen, function_eigen ... " << 
@@ -56,6 +64,6 @@ int main (){
         ((file2.run_test()) ? "passed" : "failed") << endl;
 #endif
 
-    return ((b_clock && b_timer) ? 0 : 1);
+    return ((b_clock && b_timer && b_grid) ? 0 : 1);
 }
 
