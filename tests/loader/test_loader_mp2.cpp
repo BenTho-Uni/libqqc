@@ -114,9 +114,9 @@ namespace libqqc {
             << (b_load_cube_coul ? "passed" : "failed") << endl;
 
         result = b_load_nocc && b_load_nvirt && b_load_nao && b_load_1Dtol
-                && b_load_prnt_lvl && b_load_1Dgrid && b_load_3Dgrid
-                && b_load_mat_fock && b_load_mat_coeff & b_load_mat_cgto
-                && b_load_cube_coul;
+            && b_load_prnt_lvl && b_load_1Dgrid && b_load_3Dgrid
+            && b_load_mat_fock && b_load_mat_coeff & b_load_mat_cgto
+            && b_load_cube_coul;
         return result;
 
     } // run_test

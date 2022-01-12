@@ -33,15 +33,15 @@ int main (){
         << ((b_rename) ? "all passed" : "some failed") << endl;
 
 #if LIBQQC_WITH_EIGEN
-//    test_file3_eigen file3;
-//    cout << "Testing eigen_folder/file3_eigen, function_eigen ... " << 
-//        flush << ((file3.run_test()) ? "passed" : "failed") << endl;
+    //    test_file3_eigen file3;
+    //    cout << "Testing eigen_folder/file3_eigen, function_eigen ... " << 
+    //        flush << ((file3.run_test()) ? "passed" : "failed") << endl;
 #endif
 
 #if LIBQQC_WITH_MPI
-//    test_file2_mpi file2;
-//    cout << "Testing mpi_folder/file2_mpi, function_mpi ... " << flush << 
-//        ((file2.run_test()) ? "passed" : "failed") << endl;
+    //    test_file2_mpi file2;
+    //    cout << "Testing mpi_folder/file2_mpi, function_mpi ... " << flush << 
+    //        ((file2.run_test()) ? "passed" : "failed") << endl;
 #endif
 
     return ((b_rename) ? 0 : 1);

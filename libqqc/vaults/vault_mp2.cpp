@@ -55,9 +55,15 @@ namespace libqqc {
         loader.load_3Dgrid (m3Dgrid);
 
         // loading in matrices
+        size_t nao2 = mnao * mnao;
+        size_t npts = m3Dgrid.get_mnpts();
+        mmat_fock = new double[nao2];
         loader.load_mat_fock (mmat_fock);
+        mmat_coeff = new double[mnao * mnnmo];
         loader.load_mat_coeff (mmat_coeff);
+        mmat_cgto = new double[npts * mnao];
         loader.load_mat_cgto (mmat_cgto);
+        mcube_coul = new double[npts * nao2];
         loader.load_cube_coul (mcube_coul);
 
         check_data_validity();
@@ -65,7 +71,7 @@ namespace libqqc {
 
     Vault_mp2 :: Vault_mp2(size_t nocc, size_t nvirt, size_t nao, double p1Dtol,
             int prnt_lvl, Grid p1Dgrid, Grid p3Dgrid, double* mat_fock, 
-            double* mat_coeff, double* mat_cgto, double* mat_coul) :
+            double* mat_coeff, double* mat_cgto, double* cube_coul) :
         mnocc(nocc), mnvirt(nvirt), mnao(nao), m1Dtol(p1Dtol), 
         mprnt_lvl(prnt_lvl), m1Dgrid(p1Dgrid), m3Dgrid(p3Dgrid) {
 
@@ -89,7 +95,7 @@ namespace libqqc {
                     "Coefficient matrix pointer cannot be NULL.");
             if (!mat_cgto) throw invalid_argument(
                     "CGTO matrix pointer cannot be NULL.");
-            if (!mat_coul) throw invalid_argument(
+            if (!cube_coul) throw invalid_argument(
                     "Coulomb matrix pointer cannot be NULL.");
 
             if (m1Dtol < 0) m1Dtol *= -1; //ensuring that tolerance is positive
@@ -121,9 +127,9 @@ namespace libqqc {
             mcube_coul = new double[npts * mnao2];
             for (size_t i = 0; i < npts; i++) {
                 for (size_t j = 0; j < mnao; j++){
-                    for (size_t k=0; k < mnao; k++){
-                        mcube_coul[i * mnao2+j * mnao + k] = 
-                            mat_cgto[i * mnao2 + j * mnao + k];
+                    for (size_t k = 0; k < mnao; k++){
+                        mcube_coul[i * mnao2 +j * mnao + k] = 
+                            cube_coul[i * mnao2 + j * mnao + k];
                     }
                 }
             } 

@@ -24,7 +24,7 @@ namespace libqqc {
             ///
             /// @brief Constructor of loader_mp2 class
             ///
-            Loader_mp2 ();
+            Loader_mp2 () {};
 
             ///
             /// @brief loads number of occupied orbitals into reference

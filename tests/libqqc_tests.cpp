@@ -9,6 +9,7 @@
 #include "loader/test_loader_mp2.h"
 #include "grids/test_grid.h"
 #include "utils/test_ttimer.h"
+#include "vaults/test_vault_mp2.h"
 
 #if LIBQQC_WITH_EIGEN
 #include "eigen_folder/test_file3_eigen.h"
@@ -60,6 +61,13 @@ int main (){
     cout << "... " 
         << ((b_grid) ? "all passed" : "some failed") << endl;
 
+    Test_Vault_mp2 vault_mp2;
+    bool b_vault_mp2 = vault_mp2.run_all_tests(out);
+    cout << endl << "Testing vaults/vault_mp2.h, Vault_mp2::" << flush << endl;
+    cout << out.str();
+    cout << "... " 
+        << ((b_vault_mp2) ? "all passed" : "some failed") << endl;
+
 #if LIBQQC_WITH_EIGEN
     test_file3_eigen file3;
     cout << "Testing eigen_folder/file3_eigen, function_eigen ... " << 
@@ -72,6 +80,6 @@ int main (){
         ((file2.run_test()) ? "passed" : "failed") << endl;
 #endif
 
-    return ((b_clock && b_timer && b_loader_mp2 && b_grid) ? 0 : 1);
+    return ((b_clock && b_timer && b_loader_mp2 && b_grid 
+                && b_vault_mp2) ? 0 : 1);
 }
-

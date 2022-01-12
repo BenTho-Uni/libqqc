@@ -36,6 +36,14 @@ set(HDR_UTILS
     utils/ttimer.h
 )
 
+set(SRC_VAULTS
+    vaults/vault_mp2.cpp
+)
+
+set(HDR_VAULTS
+    vaults/vault_mp2.cpp
+)
+
 # for compiling with the Eigen library
 set(SRC_EIGEN
     eigen_folder/file3_eigen.cpp
@@ -65,13 +73,17 @@ set(HDR_MPI
 set(SRC
     ${SRC_ADDITIONAL}
     ${SRC_GRIDS}
+    ${SRC_LOADER}
     ${SRC_UTILS}
+    ${SRC_VAULTS}
     main.cpp
 )
 
 set(HDR
     ${HDR_ADDITIONAL}
     ${HDR_GRIDS}
+    ${HDR_LOADER}
+    ${HDR_VAULTS}
     ${HDR_UTILS}
 )
 

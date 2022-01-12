@@ -23,7 +23,7 @@ using namespace std;
 int main (){
     ostringstream out; //Stringstream for testing outputs
 
-    cout << "Performing tests for libqqc/testfolder ..." << endl;
+    cout << "Performing tests for libqqc/grids ..." << endl;
 
     Test_Grid grid;
     bool b_grid = grid.run_all_tests(out);
@@ -33,15 +33,15 @@ int main (){
         << ((b_grid) ? "all passed" : "some failed") << endl;
 
 #if LIBQQC_WITH_EIGEN
-//    test_file3_eigen file3;
-//    cout << "Testing eigen_folder/file3_eigen, function_eigen ... " << 
-//        flush << ((file3.run_test()) ? "passed" : "failed") << endl;
+    //    test_file3_eigen file3;
+    //    cout << "Testing eigen_folder/file3_eigen, function_eigen ... " << 
+    //        flush << ((file3.run_test()) ? "passed" : "failed") << endl;
 #endif
 
 #if LIBQQC_WITH_MPI
-//    test_file2_mpi file2;
-//    cout << "Testing mpi_folder/file2_mpi, function_mpi ... " << flush << 
-//        ((file2.run_test()) ? "passed" : "failed") << endl;
+    //    test_file2_mpi file2;
+    //    cout << "Testing mpi_folder/file2_mpi, function_mpi ... " << flush << 
+    //        ((file2.run_test()) ? "passed" : "failed") << endl;
 #endif
 
     return ((b_grid) ? 0 : 1);
