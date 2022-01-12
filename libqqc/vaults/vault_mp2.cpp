@@ -128,7 +128,7 @@ namespace libqqc {
             for (size_t i = 0; i < npts; i++) {
                 for (size_t j = 0; j < mnao; j++){
                     for (size_t k = 0; k < mnao; k++){
-                        mcube_coul[i * mnao2 +j * mnao + k] = 
+                        mcube_coul[i * mnao2 + j * mnao + k] = 
                             cube_coul[i * mnao2 + j * mnao + k];
                     }
                 }

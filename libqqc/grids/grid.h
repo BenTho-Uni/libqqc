@@ -38,6 +38,16 @@ namespace libqqc {
             bool check_data_validity();
 
             ///
+            /// @brief Simple copy constructor 
+            ///
+            Grid (const Grid &grid1) {
+                //sets the grid up, the setter function hardcopies the 
+                //mpts and mwts values, so we dont run into double deletion
+                //problems when the second grid gets destroyed
+                set_grid (grid1.mnpts, grid1.mndim, grid1.mpts, grid1.mwts);
+            }
+
+            ///
             /// @brief Sets number, value and weights of points
             ///
             /// @details This function takes a number of grid points, and two 
