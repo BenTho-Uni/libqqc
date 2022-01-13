@@ -90,27 +90,27 @@ namespace libqqc {
         out.str(""); //clearing the output string
         bool result = false;
 
-        bool b_mrun = (test_get_mrun()) ? true : false;
+        bool b_mrun = test_get_mrun();
         out << "    Testing Tclock::get_mrun()    ... " << flush
             << (b_mrun ? "passed" : "failed") << endl;
 
-        bool b_stop = (test_stop_clock()) ? true : false;
+        bool b_stop = test_stop_clock();
         out << "    Testing Tclock::stop_clock()  ... " << flush
             << (b_stop ? "passed" : "failed") << endl;
 
-        bool b_start = (test_start_clock()) ? true : false;
+        bool b_start = test_start_clock();
         out << "    Testing Tclock::start_clock() ... " << flush
             << (b_start ? "passed" : "failed") << endl;
 
-        bool b_wall = (test_wall_time()) ? true : false;
+        bool b_wall = test_wall_time();
         out << "    Testing Tclock::wall_time()   ... " << flush
             << (b_wall ? "passed" : "failed") << endl;
 
-        bool b_cpu = (test_cpu_time()) ? true : false;
+        bool b_cpu = test_cpu_time();
         out << "    Testing Tclock::cpu_time()    ... " << flush
             << (b_cpu ? "passed" : "failed") << endl;
 
-        bool b_print = (test_print_time()) ? true : false;
+        bool b_print = test_print_time();
         out << "    Testing Tclock::print_time()  ... " << flush
             << (b_print ? "passed" : "failed") << endl;
 
@@ -214,27 +214,27 @@ namespace libqqc {
         out.str("");
         bool result = false;
 
-        bool b_get = (test_get_clocks()) ? true : false;
+        bool b_get = test_get_clocks();
         out << "    Testing Ttimer::get_clocks()       ... " << flush
             << (b_get ? "passed" : "failed") << endl;
 
-        bool b_start = (test_start_new_clock()) ? true : false;
+        bool b_start = test_start_new_clock();
         out << "    Testing Ttimer::start_new_clock()  ... " << flush
             << (b_start ? "passed" : "failed") << endl;
 
-        bool b_stop1 = (test_stop_clocks()) ? true : false;
+        bool b_stop1 = test_stop_clocks();
         out << "    Testing Ttimer::stop_clocks()      ... " << flush
             << (b_stop1 ? "passed" : "failed") << endl;
 
-        bool b_stopA = (test_stop_all_clocks()) ? true : false;
+        bool b_stopA = test_stop_all_clocks();
         out << "    Testing Ttimer::stop_all_clocks()  ... " << flush
             << (b_stopA ? "passed" : "failed") << endl;
 
-        bool b_print1 = (test_print_clocks()) ? true : false;
+        bool b_print1 = test_print_clocks();
         out << "    Testing Ttimer::print_clocks()     ... " << flush
             << (b_print1 ? "passed" : "failed") << endl;
 
-        bool b_printA = (test_print_all_clocks()) ? true : false;
+        bool b_printA = test_print_all_clocks();
         out << "    Testing Ttimer::print_all_clocks() ... " << flush
             << (b_printA ? "passed" : "failed") << endl;
 

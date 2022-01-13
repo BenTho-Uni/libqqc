@@ -13,11 +13,35 @@ set(HDR_ADDITIONAL
     folder/file1.h
 )
 
+set(SRC_GRIDS
+    grids/grid.cpp
+)
+
+set(HDR_GRIDS
+    grids/grid.h
+)
+
+set(SRC_LOADER
+    loader/loader_mp2.cpp
+)
+
+set(HDR_LOADER
+    loader/loader_mp2.h
+)
+
 set(SRC_UTILS
 )
 
 set(HDR_UTILS
     utils/ttimer.h
+)
+
+set(SRC_VAULTS
+    vaults/vault_mp2.cpp
+)
+
+set(HDR_VAULTS
+    vaults/vault_mp2.cpp
 )
 
 # for compiling with the Eigen library
@@ -48,13 +72,19 @@ set(HDR_MPI
 #SRC_ is a variable name
 set(SRC
     ${SRC_ADDITIONAL}
+    ${SRC_GRIDS}
+    ${SRC_LOADER}
     ${SRC_UTILS}
+    ${SRC_VAULTS}
     main.cpp
 )
 
 set(HDR
-    ${SRC_ADDITIONAL}
-    ${SRC_UTILS}
+    ${HDR_ADDITIONAL}
+    ${HDR_GRIDS}
+    ${HDR_LOADER}
+    ${HDR_VAULTS}
+    ${HDR_UTILS}
 )
 
 if(LIBQQC_EIGEN)
