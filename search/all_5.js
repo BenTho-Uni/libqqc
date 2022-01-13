@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['rename_0',['Rename',['../classlibqqc_1_1Rename.html',1,'libqqc']]],
-  ['rename_2ecpp_1',['rename.cpp',['../rename_8cpp.html',1,'']]],
-  ['run_5fall_5ftests_2',['run_all_tests',['../classlibqqc_1_1Test__Tclock.html#aabe0f7f56b1acfabab7eda9545438a9c',1,'libqqc::Test_Tclock::run_all_tests()'],['../classlibqqc_1_1Test__Ttimer.html#a8733a1e16b74f53b047a85a19dba3007',1,'libqqc::Test_Ttimer::run_all_tests()']]],
-  ['run_5ftest_3',['run_test',['../classlibqqc_1_1test__file3__eigen.html#a7d798aab6a0a0f29cdcd9b2432cd6ca1',1,'libqqc::test_file3_eigen::run_test()'],['../classlibqqc_1_1test__file1.html#a8605659dcfc8b72a5220c2bdf3f32607',1,'libqqc::test_file1::run_test()'],['../classlibqqc_1_1test__file2__mpi.html#a46717763bfc0c92d9ab058ad86baba1f',1,'libqqc::test_file2_mpi::run_test()']]]
+  ['print_5fall_5fclocks_0',['print_all_clocks',['../classlibqqc_1_1Ttimer.html#a639535840346c8970b221284fefc2af9',1,'libqqc::Ttimer']]],
+  ['print_5fclocks_1',['print_clocks',['../classlibqqc_1_1Ttimer.html#a88450196dfe571bf8027fb35bb7f552b',1,'libqqc::Ttimer']]],
+  ['print_5ftime_2',['print_time',['../classlibqqc_1_1Tclock.html#ad8da35ba3f03fa66713eb41a58f2ace5',1,'libqqc::Tclock']]]
 ];
