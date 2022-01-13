@@ -19,7 +19,7 @@ namespace libqqc {
         out.str(""); //clearing the output string
         bool result = false;
 
-        bool b_function = (test_function()) ? true : false;
+        bool b_function = test_function();
         out << "    Testing rename::function()    ... " << flush
             << (b_function ? "passed" : "failed") << endl;
 

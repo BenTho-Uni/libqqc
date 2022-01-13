@@ -125,7 +125,7 @@ namespace libqqc {
             size_t get_mnnmo() {
                 if (mnnmo == 0) throw invalid_argument(
                         "Number of molecular orbitals shouldn't be 0.");
-                return mnocc;
+                return mnnmo;
             };
 
             ///

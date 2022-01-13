@@ -69,47 +69,47 @@ namespace libqqc {
         out.str(""); //clearing the output string
         bool result = false;
 
-        bool b_load_nocc = (test_load_nocc()) ? true : false;
+        bool b_load_nocc = test_load_nocc();
         out << "    Testing loader_mp2::load_nocc()         ... " << flush
             << (b_load_nocc ? "passed" : "failed") << endl;
 
-        bool b_load_nvirt = (test_load_nvirt()) ? true : false;
+        bool b_load_nvirt = test_load_nvirt();
         out << "    Testing loader_mp2::load_nvirt()        ... " << flush
             << (b_load_nvirt ? "passed" : "failed") << endl;
 
-        bool b_load_nao = (test_load_nao()) ? true : false;
+        bool b_load_nao = test_load_nao();
         out << "    Testing loader_mp2::load_nao()          ... " << flush
             << (b_load_nao ? "passed" : "failed") << endl;
 
-        bool b_load_1Dtol = (test_load_1Dtol()) ? true : false;
+        bool b_load_1Dtol = test_load_1Dtol();
         out << "    Testing loader_mp2::load_1Dtol()        ... " << flush
             << (b_load_1Dtol ? "passed" : "failed") << endl;
 
-        bool b_load_prnt_lvl = (test_load_prnt_lvl()) ? true : false;
+        bool b_load_prnt_lvl = test_load_prnt_lvl();
         out << "    Testing loader_mp2::load_prnt_lvl()     ... " << flush
             << (b_load_prnt_lvl ? "passed" : "failed") << endl;
 
-        bool b_load_1Dgrid = (test_load_1Dgrid()) ? true : false;
+        bool b_load_1Dgrid = test_load_1Dgrid();
         out << "    Testing loader_mp2::load_1Dgrid()       ... " << flush
             << (b_load_1Dgrid ? "passed" : "failed") << endl;
 
-        bool b_load_3Dgrid = (test_load_3Dgrid()) ? true : false;
+        bool b_load_3Dgrid = test_load_3Dgrid();
         out << "    Testing loader_mp2::load_3Dgrid()       ... " << flush
             << (b_load_3Dgrid ? "passed" : "failed") << endl;
 
-        bool b_load_mat_fock = (test_load_mat_fock()) ? true : false;
+        bool b_load_mat_fock = test_load_mat_fock();
         out << "    Testing loader_mp2::load_mat_fock()     ... " << flush
             << (b_load_mat_fock ? "passed" : "failed") << endl;
 
-        bool b_load_mat_coeff = (test_load_mat_coeff()) ? true : false;
+        bool b_load_mat_coeff = test_load_mat_coeff();
         out << "    Testing loader_mp2::load_mat_coeff()    ... " << flush
             << (b_load_mat_coeff ? "passed" : "failed") << endl;
 
-        bool b_load_mat_cgto = (test_load_mat_cgto()) ? true : false;
+        bool b_load_mat_cgto = test_load_mat_cgto();
         out << "    Testing loader_mp2::load_mat_cgto()     ... " << flush
             << (b_load_mat_cgto ? "passed" : "failed") << endl;
 
-        bool b_load_cube_coul = (test_load_cube_coul()) ? true : false;
+        bool b_load_cube_coul = test_load_cube_coul();
         out << "    Testing loader_mp2::load_cube_coul()    ... " << flush
             << (b_load_cube_coul ? "passed" : "failed") << endl;
 

@@ -85,27 +85,27 @@ namespace libqqc {
         out.str(""); //clearing the output string
         bool result = false;
 
-        bool b_set_grid = (test_set_grid()) ? true : false;
+        bool b_set_grid = test_set_grid();
         out << "    Testing grid::set_grid()            ... " << flush
             << (b_set_grid ? "passed" : "failed") << endl;
 
-        bool b_check_data_validity = (test_check_data_validity()) ? true : false;
+        bool b_check_data_validity = test_check_data_validity();
         out << "    Testing grid::check_data_validity() ... " << flush
             << (b_check_data_validity ? "passed" : "failed") << endl;
 
-        bool b_get_mnpts = (test_get_mnpts()) ? true : false;
+        bool b_get_mnpts = test_get_mnpts();
         out << "    Testing grid::get_mnpts()           ... " << flush
             << (b_get_mnpts ? "passed" : "failed") << endl;
 
-        bool b_get_mndim = (test_get_mndim()) ? true : false;
+        bool b_get_mndim = test_get_mndim();
         out << "    Testing grid::get_mndim()           ... " << flush
             << (b_get_mndim ? "passed" : "failed") << endl;
 
-        bool b_get_mpts = (test_get_mpts()) ? true : false;
+        bool b_get_mpts = test_get_mpts();
         out << "    Testing grid::get_mpts()            ... " << flush
             << (b_get_mpts ? "passed" : "failed") << endl;
 
-        bool b_get_mwts = (test_get_mwts()) ? true : false;
+        bool b_get_mwts = test_get_mwts();
         out << "    Testing grid::get_mwts()            ... " << flush
             << (b_get_mwts ? "passed" : "failed") << endl;
 

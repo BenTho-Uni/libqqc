@@ -40,6 +40,16 @@ namespace libqqc {
                 17.0, 18.0};
 
             ///
+            /// @brief method for checking both constructors
+            ///
+            /// @details This method tests the function and returns TRUE or 
+            /// false depending on correct behaviour
+            ///
+            /// @return bool result of comparison to reference
+            ///
+            bool test_Vault_mp2();
+
+            ///
             /// @brief method for testing check_data_validity
             ///
             /// @details This method tests the function and returns TRUE or 

@@ -77,8 +77,6 @@ namespace libqqc {
 
             if (nocc == 0) throw invalid_argument(
                     "Number of occupied orbitals cannot be 0.");
-            mnnmo = mnocc + mnvirt;
-
             if (nao == 0) throw invalid_argument(
                     "Number of atomiv orbitals cannot be 0.");
             if (!p1Dgrid.check_data_validity()) throw invalid_argument(
@@ -101,6 +99,7 @@ namespace libqqc {
             if (m1Dtol < 0) m1Dtol *= -1; //ensuring that tolerance is positive
 
             //looping through the given array, copying the dat
+            mnnmo = mnocc + mnvirt;
             size_t mnao2 = mnao * mnao;
 
             mmat_fock = new double[mnao2];
