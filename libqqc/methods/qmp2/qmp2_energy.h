@@ -71,61 +71,66 @@ namespace libqqc {
             ///
             /// @details This function computes the Q-MP2 energy of a system
             ///
-            /// @param[in,out] ene Energie of system
+            /// @return e_mp2 Energie of system
             ///
-            void compute (double &ene){
+            double compute (){
 
-                ene = 0.0;
+                double e_mp2 = 0;
 #pragma omp parallel for reduction(+:e_mp2) schedule(dynamic) default(none)\
-    shared(offset, elements_per_proc, tsize, npts, occ, virt, v_twts, m_o, m_teps_o, m_v, m_teps_v, c_c, c_teps)\
+    shared(moffset, mnpts_to_proc, m1Dnpts, m3Dnpts, mnocc, mbvirt, mv1Dwts, mmo, mm1Deps_o, mmv, mm1Deps_v, mc_c, mm1Deps_ov)\
     collapse(2)
-                for (size_t k = 0; k < tsize; k++){
-                    for (int p = offset; p < offset+elements_per_proc; p++){
+                for (size_t k = 0; k < m1Dnpts; k++){
+                    for (int p = moffset; p < moffset+mnpts_to_proc; p++){
                         //scale o_p, v_p, c2_p by e term
                         //
-                        double v_o_p[occ];
-                        double v_v_p[virt];
-                        double m_c_p[occ][virt];
-                        for (size_t i = 0; i < occ; i++) 
-                            v_o_p [i] = m_o [p*occ+i] * m_teps_o[k*occ+i]; 
-                        for (size_t a = 0; a < virt; a++) 
-                            v_v_p [a] = m_v [p*virt+a] * m_teps_v[k*virt+a]; 
-                        for (size_t i =0; i < occ; i++) {
-                            for (size_t a = 0; a < virt; a++){
-                                m_c_p [i][a] = c_c [p*occ*virt+i*virt+a] 
-                                    * c_teps[k*occ*virt+i*virt+a]; 
+                        double v_o_p[mnocc];
+                        double v_v_p[mnvirt];
+                        double m_c_p[mnocc][mnvirt];
+                        for (size_t i = 0; i < mnocc; i++) 
+                            v_o_p[i] = mmo[p * mnocc + i] 
+                                * mm1Deps_o[k * mnocc + i]; 
+                        for (size_t a = 0; a < mnvirt; a++) 
+                            v_v_p[a] = mmv[p * mnvirt + a] 
+                                * mm1Deps_v[k * mnvirt + a]; 
+                        for (size_t i =0; i < mnocc; i++) {
+                            for (size_t a = 0; a < mnvirt; a++){
+                                m_c_p[i][a] = 
+                                    mc_c [p * mnocc * mnvirt + i * mnvirt + a] *
+                                    mm1Deps_ov[k * mnocc * mnvirt + i * mnvirt + a]; 
                             }//for a
                         }//for i
 
                         for (int q = 0; q <= p; q++){
 
                             double jo = 0;
-                            for (size_t a = 0; a < virt; a++){
+                            for (size_t a = 0; a < mnvirt; a++){
                                 //calc temp 1 and temp 2
                                 double tmp1 = 0;
                                 double tmp2 = 0;
-                                for (size_t i = 0; i < occ; i++){
-                                    tmp1 += v_o_p[i] * c_c[q*occ*virt+i*virt+a];
-                                    tmp2 += m_o[q*occ+i] * m_c_p[i][a];
+                                for (size_t i = 0; i < mnocc; i++){
+                                    tmp1 += v_o_p[i] *
+                                        mc_c[q * mnocc * mnvirt + i * mnvirt + a];
+                                    tmp2 += mmo[q*mnocc+i] * m_c_p[i][a];
                                 }//for 
                                 jo += tmp1 * tmp2;
                             }//for a
                             //calc j
                             double j = 0;
-                            for (size_t i = 0; i < occ; i++){
-                                for (size_t a = 0; a < virt; a++){
-                                    j += m_c_p[i][a]*c_c[q*occ*virt+i*virt+a];
+                            for (size_t i = 0; i < mnocc; i++){
+                                for (size_t a = 0; a < mnvirt; a++){
+                                    j += m_c_p[i][a] 
+                                        * mc_c[q * mnocc * mnvirt + i * mnvirt+a];
                                 }
                             }//for i
                             //Calc o
                             double o = 0;
-                            for (size_t i = 0; i <occ; i++){
-                                o += v_o_p[i]*m_o[q*occ+i];
+                            for (size_t i = 0; i < mnocc; i++){
+                                o += v_o_p[i]*mmo[q * mnocc + i];
                             }//for i
                             //calc v
                             double v = 0;
-                            for (size_t a = 0; a < virt; a++){
-                                v += v_v_p[a] * m_v[q*virt+a];
+                            for (size_t a = 0; a < mnvirt; a++){
+                                v += v_v_p[a] * mmv[q * mnvirt + a];
                             }
 
                             double sum = (jo - 2 * j * o) * v;
@@ -135,7 +140,7 @@ namespace libqqc {
                             }//if double counting
 
                             //calc e_mp2 by multiplying with tweights.  
-                            e_mp2 += sum * v_twts[k];
+                            e_mp2 += sum * mv1Dwts[k];
                         }//q for
                     }//p
                 }//for k 
