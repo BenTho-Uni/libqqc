@@ -25,9 +25,11 @@ namespace libqqc {
         size_t nocc = mvault.get_mnocc();
         size_t nvirt = mvault.get_mnvirt();
         size_t nmo = nocc + nvirt;
+        size_t nao = mvault.get_mnao(); 
 
         // setting up the MO quantaties and calculating them
         double* mcoeff = mvault.get_mmat_coeff();
+        double* mfao = mvault.get_mmat_fock();
         double* m_o = new double[p3Dnpts * nocc]();
         double* m_v = new double[p3Dnpts * nvirt]();
         double* c_c = new double[p3Dnpts * nocc * nvirt]();
@@ -39,7 +41,46 @@ namespace libqqc {
         double* m1Deps_v = new double[p1Dnpts * nvirt]();
         double* c1Deps_ov = new double[p1Dnpts * nocc * nvirt]();
 
-        //mo transformations
+        // AO to MO transformations
+        for (size_t p = 0; p < nmo; p++){
+            vf[p] = 0;
+            for (size_t k = 0; k < nao; k++) {
+                vf[p] += mcoeff[k * nmo + p] * mfao[p * nao + k] * mcoeff[p * nao + k];
+            }
+        }
+        // Fock-Matrix F $F_{MO} = C^T F_{AO} C
+        // 
+        // Save a Transpose of the Matrix for better cache alignment
+        //
+        double mcoeff_t[ nao * nmo];
+        for (size_t i = 0; i < nao; i++){
+            for (size_t j = 0; j <nmo; j++){
+                mcoeff_t[i * nmo + j ] = mcoeff [j * nmo + i];
+            }
+        }
+
+        for (size_t p = 0; p < nmo; p ++){
+            for (size_t l = 0; l < nao; l++){
+                double temp = 0;
+                for (size_t k = 0; k < nao; k++){
+                    // Matrix Multiplication A*B multiplies the Row of A with 
+                    // Column of B. That is a Problem in B, as we have filled it 
+                    // Row major which would lead to cache misses. 
+                    // We therefore traferce over the transposed matrix instead, 
+                    // as we don't have to adhere to simulating "matrix multiplication"
+                    // and multiply row A with row of B^T
+                    temp += mfao[l * nao + k] * mcoeff_t[p * nao + k];
+                }
+                vf[p] += mcoeff_t[p * nao + l] * temp;
+            }
+        }
+
+        // Orbitals O $O_{MO} = O * C$
+        //
+        // (weighted) Coulomb Integral U_{MO}^P: for each slice P 
+        // $U_{MO} = rwts^P * C_{occpuid}^T * (u_{AO}^P * C_{virtuals}
+        //
+        
 
         // Precalculating the exponential factors
         for (size_t k = 0; k < p1Dnpts; k++){
