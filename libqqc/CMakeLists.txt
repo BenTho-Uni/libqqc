@@ -29,6 +29,13 @@ set(HDR_LOADER
     loader/loader_mp2.h
 )
 
+set(SRC_METHODS
+)
+
+set(HDR_METHODS
+    methods/qmp/qmp2_energy.h
+)
+
 set(SRC_UTILS
 )
 
@@ -74,6 +81,7 @@ set(SRC
     ${SRC_ADDITIONAL}
     ${SRC_GRIDS}
     ${SRC_LOADER}
+    ${SRC_METHODS}
     ${SRC_UTILS}
     ${SRC_VAULTS}
     main.cpp
@@ -83,6 +91,7 @@ set(HDR
     ${HDR_ADDITIONAL}
     ${HDR_GRIDS}
     ${HDR_LOADER}
+    ${HDR_METHODS}
     ${HDR_VAULTS}
     ${HDR_UTILS}
 )

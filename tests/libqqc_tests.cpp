@@ -8,6 +8,7 @@
 #include "folder/test_file1.h"
 #include "loader/test_loader_mp2.h"
 #include "grids/test_grid.h"
+#include "methods/qmp/test_qmp2_energy.h"
 #include "utils/test_ttimer.h"
 #include "vaults/test_vault_mp2.h"
 
@@ -61,6 +62,14 @@ int main (){
     cout << "... " 
         << ((b_grid) ? "all passed" : "some failed") << endl;
 
+    Test_Qmp2_energy qmp2_energy;
+    bool b_qmp2_energy = qmp2_energy.run_all_tests(out);
+    cout << endl << "Testing methods/qmp2/qmp2_energy.h, Qmp2_energy::" 
+        << flush << endl;
+    cout << out.str();
+    cout << "... " 
+        << ((b_qmp2_energy) ? "all passed" : "some failed") << endl;
+
     Test_Vault_mp2 vault_mp2;
     bool b_vault_mp2 = vault_mp2.run_all_tests(out);
     cout << endl << "Testing vaults/vault_mp2.h, Vault_mp2::" << flush << endl;
@@ -80,6 +89,6 @@ int main (){
         ((file2.run_test()) ? "passed" : "failed") << endl;
 #endif
 
-    return ((b_clock && b_timer && b_loader_mp2 && b_grid 
+    return ((b_clock && b_timer && b_loader_mp2 && b_grid && b_qmp2_energy
                 && b_vault_mp2) ? 0 : 1);
 }

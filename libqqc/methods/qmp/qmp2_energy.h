@@ -29,8 +29,8 @@ namespace libqqc {
             double *mv1Dpts = NULL; ///< Pointer to array of 1D grid point
             double *mv1Dwts = NULL; ///< Pointer to array of 1D grid point weights
             
-            int &moffset; ///< Offset of 3D grid pts to start calculation from
-            int &mnpts_to_proc; ///< Numer of 3D grid pts to process in this iteration
+            size_t &moffset; ///< Offset of 3D grid pts to start calculation from
+            size_t &mnpts_to_proc; ///< Numer of 3D grid pts to process in this iteration
 
         public: 
             ///
@@ -58,8 +58,8 @@ namespace libqqc {
             Qmp2_energy (size_t &p1Dnpts, size_t &p3Dnpts, size_t &nocc, 
                     size_t &nvirt, double *mo, double *mv, double *c_c,
                     double *m1Deps_o, double *m1Deps_v, double *m1Deps_ov, 
-                    double *vf, double *v1Dpts, double *v1Dwts, int &offset, 
-                    int &npts_to_proc) : m1Dnpts(p1Dnpts), 
+                    double *vf, double *v1Dpts, double *v1Dwts, size_t &offset, 
+                    size_t &npts_to_proc) : m1Dnpts(p1Dnpts), 
                     m3Dnpts(p3Dnpts), mnocc(nocc), mnvirt(nvirt), mmo(mo),
                     mmv(mv), mc_c(c_c), mm1Deps_o(m1Deps_o), mm1Deps_v(m1Deps_v),
                     mm1Deps_ov(m1Deps_ov), mvf(vf), mv1Dpts(v1Dpts), 
@@ -77,12 +77,19 @@ namespace libqqc {
 
                 double e_mp2 = 0;
 #pragma omp parallel for reduction(+:e_mp2) schedule(dynamic) default(none)\
-    shared(moffset, mnpts_to_proc, m1Dnpts, m3Dnpts, mnocc, mbvirt, mv1Dwts, mmo, mm1Deps_o, mmv, mm1Deps_v, mc_c, mm1Deps_ov)\
+    shared(moffset, mnpts_to_proc, m1Dnpts, m3Dnpts, mnocc, mnvirt, mv1Dwts, mmo, mm1Deps_o, mmv, mm1Deps_v, mc_c, mm1Deps_ov)\
     collapse(2)
+                // We loop over the points on the 1D grid quadrature of 
+                // the variable used to remove the energy in the denominator
+                // These are generally <10 points, so no need to mass. parralelize
+                // over this. 
                 for (size_t k = 0; k < m1Dnpts; k++){
-                    for (int p = moffset; p < moffset+mnpts_to_proc; p++){
-                        //scale o_p, v_p, c2_p by e term
-                        //
+                    // Then we loop over the points on the 3D grid, 
+                    // which are indipendent of each other and can be parallelized
+                    for (size_t p = moffset; p < moffset+mnpts_to_proc; p++){
+                        // First off we scale a copy of the orbitals and integrals
+                        // by the exponent of our energies, which we prescaled,
+                        // as exp functions are expensive
                         double v_o_p[mnocc];
                         double v_v_p[mnvirt];
                         double m_c_p[mnocc][mnvirt];
@@ -100,20 +107,36 @@ namespace libqqc {
                             }//for a
                         }//for i
 
-                        for (int q = 0; q <= p; q++){
+                        // And then we loop over the inner 3D grid points. 
+                        // These are symmetrix, so we only need to compute 
+                        // one triangle of the "matrix". 
+                        for (size_t q = 0; q <= p; q++){
 
+                            // jo, j, o, v are the names for the parts of the 
+                            // calculations in the original derivation
+                            // by Bloomfield. But this is basically matrix 
+                            // multiplications, with as much cache alignment
+                            // as we ca. 
                             double jo = 0;
                             for (size_t a = 0; a < mnvirt; a++){
-                                //calc temp 1 and temp 2
+                                // we have here two intermediates we can precalc
+                                // which saves some cycles
                                 double tmp1 = 0;
                                 double tmp2 = 0;
                                 for (size_t i = 0; i < mnocc; i++){
+                                    // these terms are the only ones with
+                                    // problematic cache alignments, 
+                                    // as we have to move in a and i 
+                                    // direction simultaniously. 
+                                    // Could be remedied by having a transposed
+                                    // copy, but this increases the data footprint.
                                     tmp1 += v_o_p[i] *
                                         mc_c[q * mnocc * mnvirt + i * mnvirt + a];
                                     tmp2 += mmo[q*mnocc+i] * m_c_p[i][a];
                                 }//for 
                                 jo += tmp1 * tmp2;
                             }//for a
+                            
                             //calc j
                             double j = 0;
                             for (size_t i = 0; i < mnocc; i++){
@@ -122,12 +145,14 @@ namespace libqqc {
                                         * mc_c[q * mnocc * mnvirt + i * mnvirt+a];
                                 }
                             }//for i
-                            //Calc o
+
+                            // calc o
                             double o = 0;
                             for (size_t i = 0; i < mnocc; i++){
-                                o += v_o_p[i]*mmo[q * mnocc + i];
+                                o += v_o_p[i] *  mmo[q * mnocc + i];
                             }//for i
-                            //calc v
+
+                            // calc v
                             double v = 0;
                             for (size_t a = 0; a < mnvirt; a++){
                                 v += v_v_p[a] * mmv[q * mnvirt + a];
@@ -135,11 +160,14 @@ namespace libqqc {
 
                             double sum = (jo - 2 * j * o) * v;
 
+                            // here we finish exploiting the symmetry and account
+                            // for the double values
                             if (p != q){
                                 sum *= 2.0;
-                            }//if double counting
+                            }
 
-                            //calc e_mp2 by multiplying with tweights.  
+                            // and finally we weight the energy part for this 
+                            // point on the 1D grid.
                             e_mp2 += sum * mv1Dwts[k];
                         }//q for
                     }//p
