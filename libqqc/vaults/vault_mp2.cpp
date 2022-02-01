@@ -85,8 +85,6 @@ namespace libqqc {
                     "3D Grid data not valid.");
             // get number of points to be looped over, used later
             size_t npts = m3Dgrid.get_mnpts();
-            if (npts != p1Dgrid.get_mnpts()) throw invalid_argument(
-                    "Both grids have different number of points.");
             if (!mat_fock) throw invalid_argument(
                     "Fock matrix pointer cannot be NULL.");
             if (!mat_coeff) throw invalid_argument(

@@ -27,21 +27,22 @@ namespace libqqc {
         size_t nmo = nocc + nvirt;
         size_t nao = mvault.get_mnao(); 
 
-        // setting up the MO quantaties and calculating them
         double* mcoeff = mvault.get_mmat_coeff();
         double* mfao = mvault.get_mmat_fock();
         double* mcgto = mvault.get_mmat_cgto();
         double* ccao = mvault.get_mcube_coul();
-        double* m_o = new double[p3Dnpts * nocc]();
-        double* m_v = new double[p3Dnpts * nvirt]();
-        double* c_c = new double[p3Dnpts * nocc * nvirt]();
-        double vf[nmo];
-        double v1Dpts[p1Dnpts];
-        double v1Dwts[p1Dnpts];
+        double* v1Dpts = mvault.get_m1Dgrid().get_mpts();
+        double* v1Dwts = mvault.get_m1Dgrid().get_mwts();
+
+        // setting up the MO quantaties and calculating them
 
         double* m1Deps_o = new double[p1Dnpts * nocc]();
         double* m1Deps_v = new double[p1Dnpts * nvirt]();
         double* c1Deps_ov = new double[p1Dnpts * nocc * nvirt]();
+        double* m_o = new double[p3Dnpts * nocc]();
+        double* m_v = new double[p3Dnpts * nvirt]();
+        double* c_c = new double[p3Dnpts * nocc * nvirt]();
+        double vf[nmo];
 
         // AO to MO transformations
         // Fock-Matrix F $F_{MO} = C^T F_{AO} C
@@ -50,7 +51,7 @@ namespace libqqc {
         //
         double mcoeff_t[ nao * nmo];
 
-#pragma omp parallel for schedule(dynamic) default(none)\
+//#pragma omp parallel for schedule(dynamic) default(none)\
         shared(nao, nmo, mcoeff_t, mcoeff)\
         collapse(2)
         for (size_t i = 0; i < nao; i++){
@@ -59,7 +60,7 @@ namespace libqqc {
             }
         }
 
-#pragma omp parallel for schedule(dynamic) default(none)\
+//#pragma omp parallel for schedule(dynamic) default(none)\
         shared(nmo, nao, mfao, mcoeff_t, vf)\
         collapse(2)
         for (size_t p = 0; p < nmo; p ++){
@@ -78,9 +79,10 @@ namespace libqqc {
             }
         }
 
+
         // Orbitals O $O_{MO} = O * C$
         //
-#pragma omp parallel for schedule(dynamic) default(none)\
+//#pragma omp parallel for schedule(dynamic) default(none)\
         shared(p3Dnpts, nmo, nao, nocc, nvirt, m_o, m_v, mcgto, mcoeff_t)\
         collapse(3)
         for (size_t p = 0; p < p3Dnpts; p++){
@@ -100,7 +102,7 @@ namespace libqqc {
         // (weighted) Coulomb Integral U_{MO}^P: for each slice P 
         // $U_{MO} = rwts^P * C_{occpuid}^T * (u_{AO}^P * C_{virtuals}
         //
-#pragma omp parallel for schedule(dynamic) default(none)\
+//#pragma omp parallel for schedule(dynamic) default(none)\
         shared(p3Dnpts, nocc, nvirt, nao, ccao, mcoeff_t, c_c)\
         collapse(3)
         for (size_t p = 0; p < p3Dnpts; p++){
@@ -119,10 +121,9 @@ namespace libqqc {
                 }
             }
         }
-        
 
         // Precalculating the exponential factors
-#pragma omp parallel for schedule(dynamic) default(none)\
+//#pragma omp parallel for schedule(dynamic) default(none)\
         shared(p1Dnpts, nocc, nvirt, m1Deps_o, m1Deps_v, c1Deps_ov, \
                 v1Dpts, vf)
         for (size_t k = 0; k < p1Dnpts; k++){

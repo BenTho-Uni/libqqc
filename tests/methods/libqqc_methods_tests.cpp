@@ -6,6 +6,7 @@
 
 // includes of the test headers
 #include "qmp/test_qmp2_energy.h"
+#include "test_do_qmp2.h"
 
 #if LIBQQC_WITH_EIGEN
 //#include "eigen_folder/test_file3_eigen.h"
@@ -33,6 +34,14 @@ int main (){
     cout << "... " 
         << ((b_qmp2_energy) ? "all passed" : "some failed") << endl;
 
+    Test_Do_qmp2 do_qmp2;
+    bool b_do_qmp2 = do_qmp2.run_all_tests(out);
+    cout << endl << "Testing methods/do_qmp2.h, Do_qmp2::" 
+        << flush << endl;
+    cout << out.str();
+    cout << "... " 
+        << ((b_do_qmp2) ? "all passed" : "some failed") << endl;
+
 #if LIBQQC_WITH_EIGEN
     //    test_file3_eigen file3;
     //    cout << "Testing eigen_folder/file3_eigen, function_eigen ... " << 
@@ -45,6 +54,6 @@ int main (){
     //        ((file2.run_test()) ? "passed" : "failed") << endl;
 #endif
 
-    return ((b_qmp2_energy) ? 0 : 1);
+    return ((b_qmp2_energy && b_do_qmp2) ? 0 : 1);
 }
 

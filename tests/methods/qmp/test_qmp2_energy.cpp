@@ -1,7 +1,6 @@
 //include file header
 #include "test_qmp2_energy.h"
 
-
 // includes of the to be tested headers
 #include "../../../libqqc/methods/qmp/qmp2_energy.h"
 
@@ -38,7 +37,8 @@ namespace libqqc {
                 m1Deps_v, m1Deps_ov, vf, v1Dpts, v1Dwts, offset, npts_to_proc);
 
         double ene = qmp2_energy.compute();
-        double ref = -67079871.458116568625;
+        //double ref = -67079871.458116568625;
+        double ref = -67198187.5022573173;
         double tol = 10e-8;
         result = (abs(ene - ref) < tol);
 

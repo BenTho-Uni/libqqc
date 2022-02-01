@@ -30,7 +30,7 @@ namespace libqqc {
             ///
             /// @param[in,out] pvault vault object which holds the data
             ///
-            Do_qmp2(Vault_mp2 &pvault, ostringstream &pout) : mvault(pvault) {};
+            Do_qmp2(Vault_mp2 &pvault) : mvault(pvault) {};
             ///
             /// @brief this runs the setup and executes the calculation
             ///

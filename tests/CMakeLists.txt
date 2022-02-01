@@ -26,9 +26,11 @@ set(HDR_GRIDS
 
 set(SRC_METHODS
     methods/qmp/test_qmp2_energy.cpp
+    methods/test_do_qmp2.cpp
     )
 set(HDR_METHODS
     methods/qmp/test_qmp2_energy.h
+    methods/test_do_qmp2.h
     )
 
 set(SRC_UTILS
