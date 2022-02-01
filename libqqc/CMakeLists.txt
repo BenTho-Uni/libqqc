@@ -30,10 +30,12 @@ set(HDR_LOADER
 )
 
 set(SRC_METHODS
+    methods/do_qmp2.cpp
 )
 
 set(HDR_METHODS
     methods/qmp/qmp2_energy.h
+    methods/do_qmp2.h
 )
 
 set(SRC_UTILS

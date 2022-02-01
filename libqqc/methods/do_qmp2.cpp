@@ -30,6 +30,8 @@ namespace libqqc {
         // setting up the MO quantaties and calculating them
         double* mcoeff = mvault.get_mmat_coeff();
         double* mfao = mvault.get_mmat_fock();
+        double* mcgto = mvault.get_mmat_cgto();
+        double* ccao = mvault.get_mcube_coul();
         double* m_o = new double[p3Dnpts * nocc]();
         double* m_v = new double[p3Dnpts * nvirt]();
         double* c_c = new double[p3Dnpts * nocc * nvirt]();
@@ -42,23 +44,24 @@ namespace libqqc {
         double* c1Deps_ov = new double[p1Dnpts * nocc * nvirt]();
 
         // AO to MO transformations
-        for (size_t p = 0; p < nmo; p++){
-            vf[p] = 0;
-            for (size_t k = 0; k < nao; k++) {
-                vf[p] += mcoeff[k * nmo + p] * mfao[p * nao + k] * mcoeff[p * nao + k];
-            }
-        }
         // Fock-Matrix F $F_{MO} = C^T F_{AO} C
         // 
         // Save a Transpose of the Matrix for better cache alignment
         //
         double mcoeff_t[ nao * nmo];
+
+#pragma omp parallel for schedule(dynamic) default(none)\
+        shared(nao, nmo, mcoeff_t, mcoeff)\
+        collapse(2)
         for (size_t i = 0; i < nao; i++){
-            for (size_t j = 0; j <nmo; j++){
+            for (size_t j = 0; j < nmo; j++){
                 mcoeff_t[i * nmo + j ] = mcoeff [j * nmo + i];
             }
         }
 
+#pragma omp parallel for schedule(dynamic) default(none)\
+        shared(nmo, nao, mfao, mcoeff_t, vf)\
+        collapse(2)
         for (size_t p = 0; p < nmo; p ++){
             for (size_t l = 0; l < nao; l++){
                 double temp = 0;
@@ -77,12 +80,51 @@ namespace libqqc {
 
         // Orbitals O $O_{MO} = O * C$
         //
+#pragma omp parallel for schedule(dynamic) default(none)\
+        shared(p3Dnpts, nmo, nao, nocc, nvirt, m_o, m_v, mcgto, mcoeff_t)\
+        collapse(3)
+        for (size_t p = 0; p < p3Dnpts; p++){
+            for (size_t q = 0; q < nmo; q++){
+                for (size_t k = 0; k < nao; k++){
+                    if (q < nocc){
+                        m_o[p * nocc + q] = mcgto[p * nmo + q] 
+                            * mcoeff_t[p * nao + k];
+                    }
+                    if (q >= nocc){
+                        m_v[p * nvirt + q] = mcgto[p * nmo + q] 
+                            * mcoeff_t[p * nao + k];
+                    }
+                }
+            }
+        }
         // (weighted) Coulomb Integral U_{MO}^P: for each slice P 
         // $U_{MO} = rwts^P * C_{occpuid}^T * (u_{AO}^P * C_{virtuals}
         //
+#pragma omp parallel for schedule(dynamic) default(none)\
+        shared(p3Dnpts, nocc, nvirt, nao, ccao, mcoeff_t, c_c)\
+        collapse(3)
+        for (size_t p = 0; p < p3Dnpts; p++){
+            for (size_t i = 0; i < nocc; i++){
+                for (size_t a = 0; a < nvirt; a++){
+                    size_t pos_a = nocc + a;
+                    for (size_t l = 0; l < nao; l++){
+                        double temp = 0;
+                        for (size_t k = 0; k < nao; k++){
+                           temp += ccao[p * nao * nao + l * nao + k] 
+                               * mcoeff_t[pos_a * nao + k];
+                        }
+                        c_c [p * nvirt * nocc + i * nvirt + a] = 
+                            mcoeff_t[i * nao + l] + temp;
+                    }
+                }
+            }
+        }
         
 
         // Precalculating the exponential factors
+#pragma omp parallel for schedule(dynamic) default(none)\
+        shared(p1Dnpts, nocc, nvirt, m1Deps_o, m1Deps_v, c1Deps_ov, \
+                v1Dpts, vf)
         for (size_t k = 0; k < p1Dnpts; k++){
             for (size_t i = 0; i < nocc; i++){
                 m1Deps_o[k * nocc+ i] = 
