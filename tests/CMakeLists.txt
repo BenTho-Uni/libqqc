@@ -35,9 +35,11 @@ set(HDR_METHODS
 
 set(SRC_UTILS
     utils/test_ttimer.cpp
+    utils/test_load_from_file.cpp
     )
 set(HDR_UTILS
     utils/test_ttimer.h
+    utils/test_load_from_file.h
     )
 
 set(SRC_VAULTS

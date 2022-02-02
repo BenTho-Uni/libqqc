@@ -6,6 +6,7 @@
 
 // includes of the test headers
 #include "test_ttimer.h"
+#include "test_load_from_file.h"
 
 #if LIBQQC_WITH_EIGEN
 //#include "eigen_folder/test_file3_eigen.h"
@@ -39,6 +40,13 @@ int main (){
     cout << "... " 
         << ((b_timer) ? "all passed" : "some failed") << endl;
 
+    Test_load_from_file load_from_file;
+    bool b_load_from_file = load_from_file.run_all_tests(out);
+    cout << endl << "Testing utils/load_from_file.h, " << flush << endl;
+    cout << out.str();
+    cout << "... " 
+        << ((b_load_from_file) ? "all passed" : "some failed") << endl;
+
 #if LIBQQC_WITH_EIGEN
 //    test_file3_eigen file3;
 //    cout << "Testing eigen_folder/file3_eigen, function_eigen ... " << 
@@ -51,6 +59,6 @@ int main (){
 //        ((file2.run_test()) ? "passed" : "failed") << endl;
 #endif
 
-    return ((b_clock && b_timer) ? 0 : 1);
+    return ((b_clock && b_timer && b_load_from_file) ? 0 : 1);
 }
 

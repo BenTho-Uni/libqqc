@@ -43,6 +43,7 @@ set(SRC_UTILS
 
 set(HDR_UTILS
     utils/ttimer.h
+    utils/load_from_file.h
 )
 
 set(SRC_VAULTS

@@ -91,27 +91,27 @@ namespace libqqc {
         bool result = false;
 
         bool b_mrun = test_get_mrun();
-        out << "    Testing Tclock::get_mrun()    ... " << flush
+        out << "    Testing Tclock::get_mrun()         ... " << flush
             << (b_mrun ? "passed" : "failed") << endl;
 
         bool b_stop = test_stop_clock();
-        out << "    Testing Tclock::stop_clock()  ... " << flush
+        out << "    Testing Tclock::stop_clock()       ... " << flush
             << (b_stop ? "passed" : "failed") << endl;
 
         bool b_start = test_start_clock();
-        out << "    Testing Tclock::start_clock() ... " << flush
+        out << "    Testing Tclock::start_clock()      ... " << flush
             << (b_start ? "passed" : "failed") << endl;
 
         bool b_wall = test_wall_time();
-        out << "    Testing Tclock::wall_time()   ... " << flush
+        out << "    Testing Tclock::wall_time()        ... " << flush
             << (b_wall ? "passed" : "failed") << endl;
 
         bool b_cpu = test_cpu_time();
-        out << "    Testing Tclock::cpu_time()    ... " << flush
+        out << "    Testing Tclock::cpu_time()         ... " << flush
             << (b_cpu ? "passed" : "failed") << endl;
 
         bool b_print = test_print_time();
-        out << "    Testing Tclock::print_time()  ... " << flush
+        out << "    Testing Tclock::print_time()       ... " << flush
             << (b_print ? "passed" : "failed") << endl;
 
         result = b_mrun && b_stop && b_start && b_cpu && b_print;
