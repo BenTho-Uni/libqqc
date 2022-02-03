@@ -50,7 +50,7 @@ namespace libqqc {
         //
         double mcoeff_t[ nao * nmo];
 
-//#pragma omp parallel for schedule(dynamic) default(none)\
+#pragma omp parallel for schedule(dynamic) default(none)\
         shared(nao, nmo, mcoeff_t, mcoeff)\
         collapse(2)
         for (size_t i = 0; i < nao; i++){
