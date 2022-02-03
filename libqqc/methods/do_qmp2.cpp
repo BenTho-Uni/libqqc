@@ -59,7 +59,7 @@ namespace libqqc {
             }
         }
 
-//#pragma omp parallel for schedule(dynamic) default(none)\
+#pragma omp parallel for schedule(dynamic) default(none)\
         shared(nmo, nao, mfao, mcoeff_t, vf)\
         collapse(2)
         for (size_t p = 0; p < nmo; p ++){
@@ -81,7 +81,7 @@ namespace libqqc {
 
         // Orbitals O $O_{MO} = O * C$
         //
-//#pragma omp parallel for schedule(dynamic) default(none)\
+#pragma omp parallel for schedule(dynamic) default(none)\
         shared(p3Dnpts, nmo, nao, nocc, nvirt, m_o, m_v, mcgto, mcoeff_t)\
         collapse(3)
         for (size_t p = 0; p < p3Dnpts; p++){
@@ -101,7 +101,7 @@ namespace libqqc {
         // (weighted) Coulomb Integral U_{MO}^P: for each slice P 
         // $U_{MO} = rwts^P * C_{occpuid}^T * (u_{AO}^P * C_{virtuals}
         //
-//#pragma omp parallel for schedule(dynamic) default(none)\
+#pragma omp parallel for schedule(dynamic) default(none)\
         shared(p3Dnpts, nocc, nvirt, nao, ccao, mcoeff_t, c_c)\
         collapse(3)
         for (size_t p = 0; p < p3Dnpts; p++){
@@ -122,7 +122,7 @@ namespace libqqc {
         }
 
         // Precalculating the exponential factors
-//#pragma omp parallel for schedule(dynamic) default(none)\
+#pragma omp parallel for schedule(dynamic) default(none)\
         shared(p1Dnpts, nocc, nvirt, m1Deps_o, m1Deps_v, c1Deps_ov, \
                 v1Dpts, vf)
         for (size_t k = 0; k < p1Dnpts; k++){
@@ -149,6 +149,7 @@ namespace libqqc {
         
         size_t offset = 0;
         size_t npts_to_proc = p3Dnpts;
+        double energy = 0.0;
 
         Qmp2_energy  qmp2_energy(
                 p1Dnpts, 
@@ -167,18 +168,17 @@ namespace libqqc {
                 offset,
                 npts_to_proc);
 
-        double energy = 0.0;
         energy = qmp2_energy.compute();
 
         out << endl;
         out << "Q-MP(2) Ground State Energy : " << energy << endl;
 
-        delete[] m_o;
-        delete[] m_v;
         delete[] c_c;
-        delete[] m1Deps_o;
-        delete[] m1Deps_v;
+        delete[] m_v;
+        delete[] m_o;
         delete[] c1Deps_ov;
+        delete[] m1Deps_v;
+        delete[] m1Deps_o;
 
     } //Do_qmp2::member_fn
 
