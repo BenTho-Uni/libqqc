@@ -1,8 +1,8 @@
-#ifndef LIBQQC_VAULT_MP2_H
-#define LIBQQC_VAULT_MP2_H
+#ifndef LIBQQC_VAULT_QMP2_H
+#define LIBQQC_VAULT_QMP2_H
 
 #include "../grids/grid.h"
-#include "../loader/loader_mp2.h"
+#include "../loader/loader_qmp2.h"
 
 //Additional libraries
 #include <stdexcept>
@@ -13,13 +13,13 @@ using namespace std;
 namespace libqqc {
 
     ///
-    /// @brief Holder class for data used by Q-MP2 method
+    /// @brief Holder class for data used by Q-QMP2 method
     ///
     /// @details This class is used to hold all neccessary data used by the 
-    /// Q-MP2 method. 
+    /// Q-QMP2 method. 
     ///
 
-    class Vault_mp2 {
+    class Vault_qmp2 {
         private:
 
             // Meta information
@@ -61,7 +61,7 @@ namespace libqqc {
             /// @details Constructor of vault class, setting the variables
             /// through the loader given in its argument
             ///
-            Vault_mp2(Loader_mp2 loader); 
+            Vault_qmp2(Loader_qmp2 loader); 
 
             ///
             /// @brief Constructor of vault class
@@ -81,7 +81,7 @@ namespace libqqc {
             /// @param[in,out] mat_cgto pointer to CGTO matrix to be copied
             /// @param[in,out] mat_coul pointer to coulomb integral matrix to be copied
             ///
-            Vault_mp2(size_t nocc, size_t nvirt, size_t nao, double p1Dtol, 
+            Vault_qmp2(size_t nocc, size_t nvirt, size_t nao, double p1Dtol, 
                     int prnt_lvl, Grid p1Dgrid, Grid p3Dgrid, double* mat_fock, 
                     double* mat_coeff, double* mat_cgto, double* mat_coul); 
 
@@ -90,7 +90,7 @@ namespace libqqc {
             ///
             /// @details Destructor of vault class, deleting arrays 
             ///
-            ~Vault_mp2() {
+            ~Vault_qmp2() {
                 delete[] mmat_fock;
                 delete[] mmat_coeff;
                 delete[] mmat_cgto;
@@ -222,8 +222,8 @@ namespace libqqc {
                     "Coulomb integral matrix pointer cannot be NULL.");
                 return mcube_coul;
             };
-    }; // class Vault_mp2
+    }; // class Vault_qmp2
 
 } // namespace libqqc
 
-#endif //LIBQQC_VAULT_MP2_H
+#endif //LIBQQC_VAULT_QMP2_H

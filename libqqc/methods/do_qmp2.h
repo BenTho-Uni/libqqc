@@ -1,7 +1,8 @@
 #ifndef LIBQQC_DO_QMP2_H
 #define LIBQQC_DO_QMP2_H
 
-#include "../vaults/vault_mp2.h"
+#include "../vaults/vault_qmp2.h"
+#include "qmp/qmp2_energy.h"
 
 // Standard Headers
 #include <sstream>
@@ -19,7 +20,7 @@ namespace libqqc {
 
     class Do_qmp2 {
         private:
-           Vault_mp2 &mvault;
+           Vault_qmp2 &mvault;
 
         public: 
             ///
@@ -30,7 +31,7 @@ namespace libqqc {
             ///
             /// @param[in,out] pvault vault object which holds the data
             ///
-            Do_qmp2(Vault_mp2 &pvault) : mvault(pvault) {};
+            Do_qmp2(Vault_qmp2 &pvault) : mvault(pvault) {};
             ///
             /// @brief this runs the setup and executes the calculation
             ///

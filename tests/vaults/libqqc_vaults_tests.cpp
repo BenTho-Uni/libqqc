@@ -5,7 +5,7 @@
 #include <sstream>
 
 // includes of the test headers
-#include "test_vault_mp2.h"
+#include "test_vault_qmp2.h"
 
 #if LIBQQC_WITH_EIGEN
 //#include "eigen_folder/test_file3_eigen.h"
@@ -25,12 +25,12 @@ int main (){
 
     cout << "Performing tests for libqqc/vaults ..." << endl;
 
-    Test_Vault_mp2 vault_mp2;
-    bool b_vault_mp2 = vault_mp2.run_all_tests(out);
-    cout << endl << "Testing vaults/vault_mp2.h, vault_mp2::" << flush << endl;
+    Test_Vault_qmp2 vault_qmp2;
+    bool b_vault_qmp2 = vault_qmp2.run_all_tests(out);
+    cout << endl << "Testing vaults/vault_qmp2.h, vault_qmp2::" << flush << endl;
     cout << out.str();
     cout << "... " 
-        << ((b_vault_mp2) ? "all passed" : "some failed") << endl;
+        << ((b_vault_qmp2) ? "all passed" : "some failed") << endl;
 
 #if LIBQQC_WITH_EIGEN
     //    test_file3_eigen file3;
@@ -44,6 +44,6 @@ int main (){
     //        ((file2.run_test()) ? "passed" : "failed") << endl;
 #endif
 
-    return ((b_vault_mp2) ? 0 : 1);
+    return ((b_vault_qmp2) ? 0 : 1);
 }
 

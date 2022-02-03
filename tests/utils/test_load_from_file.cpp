@@ -55,8 +55,6 @@ namespace libqqc {
 
         load_array_from_file("../../data/h2o/f.mat", dim_ref, arr2D, ' ', 1);
 
-        cout << "hellO!" << endl;
-
         double res = 0;
         for (int i = 0; i < dim_ref.at(0); i++){ 
             for (int j = 0; j < dim_ref.at(1); j++){

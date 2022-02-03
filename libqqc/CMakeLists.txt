@@ -22,11 +22,12 @@ set(HDR_GRIDS
 )
 
 set(SRC_LOADER
-    loader/loader_mp2.cpp
+    loader/loader_qmp2.cpp
+    loader/loader_qmp2_from_file.cpp
 )
 
 set(HDR_LOADER
-    loader/loader_mp2.h
+    loader/loader_qmp2_from_file.h
 )
 
 set(SRC_METHODS
@@ -39,6 +40,7 @@ set(HDR_METHODS
 )
 
 set(SRC_UTILS
+    utils/load_from_file.cpp
 )
 
 set(HDR_UTILS
@@ -47,11 +49,11 @@ set(HDR_UTILS
 )
 
 set(SRC_VAULTS
-    vaults/vault_mp2.cpp
+    vaults/vault_qmp2.cpp
 )
 
 set(HDR_VAULTS
-    vaults/vault_mp2.cpp
+    vaults/vault_qmp2.cpp
 )
 
 # for compiling with the Eigen library

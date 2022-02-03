@@ -1,17 +1,17 @@
 ///
 /// Member functions for the vaults used by Q-MP2
-/// @file vault_mp2.cpp
+/// @file vault_qmp2.cpp
 /// @author Benjamin Thomitzni
 /// @version 0.1 11-01-2022
 //
 
-#include "vault_mp2.h"
+#include "vault_qmp2.h"
 
 using namespace std;
 
 namespace libqqc {
 
-    bool Vault_mp2 :: check_data_validity() {
+    bool Vault_qmp2 :: check_data_validity() {
 
         if (mnocc == 0) throw invalid_argument(
                 "Number of occupied orbitals shouldn't be 0.");
@@ -35,7 +35,7 @@ namespace libqqc {
         return true;
     }
 
-    Vault_mp2 :: Vault_mp2 (Loader_mp2 loader) {
+    Vault_qmp2 :: Vault_qmp2 (Loader_qmp2 loader) {
 
         // check if loader is empty
         //TODO: do this if loader is done
@@ -69,7 +69,7 @@ namespace libqqc {
         check_data_validity();
     }
 
-    Vault_mp2 :: Vault_mp2(size_t nocc, size_t nvirt, size_t nao, double p1Dtol,
+    Vault_qmp2 :: Vault_qmp2(size_t nocc, size_t nvirt, size_t nao, double p1Dtol,
             int prnt_lvl, Grid p1Dgrid, Grid p3Dgrid, double* mat_fock, 
             double* mat_coeff, double* mat_cgto, double* cube_coul) :
         mnocc(nocc), mnvirt(nvirt), mnao(nao), m1Dtol(p1Dtol), 

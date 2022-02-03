@@ -1,5 +1,5 @@
-#ifndef LIBQQC_TEST_LOADER_MP2_H
-#define LIBQQC_TEST_LOADER_MP2_H
+#ifndef LIBQQC_TEST_LOADER_QMP2_FROM_FILE_H
+#define LIBQQC_TEST_LOADER_QMP2_FROM_FILE_H
 
 //include needed libraries
 #include <iostream>
@@ -11,17 +11,17 @@ using namespace std;
 namespace libqqc {
 
     ///
-    /// @brief Holding class for testing Loader_mp2 functions
+    /// @brief Holding class for testing Loader_qmp2_from_file functions
     ///
     /// @details This class holds the setup for testing the 
-    /// Loader_mp2 functions
+    /// Loader_qmp2_from_file functions
     ///
 
-    class Test_Loader_mp2 {
+    class Test_Loader_qmp2_from_file {
         private: 
 
             ///
-            /// @brief method for testing load_nocc
+            /// @brief method for testing function load_nocc
             ///
             /// @details This method tests the function and returns TRUE or 
             /// false depending on correct behaviour
@@ -31,7 +31,7 @@ namespace libqqc {
             bool test_load_nocc();
 
             ///
-            /// @brief method for testing load_nvirt
+            /// @brief method for testing function load_nvirt
             ///
             /// @details This method tests the function and returns TRUE or 
             /// false depending on correct behaviour
@@ -41,7 +41,7 @@ namespace libqqc {
             bool test_load_nvirt();
 
             ///
-            /// @brief method for testing load_nao
+            /// @brief method for testing function load_nao
             ///
             /// @details This method tests the function and returns TRUE or 
             /// false depending on correct behaviour
@@ -51,7 +51,7 @@ namespace libqqc {
             bool test_load_nao();
 
             ///
-            /// @brief method for testing load_1Dtol
+            /// @brief method for testing function load_1Dtol
             ///
             /// @details This method tests the function and returns TRUE or 
             /// false depending on correct behaviour
@@ -61,7 +61,7 @@ namespace libqqc {
             bool test_load_1Dtol();
 
             ///
-            /// @brief method for testing load_prnt_lvl
+            /// @brief method for testing function load_prnt_lvl
             ///
             /// @details This method tests the function and returns TRUE or 
             /// false depending on correct behaviour
@@ -71,27 +71,17 @@ namespace libqqc {
             bool test_load_prnt_lvl();
 
             ///
-            /// @brief method for testing load_1Dgrid
+            /// @brief method for testing function load_grid
             ///
             /// @details This method tests the function and returns TRUE or 
             /// false depending on correct behaviour
             ///
             /// @return bool result of comparison to reference
             ///
-            bool test_load_1Dgrid();
+            bool test_load_grid();
 
             ///
-            /// @brief method for testing load_3Dgrid
-            ///
-            /// @details This method tests the function and returns TRUE or 
-            /// false depending on correct behaviour
-            ///
-            /// @return bool result of comparison to reference
-            ///
-            bool test_load_3Dgrid();
-
-            ///
-            /// @brief method for testing load_mat_fock
+            /// @brief method for testing function load_mat_fock
             ///
             /// @details This method tests the function and returns TRUE or 
             /// false depending on correct behaviour
@@ -101,7 +91,7 @@ namespace libqqc {
             bool test_load_mat_fock();
 
             ///
-            /// @brief method for testing load_mat_coeff
+            /// @brief method for testing function load_mat_coeff
             ///
             /// @details This method tests the function and returns TRUE or 
             /// false depending on correct behaviour
@@ -111,7 +101,7 @@ namespace libqqc {
             bool test_load_mat_coeff();
 
             ///
-            /// @brief method for testing load_mat_cgto
+            /// @brief method for testing function load_mat_cgto
             ///
             /// @details This method tests the function and returns TRUE or 
             /// false depending on correct behaviour
@@ -121,7 +111,7 @@ namespace libqqc {
             bool test_load_mat_cgto();
 
             ///
-            /// @brief method for testing load_cube_coul
+            /// @brief method for testing function load_cube_coul
             ///
             /// @details This method tests the function and returns TRUE or 
             /// false depending on correct behaviour
@@ -147,4 +137,4 @@ namespace libqqc {
 
 } // namespace
 
-#endif //LIBQQC_TEST_LOADER_MP2_H
+#endif //LIBQQC_TEST_LOADER_QMP2_FROM_FILE_H

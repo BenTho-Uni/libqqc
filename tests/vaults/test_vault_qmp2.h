@@ -1,5 +1,5 @@
-#ifndef LIBQQC_TEST_VAULT_MP2_H
-#define LIBQQC_TEST_VAULT_MP2_H
+#ifndef LIBQQC_TEST_VAULT_QMP2_H
+#define LIBQQC_TEST_VAULT_QMP2_H
 
 //include needed libraries
 #include "../../libqqc/grids/grid.h"
@@ -18,7 +18,7 @@ namespace libqqc {
     /// Vault_mp2 functions
     ///
 
-    class Test_Vault_mp2 {
+    class Test_Vault_qmp2 {
         private: 
             size_t mnocc = 1; ///< Number of occupied orbitals
             size_t mnvirt = 2; ///< Number of virtual orbitals
@@ -47,7 +47,7 @@ namespace libqqc {
             ///
             /// @return bool result of comparison to reference
             ///
-            bool test_Vault_mp2();
+            bool test_Vault_qmp2();
 
             ///
             /// @brief method for testing check_data_validity
@@ -184,7 +184,7 @@ namespace libqqc {
             ///
             /// @brief constructor of the testing class
             ///
-            Test_Vault_mp2() {
+            Test_Vault_qmp2() {
                 size_t npts = 2;
                 size_t ndim = 2;
                 double pts[2 * 2] = {1.0, 1.5, 2.0, 2.5};

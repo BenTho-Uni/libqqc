@@ -8,7 +8,6 @@
 #include "do_qmp2.h"
 
 //internal headers
-#include "qmp/qmp2_energy.h"
 
 //external headers
 #include <cmath>

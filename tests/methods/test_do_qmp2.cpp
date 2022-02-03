@@ -4,7 +4,7 @@
 
 // includes of the to be tested headers
 #include "../../libqqc/methods/do_qmp2.h"
-#include "../../libqqc/vaults/vault_mp2.h"
+#include "../../libqqc/vaults/vault_qmp2.h"
 #include "../../libqqc/grids/grid.h"
 
 // namespaces
@@ -46,7 +46,7 @@ namespace libqqc {
         Grid p3Dgrid(p3Dnpts, 3, m3Dpts, m3Dwts); 
 
         // Setup vault
-        Vault_mp2 vault(nocc, nvirt, nao, p1Dtol, prnt_lvl, p1Dgrid, p3Dgrid, 
+        Vault_qmp2 vault(nocc, nvirt, nao, p1Dtol, prnt_lvl, p1Dgrid, p3Dgrid, 
                 mat_fock, mat_coeff, mat_cgto, c_c);
 
         // Calling do_qmp2

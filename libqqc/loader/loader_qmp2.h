@@ -1,5 +1,5 @@
-#ifndef LIBQQC_LOADER_MP2_H
-#define LIBQQC_LOADER_MP2_H
+#ifndef LIBQQC_LOADER_QMP2_H
+#define LIBQQC_LOADER_QMP2_H
 
 #include "../grids/grid.h"
 
@@ -16,15 +16,15 @@ namespace libqqc {
     /// @details This class handles the input of data into the holder vault class.
     ///
 
-    class Loader_mp2 {
+    class Loader_qmp2 {
         private:
 
         public: 
 
             ///
-            /// @brief Constructor of loader_mp2 class
+            /// @brief Constructor of loader_qmp2 class
             ///
-            Loader_mp2 () {};
+            Loader_qmp2 () {};
 
             ///
             /// @brief loads number of occupied orbitals into reference
@@ -103,8 +103,8 @@ namespace libqqc {
             ///
             void load_cube_coul(double* cube_coul);
 
-    }; // class Loader_mp2
+    }; // class Loader_qmp2
 
 } // namespace libqqc
 
-#endif //LIBQQC_LOADER_MP2_H
+#endif //LIBQQC_LOADER_QMP2_H
