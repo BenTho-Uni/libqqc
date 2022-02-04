@@ -6,9 +6,8 @@ using namespace std;
 using namespace libqqc;
 
 int main (){
-    cout << "Hello World!";
 
-    Loader_qmp2 loader;
+    Loader_qmp2_from_file loader("../data/h2o/");
     Vault_qmp2 vault(loader);
     Do_qmp2 qmp2(vault);
 

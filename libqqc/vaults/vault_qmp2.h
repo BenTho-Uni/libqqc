@@ -3,6 +3,7 @@
 
 #include "../grids/grid.h"
 #include "../loader/loader_qmp2.h"
+#include "../loader/loader_qmp2_from_file.h"
 
 //Additional libraries
 #include <stdexcept>
@@ -61,7 +62,20 @@ namespace libqqc {
             /// @details Constructor of vault class, setting the variables
             /// through the loader given in its argument
             ///
+            /// @param[in] loader Loader for the qmp2 calculation
+            ///
             Vault_qmp2(Loader_qmp2 loader); 
+
+            ///
+            /// @brief Constructor of vault class with loader object when
+            /// loading from file
+            ///
+            /// @details Constructor of vault class, setting the variables
+            /// through the loader given in its argument
+            ///
+            /// @param[in] loader Loader for the qmp2 calculation from file
+            ///
+            Vault_qmp2(Loader_qmp2_from_file loader); 
 
             ///
             /// @brief Constructor of vault class

@@ -10,6 +10,7 @@
 #include "loader_qmp2_from_file.h"
 #include "../utils/load_from_file.h"
 
+
 using namespace std;
 
 namespace libqqc {

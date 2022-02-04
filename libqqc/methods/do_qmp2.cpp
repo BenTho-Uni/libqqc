@@ -58,9 +58,11 @@ namespace libqqc {
                 mcoeff_t[i * nmo + j ] = mcoeff [j * nmo + i];
             }
         }
+        cout << "Test!" << endl;
 
-#pragma omp parallel for schedule(dynamic) default(none)\
-        shared(nmo, nao, mfao, mcoeff_t, vf)\
+// This could be collapse(2) but needs a reduction on vf[p]
+#pragma omp parallel for reduction(+:vf) schedule(dynamic) default(none)\
+        shared(nmo, nao, mfao, mcoeff_t)\
         collapse(2)
         for (size_t p = 0; p < nmo; p ++){
             for (size_t l = 0; l < nao; l++){
@@ -81,23 +83,27 @@ namespace libqqc {
 
         // Orbitals O $O_{MO} = O * C$
         //
-#pragma omp parallel for schedule(dynamic) default(none)\
-        shared(p3Dnpts, nmo, nao, nocc, nvirt, m_o, m_v, mcgto, mcoeff_t)\
+        size_t pos = 0; // Position on virtual orbital space
+//#pragma omp parallel for schedule(dynamic) default(none)\
+        shared(p3Dnpts, nmo, nao, nocc, nvirt, m_o, m_v, mcgto, mcoeff_t, pos)\
         collapse(3)
         for (size_t p = 0; p < p3Dnpts; p++){
             for (size_t q = 0; q < nmo; q++){
                 for (size_t k = 0; k < nao; k++){
+                    cout << "p,q,k" << p << "," << q << "," << k << endl;
                     if (q < nocc){
-                        m_o[p * nocc + q] = mcgto[p * nmo + q] 
-                            * mcoeff_t[p * nao + k];
+                        m_o[p * nocc + q] = mcgto[p * nao + k] 
+                            * mcoeff_t[q * nao + k];
                     }
-                    if (q >= nocc){
-                        m_v[p * nvirt + q] = mcgto[p * nmo + q] 
-                            * mcoeff_t[p * nao + k];
+                    else {
+                        pos = q - nocc; // q covers nmo, so substr. num. of occ.
+                        m_v[p * nvirt + pos] = mcgto[p * nao + k] 
+                            * mcoeff_t[q * nao + k];
                     }
                 }
             }
         }
+
         // (weighted) Coulomb Integral U_{MO}^P: for each slice P 
         // $U_{MO} = rwts^P * C_{occpuid}^T * (u_{AO}^P * C_{virtuals}
         //
@@ -145,11 +151,11 @@ namespace libqqc {
                 }//for a     
             }//for i
         }//for k 
-
         
         size_t offset = 0;
         size_t npts_to_proc = p3Dnpts;
         double energy = 0.0;
+
 
         Qmp2_energy  qmp2_energy(
                 p1Dnpts, 
