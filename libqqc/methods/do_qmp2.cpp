@@ -55,13 +55,12 @@ namespace libqqc {
         collapse(2)
         for (size_t i = 0; i < nao; i++){
             for (size_t j = 0; j < nmo; j++){
-                mcoeff_t[i * nmo + j ] = mcoeff [j * nmo + i];
+                mcoeff_t[j * nao + i ] = mcoeff [i * nmo + j];
             }
         }
-        cout << "Test!" << endl;
 
 // This could be collapse(2) but needs a reduction on vf[p]
-#pragma omp parallel for reduction(+:vf) schedule(dynamic) default(none)\
+//#pragma omp parallel for reduction(+:vf) schedule(dynamic) default(none)\
         shared(nmo, nao, mfao, mcoeff_t)\
         collapse(2)
         for (size_t p = 0; p < nmo; p ++){
@@ -90,14 +89,13 @@ namespace libqqc {
         for (size_t p = 0; p < p3Dnpts; p++){
             for (size_t q = 0; q < nmo; q++){
                 for (size_t k = 0; k < nao; k++){
-                    cout << "p,q,k" << p << "," << q << "," << k << endl;
                     if (q < nocc){
-                        m_o[p * nocc + q] = mcgto[p * nao + k] 
+                        m_o[p * nocc + q] += mcgto[p * nao + k] 
                             * mcoeff_t[q * nao + k];
                     }
                     else {
                         pos = q - nocc; // q covers nmo, so substr. num. of occ.
-                        m_v[p * nvirt + pos] = mcgto[p * nao + k] 
+                        m_v[p * nvirt + pos] += mcgto[p * nao + k] 
                             * mcoeff_t[q * nao + k];
                     }
                 }
@@ -107,7 +105,7 @@ namespace libqqc {
         // (weighted) Coulomb Integral U_{MO}^P: for each slice P 
         // $U_{MO} = rwts^P * C_{occpuid}^T * (u_{AO}^P * C_{virtuals}
         //
-#pragma omp parallel for schedule(dynamic) default(none)\
+//#pragma omp parallel for schedule(dynamic) default(none)\
         shared(p3Dnpts, nocc, nvirt, nao, ccao, mcoeff_t, c_c)\
         collapse(3)
         for (size_t p = 0; p < p3Dnpts; p++){
@@ -120,8 +118,8 @@ namespace libqqc {
                            temp += ccao[p * nao * nao + l * nao + k] 
                                * mcoeff_t[pos_a * nao + k];
                         }
-                        c_c [p * nvirt * nocc + i * nvirt + a] = 
-                            mcoeff_t[i * nao + l] + temp;
+                        c_c [p * nvirt * nocc + i * nvirt + a] += 
+                            mcoeff_t[i * nao + l] * temp;
                     }
                 }
             }
@@ -178,6 +176,36 @@ namespace libqqc {
 
         out << endl;
         out << "Q-MP(2) Ground State Energy : " << energy << endl;
+
+        //output array
+        cout << "v_f[nmo]" << endl;
+        for (int i = 0; i < nmo; i++){
+            cout << vf[i] << endl;
+        }
+        cout << "m_o[p,i]" << endl;
+        for (int p = 0; p < p3Dnpts; p++){
+            for (int i = 0; i < nocc; i++){
+                cout << m_o[p * nocc + i] << " ";
+            }
+            cout << endl;
+        }
+        cout << "m_v[p,a]" << endl;
+        for (int p = 0; p < p3Dnpts; p++){
+            for (int i = 0; i < nvirt; i++){
+                cout << m_v[p * nvirt + i] << " ";
+            }
+            cout << endl;
+        }
+        cout << "c_c[p,i,a]" << endl;
+        for (int p = 0; p < 1; p++){
+            for (int i = 0; i < nocc; i ++){
+                for (int a = 0; a < nvirt; a++){
+                    cout << c_c[p * nocc * nvirt + i * nvirt + a] << " ";
+                }
+                cout << endl;
+            }
+            cout << endl;
+        }
 
         delete[] c_c;
         delete[] m_v;
