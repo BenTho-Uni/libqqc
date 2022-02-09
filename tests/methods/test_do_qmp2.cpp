@@ -55,7 +55,8 @@ namespace libqqc {
         ostringstream out;
         qmp2.run(out);
 
-        string ref ="\nQ-MP(2) Ground State Energy : -10401.3\n";
+        string ref ="\nQ-MP(2) Ground State Energy : -154576\n";
+        cout << out.str() << endl;
 
         result = (out.str() == ref); 
         return result;
