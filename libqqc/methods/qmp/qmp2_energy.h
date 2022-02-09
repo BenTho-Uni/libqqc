@@ -28,6 +28,7 @@ namespace libqqc {
             double *mvf = NULL; ///< Pointer to array of fock energies
             double *mv1Dpts = NULL; ///< Pointer to array of 1D grid point
             double *mv1Dwts = NULL; ///< Pointer to array of 1D grid point weights
+            double *mv3Dwts = NULL; ///< Pointer to array of 3D grid point weights
             
             size_t &moffset; ///< Offset of 3D grid pts to start calculation from
             size_t &mnpts_to_proc; ///< Numer of 3D grid pts to process in this iteration
@@ -52,29 +53,45 @@ namespace libqqc {
             /// @param[in] *vf pointer to array of fock energies
             /// @param[in] *v1Dpts pointer to array of 1D grid point weights
             /// @param[in] *v1Dwts pointer to array of 1D grid point weights
+            /// @param[in] *v3Dwts pointer to array of 3D grid point weights
             /// @param[in] &offset reference to number of offset elements
             /// @param[in] &npts_to_proc number of points to process in this iteration
             ///
             Qmp2_energy (size_t &p1Dnpts, size_t &p3Dnpts, size_t &nocc, 
                     size_t &nvirt, double *mo, double *mv, double *c_c,
                     double *m1Deps_o, double *m1Deps_v, double *m1Deps_ov, 
-                    double *vf, double *v1Dpts, double *v1Dwts, 
+                    double *vf, double *v1Dpts, double *v1Dwts, double *v3Dwts, 
                     size_t &offset, 
                     size_t &npts_to_proc) : m1Dnpts(p1Dnpts), 
                     m3Dnpts(p3Dnpts), mnocc(nocc), mnvirt(nvirt), mmo(mo),
                     mmv(mv), mc_c(c_c), mm1Deps_o(m1Deps_o), mm1Deps_v(m1Deps_v),
                     mm1Deps_ov(m1Deps_ov), mvf(vf), mv1Dpts(v1Dpts), 
-                    mv1Dwts(v1Dwts), moffset(offset), mnpts_to_proc(npts_to_proc)
+                    mv1Dwts(v1Dwts), mv3Dwts (v3Dwts), moffset(offset), mnpts_to_proc(npts_to_proc)
                     {};
 
             ///
             /// @brief computes the energy
             ///
-            /// @details This function computes the Q-MP2 energy of a system
+            /// @details This function computes the Q-MP2 energy of a system.
             ///
             /// @return e_mp2 Energie of system
             ///
             double compute (){
+
+                //Precalc. Scale all slices of the integral by the weight of 
+                //each point
+                //
+#pragma omp parallel for schedule(dynamic) default(none)\
+                shared(m3Dnpts, mnocc, mnvirt, mc_c, mv3Dwts)\
+                collapse(3)
+                for (size_t p = 0; p < m3Dnpts; p++){
+                    for (size_t i = 0; i < mnocc; i++){
+                        for (size_t a = 0; a < mnvirt; a++){
+                            mc_c [p * mnvirt * mnocc + i * mnvirt + a] *=
+                                mv3Dwts[p];
+                        }
+                    }
+                }
 
                 double e_mp2 = 0;
 #pragma omp parallel for reduction(+:e_mp2) schedule(dynamic) default(none)\

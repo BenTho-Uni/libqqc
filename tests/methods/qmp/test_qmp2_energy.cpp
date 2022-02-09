@@ -4,6 +4,8 @@
 // includes of the to be tested headers
 #include "../../../libqqc/methods/qmp/qmp2_energy.h"
 
+#include <iomanip>
+
 // namespaces
 
 using namespace std;
@@ -32,13 +34,15 @@ namespace libqqc {
         double vf[5] = {6.1, 6.2, 6.3, 6.4, 6.5};
         double v1Dpts[3] = {7.1, 7.2, 7.3};
         double v1Dwts[3] = {8.1, 8.2, 8.3};
+        double v3Dwts[2] = {1.11, 1.12};
 
         Qmp2_energy qmp2_energy(p1Dnpts, p3Dnpts, nocc, nvirt, mo, mv, c_c, m1Deps_o,
-                m1Deps_v, m1Deps_ov, vf, v1Dpts, v1Dwts, offset, npts_to_proc);
+                m1Deps_v, m1Deps_ov, vf, v1Dpts, v1Dwts, v3Dwts, offset, npts_to_proc);
 
         double ene = qmp2_energy.compute();
+        cout << fixed << setprecision(10) << endl << ene << endl;
         //double ref = -67079871.458116568625;
-        double ref = -67198187.5022573173;
+        double ref = -83854163.66417963;
         double tol = 10e-8;
         result = (abs(ene - ref) < tol);
 

@@ -108,7 +108,7 @@ namespace libqqc {
         // $U_{MO} = rwts^P * C_{occpuid}^T * (u_{AO}^P * C_{virtuals}
         //
 #pragma omp parallel for schedule(dynamic) default(none)\
-        shared(p3Dnpts, nocc, nvirt, nao, ccao, mcoeff_t, c_c, v3Dwts)\
+        shared(p3Dnpts, nocc, nvirt, nao, ccao, mcoeff_t, c_c)\
         collapse(3)
         for (size_t p = 0; p < p3Dnpts; p++){
             for (size_t i = 0; i < nocc; i++){
@@ -120,7 +120,7 @@ namespace libqqc {
                            temp += ccao[p * nao * nao + l * nao + k] 
                                * mcoeff_t[pos_a * nao + k];
                         }
-                        c_c [p * nvirt * nocc + i * nvirt + a] += v3Dwts [p] *
+                        c_c [p * nvirt * nocc + i * nvirt + a] += 
                             mcoeff_t[i * nao + l] * temp;
                     }
                 }
@@ -171,6 +171,7 @@ namespace libqqc {
                 vf,
                 v1Dpts,
                 v1Dwts,
+                v3Dwts,
                 offset,
                 npts_to_proc);
 
