@@ -31,7 +31,6 @@ set(HDR_LOADER
 )
 
 set(SRC_METHODS
-    methods/do_qmp2.cpp
 )
 
 set(HDR_METHODS
@@ -75,6 +74,7 @@ set(HDR_GPU
 # for compiling with MPI
 set(SRC_MPI
     mpi_folder/file2_mpi.cpp
+    methods/do_qmp2_mpi.cpp
 )
 
 set(HDR_MPI
@@ -111,9 +111,7 @@ if(LIBQQC_EIGEN)
         ${HDR}
         ${HDR_EIGEN}
     )
-endif(LIBQQC_EIGEN)
-
-if(LIBQQC_GPU)
+elseif(LIBQQC_GPU)
     set(SRC
         ${SRC}
         ${SRC_GPU}
@@ -123,19 +121,25 @@ if(LIBQQC_GPU)
         ${HDR}
         ${HDR_GPU}
     )
-endif(LIBQQC_GPU)
-
-if(LIBQQC_MPI)
+elseif(LIBQQC_MPI)
     set(SRC
         ${SRC}
-        ${SRC_MPI}
+        ${SRC_MPI} 
     )
 
     set(HDR
         ${HDR}
         ${HDR_MPI}
     )
-endif(LIBQQC_MPI)
+else()
+    set(SRC
+        ${SRC}
+        methods/do_qmp2.cpp
+        )
+    set(HDR
+        ${HDR}
+        )
+endif()
 
 add_library(qqc ${SRC} ${HDR})
 target_include_directories(qqc PUBLIC "${LIBQQC_SOURCE_DIR}")

@@ -14,7 +14,7 @@ namespace libqqc {
     class Qmp2_energy {
         private:
             size_t &m1Dnpts; ///< Number of points on 1D grid
-            size_t &m3Dnpts; ///< Number of pointson 3D grid
+            size_t &m3Dnpts; ///< Number of points on 3D grid
             size_t &mnocc; ///< Number of occupied orbitals
             size_t &mnvirt; ///< Number of virtual orbitals
             
