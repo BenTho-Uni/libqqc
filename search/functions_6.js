@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['run_5fall_5ftests_0',['run_all_tests',['../classlibqqc_1_1Test__Rename.html#a84d5997ef35ecb6b3c43f80764d08460',1,'libqqc::Test_Rename::run_all_tests()'],['../classlibqqc_1_1Test__Grid.html#a780a6f5da9b85f2d07562db48fc517e3',1,'libqqc::Test_Grid::run_all_tests()'],['../classlibqqc_1_1Test__Loader__mp2.html#ad5c2b2b6a6ff37ad3230177b186acbd3',1,'libqqc::Test_Loader_mp2::run_all_tests()'],['../classlibqqc_1_1Test__Tclock.html#aabe0f7f56b1acfabab7eda9545438a9c',1,'libqqc::Test_Tclock::run_all_tests()'],['../classlibqqc_1_1Test__Ttimer.html#a8733a1e16b74f53b047a85a19dba3007',1,'libqqc::Test_Ttimer::run_all_tests()'],['../classlibqqc_1_1Test__Vault__mp2.html#a757007714b6b455dd7158e22b2db8a94',1,'libqqc::Test_Vault_mp2::run_all_tests()']]],
-  ['run_5ftest_1',['run_test',['../classlibqqc_1_1test__file3__eigen.html#a7d798aab6a0a0f29cdcd9b2432cd6ca1',1,'libqqc::test_file3_eigen::run_test()'],['../classlibqqc_1_1test__file1.html#a8605659dcfc8b72a5220c2bdf3f32607',1,'libqqc::test_file1::run_test()'],['../classlibqqc_1_1test__file2__mpi.html#a46717763bfc0c92d9ab058ad86baba1f',1,'libqqc::test_file2_mpi::run_test()']]]
+  ['print_5fall_5fclocks_0',['print_all_clocks',['../classlibqqc_1_1Ttimer.html#a639535840346c8970b221284fefc2af9',1,'libqqc::Ttimer']]],
+  ['print_5fclocks_1',['print_clocks',['../classlibqqc_1_1Ttimer.html#a88450196dfe571bf8027fb35bb7f552b',1,'libqqc::Ttimer']]],
+  ['print_5ftime_2',['print_time',['../classlibqqc_1_1Tclock.html#ad8da35ba3f03fa66713eb41a58f2ace5',1,'libqqc::Tclock']]]
 ];

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['_7egrid_0',['~Grid',['../classlibqqc_1_1Grid.html#a74372f7b9264a541c233bb82ec4f3725',1,'libqqc::Grid']]],
-  ['_7evault_5fmp2_1',['~Vault_mp2',['../classlibqqc_1_1Vault__mp2.html#af6dd5b2031e7f1640231b9e6b5658de8',1,'libqqc::Vault_mp2']]]
+  ['vault_5fqmp2_0',['Vault_qmp2',['../classlibqqc_1_1Vault__qmp2.html#ae7aa6eb2634b1d882a87ba27cf0fb478',1,'libqqc::Vault_qmp2::Vault_qmp2(Loader_qmp2 loader)'],['../classlibqqc_1_1Vault__qmp2.html#ab13ea2c6bbff5815b04851fcf33e5a13',1,'libqqc::Vault_qmp2::Vault_qmp2(Loader_qmp2_from_file loader)'],['../classlibqqc_1_1Vault__qmp2.html#a9d61a2b0f6eabad59551cd89047decec',1,'libqqc::Vault_qmp2::Vault_qmp2(size_t nocc, size_t nvirt, size_t nao, double p1Dtol, int prnt_lvl, Grid p1Dgrid, Grid p3Dgrid, double *mat_fock, double *mat_coeff, double *mat_cgto, double *mat_coul)']]]
 ];
