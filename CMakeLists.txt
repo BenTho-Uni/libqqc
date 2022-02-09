@@ -54,6 +54,9 @@ if(LIBQQC_TESTS)
     add_subdirectory(tests)
 endif(LIBQQC_TESTS)
 
+# Adding Cmpiler flags
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -ffast-math")
+
 # find_package sets DOXYGEN_FOUND to true if found, compile doxygen
 if(DOXYGEN_FOUND)
     configure_file(
