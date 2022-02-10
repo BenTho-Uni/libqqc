@@ -17,7 +17,7 @@ namespace libqqc {
             size_t &m3Dnpts; ///< Number of points on 3D grid
             size_t &mnocc; ///< Number of occupied orbitals
             size_t &mnvirt; ///< Number of virtual orbitals
-            
+
             double *mmo = NULL; ///< Pointer to occupied orbital matrix
             double *mmv = NULL; ///< Pointer to virtual orbital matrix
             double *mc_c = NULL; ///< Pointer to tensor of coulomb orbitals
@@ -29,7 +29,7 @@ namespace libqqc {
             double *mv1Dpts = NULL; ///< Pointer to array of 1D grid point
             double *mv1Dwts = NULL; ///< Pointer to array of 1D grid point weights
             double *mv3Dwts = NULL; ///< Pointer to array of 3D grid point weights
-            
+
             size_t &moffset; ///< Offset of 3D grid pts to start calculation from
             size_t &mnpts_to_proc; ///< Numer of 3D grid pts to process in this iteration
 
@@ -63,11 +63,11 @@ namespace libqqc {
                     double *vf, double *v1Dpts, double *v1Dwts, double *v3Dwts, 
                     size_t &offset, 
                     size_t &npts_to_proc) : m1Dnpts(p1Dnpts), 
-                    m3Dnpts(p3Dnpts), mnocc(nocc), mnvirt(nvirt), mmo(mo),
-                    mmv(mv), mc_c(c_c), mm1Deps_o(m1Deps_o), mm1Deps_v(m1Deps_v),
-                    mm1Deps_ov(m1Deps_ov), mvf(vf), mv1Dpts(v1Dpts), 
-                    mv1Dwts(v1Dwts), mv3Dwts (v3Dwts), moffset(offset), mnpts_to_proc(npts_to_proc)
-                    {};
+            m3Dnpts(p3Dnpts), mnocc(nocc), mnvirt(nvirt), mmo(mo),
+            mmv(mv), mc_c(c_c), mm1Deps_o(m1Deps_o), mm1Deps_v(m1Deps_v),
+            mm1Deps_ov(m1Deps_ov), mvf(vf), mv1Dpts(v1Dpts), 
+            mv1Dwts(v1Dwts), mv3Dwts (v3Dwts), moffset(offset), mnpts_to_proc(npts_to_proc)
+        {};
 
             ///
             /// @brief computes the energy
@@ -95,8 +95,8 @@ namespace libqqc {
 
                 double e_mp2 = 0;
 #pragma omp parallel for reduction(+:e_mp2) schedule(dynamic) default(none)\
-    shared(moffset, mnpts_to_proc, m1Dnpts, m3Dnpts, mnocc, mnvirt, mv1Dwts, mmo, mm1Deps_o, mmv, mm1Deps_v, mc_c, mm1Deps_ov)\
-    collapse(2)
+                shared(moffset, mnpts_to_proc, m1Dnpts, m3Dnpts, mnocc, mnvirt, mv1Dwts, mmo, mm1Deps_o, mmv, mm1Deps_v, mc_c, mm1Deps_ov)\
+                collapse(2)
                 // We loop over the points on the 1D grid quadrature of 
                 // the variable used to remove the energy in the denominator
                 // These are generally <10 points, so no need to mass. parralelize
@@ -154,7 +154,7 @@ namespace libqqc {
                                 }//for 
                                 jo += tmp1 * tmp2;
                             }//for a
-                            
+
                             //calc j
                             double j = 0;
                             for (size_t i = 0; i < mnocc; i++){
@@ -193,6 +193,24 @@ namespace libqqc {
                 return e_mp2;
             };//calc_mp2
     };
+
+    /* /// */
+    /* /// @brief Set a new offset */
+    /* /// */
+    /* /// @param[in] offset new offset */
+    /* /// */
+    /* void set_moffset (size_t &offset) { */
+    /*     moffset = offset; */
+    /* }; */
+
+    /* /// */
+    /* /// @brief Set a new number of elements to process */
+    /* /// */
+    /* /// @param[in] offset new offset */
+    /* /// */
+    /* void set_moffset (size_t &offset) { */
+    /*     moffset = offset; */
+    /* }; */
 }
 
 #endif //LIBQQC_QMP2_ENERGY_H

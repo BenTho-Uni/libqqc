@@ -23,7 +23,6 @@ set(HDR_GRIDS
 
 set(SRC_LOADER
     loader/loader_qmp2.cpp
-    loader/loader_qmp2_from_file.cpp
 )
 
 set(HDR_LOADER
@@ -75,6 +74,7 @@ set(HDR_GPU
 set(SRC_MPI
     mpi_folder/file2_mpi.cpp
     methods/do_qmp2_mpi.cpp
+    loader/loader_qmp2_from_file_mpi.cpp
 )
 
 set(HDR_MPI
@@ -135,6 +135,7 @@ else()
     set(SRC
         ${SRC}
         methods/do_qmp2.cpp
+        loader/loader_qmp2_from_file.cpp
         )
     set(HDR
         ${HDR}

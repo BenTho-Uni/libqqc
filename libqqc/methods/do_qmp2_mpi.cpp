@@ -11,6 +11,7 @@
 
 //external headers
 #include <cmath>
+#include <iomanip>
 #include <mpi.h>
 
 using namespace std;
@@ -53,7 +54,7 @@ namespace libqqc {
         double mcoeff_t[ nao * nmo];
 
         // Set up MPI environment and set important variables
-        MPI_Init (NULL, NULL); //Initialize MPI
+        //MPI_Init (NULL, NULL); //Initialize MPI
         int pid, max_id; // pid is rank and max_id is maxrank
         MPI_Comm_rank(MPI_COMM_WORLD, &pid);
         MPI_Comm_size(MPI_COMM_WORLD, &max_id);
@@ -161,9 +162,14 @@ namespace libqqc {
         }//for k 
         
         size_t offset = 0;
-        size_t npts_to_proc = p3Dnpts;
-        double energy = 0.0;
+        size_t npts_to_proc = p3Dnpts/(2*max_id);
+        cout << "THere are " << p3Dnpts << " elements and " << max_id << " nodes."<< endl;
+        size_t remaining_elements = p3Dnpts - npts_to_proc * max_id * 2;
+        cout << "Master reporting: elements to process per node -> 2x" 
+            << npts_to_proc << ", remaining elements -> " 
+            << remaining_elements << endl;
 
+        double energy = 0.0;
 
         Qmp2_energy  qmp2_energy(
                 p1Dnpts, 
@@ -183,12 +189,37 @@ namespace libqqc {
                 offset,
                 npts_to_proc);
 
-        energy = qmp2_energy.compute();
+        // First batch of points from the beginning of the data, easier work load
+        offset = pid * npts_to_proc;
+        energy += qmp2_energy.compute();
 
-        out << endl;
-        out << "Q-MP(2) Ground State Energy : " << energy << endl;
+        // Second set of points 
+        offset = p3Dnpts - (1 + pid) * npts_to_proc;
+        energy += qmp2_energy.compute();
 
-        MPI_Finalize();
+        //now lets differentiate which node does what
+        if (pid == 0){
+            double tmp = 0.0;
+            // Get all partial energies from servants
+            for (int i = 1; i < max_id; i++){
+                MPI_Recv(&tmp, 1, MPI_DOUBLE, MPI_ANY_SOURCE, 0, 
+                        MPI_COMM_WORLD, &status);
+                energy += tmp;
+            }
+
+            // Calculate missing elements. 
+            // TODO: parallelize this!
+            offset = max_id * npts_to_proc;
+            npts_to_proc = remaining_elements;
+            energy += qmp2_energy.compute();
+
+            cout << "Result:" << setprecision(6) << scientific << energy << endl;
+        } else{
+            // Send servant energies to master
+            MPI_Send(&energy, 1, MPI_DOUBLE, 0,0, MPI_COMM_WORLD); 
+        }
+
+        //MPI_Finalize();
 
         delete[] c_c;
         delete[] m_v;
