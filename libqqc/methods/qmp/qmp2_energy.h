@@ -67,7 +67,22 @@ namespace libqqc {
             mmv(mv), mc_c(c_c), mm1Deps_o(m1Deps_o), mm1Deps_v(m1Deps_v),
             mm1Deps_ov(m1Deps_ov), mvf(vf), mv1Dpts(v1Dpts), 
             mv1Dwts(v1Dwts), mv3Dwts (v3Dwts), moffset(offset), mnpts_to_proc(npts_to_proc)
-        {};
+        {
+            //Precalc. Scale all slices of the integral by the weight of 
+            //each point
+            //
+            #pragma omp parallel for schedule(dynamic) default(none)\
+                            shared(m3Dnpts, mnocc, mnvirt, mc_c, mv3Dwts)\
+                            collapse(3)
+            for (size_t p = 0; p < m3Dnpts; p++){
+                for (size_t i = 0; i < mnocc; i++){
+                    for (size_t a = 0; a < mnvirt; a++){
+                        mc_c [p * mnvirt * mnocc + i * mnvirt + a] *=
+                            mv3Dwts[p];
+                    }
+                }
+            }
+        };
 
             ///
             /// @brief computes the energy
@@ -78,20 +93,6 @@ namespace libqqc {
             ///
             double compute (){
 
-                //Precalc. Scale all slices of the integral by the weight of 
-                //each point
-                //
-#pragma omp parallel for schedule(dynamic) default(none)\
-                shared(m3Dnpts, mnocc, mnvirt, mc_c, mv3Dwts)\
-                collapse(3)
-                for (size_t p = 0; p < m3Dnpts; p++){
-                    for (size_t i = 0; i < mnocc; i++){
-                        for (size_t a = 0; a < mnvirt; a++){
-                            mc_c [p * mnvirt * mnocc + i * mnvirt + a] *=
-                                mv3Dwts[p];
-                        }
-                    }
-                }
 
                 double e_mp2 = 0;
 #pragma omp parallel for reduction(+:e_mp2) schedule(dynamic) default(none)\
@@ -194,23 +195,6 @@ namespace libqqc {
             };//calc_mp2
     };
 
-    /* /// */
-    /* /// @brief Set a new offset */
-    /* /// */
-    /* /// @param[in] offset new offset */
-    /* /// */
-    /* void set_moffset (size_t &offset) { */
-    /*     moffset = offset; */
-    /* }; */
-
-    /* /// */
-    /* /// @brief Set a new number of elements to process */
-    /* /// */
-    /* /// @param[in] offset new offset */
-    /* /// */
-    /* void set_moffset (size_t &offset) { */
-    /*     moffset = offset; */
-    /* }; */
 }
 
 #endif //LIBQQC_QMP2_ENERGY_H

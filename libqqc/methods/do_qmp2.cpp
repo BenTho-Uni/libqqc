@@ -178,7 +178,7 @@ namespace libqqc {
         energy = qmp2_energy.compute();
 
         out << endl;
-        out << "Q-MP(2) Ground State Energy : " << energy << endl;
+        out << "Q-MP(2) Ground State Energy (eV): " << energy;
 
         delete[] c_c;
         delete[] m_v;

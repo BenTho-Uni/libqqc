@@ -11,7 +11,6 @@
 
 //external headers
 #include <cmath>
-#include <iomanip>
 #include <mpi.h>
 
 using namespace std;
@@ -163,11 +162,16 @@ namespace libqqc {
         
         size_t offset = 0;
         size_t npts_to_proc = p3Dnpts/(2*max_id);
-        cout << "THere are " << p3Dnpts << " elements and " << max_id << " nodes."<< endl;
         size_t remaining_elements = p3Dnpts - npts_to_proc * max_id * 2;
-        cout << "Master reporting: elements to process per node -> 2x" 
-            << npts_to_proc << ", remaining elements -> " 
-            << remaining_elements << endl;
+
+        if ((pid == 0) && (mvault.get_mprnt_lvl() >=1)){
+            cout << "Master (pid 0) reporting:" << endl 
+                <<"There are " << p3Dnpts << " elements and " << max_id 
+                << ((max_id == 1) ? " node." : " nodes.") << endl;
+            cout << "Elements to process per node -> 2x" 
+                << npts_to_proc << ", remaining elements -> " 
+                << remaining_elements << endl;
+        }
 
         double energy = 0.0;
 
@@ -213,13 +217,13 @@ namespace libqqc {
             npts_to_proc = remaining_elements;
             energy += qmp2_energy.compute();
 
-            cout << "Result:" << setprecision(6) << scientific << energy << endl;
+            out << endl;
+            out << "Q-MP(2) Ground State Energy (eV): " << energy;
         } else{
             // Send servant energies to master
             MPI_Send(&energy, 1, MPI_DOUBLE, 0,0, MPI_COMM_WORLD); 
         }
 
-        //MPI_Finalize();
 
         delete[] c_c;
         delete[] m_v;

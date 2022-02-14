@@ -107,7 +107,6 @@ namespace libqqc {
                 m3Dgrid, mmat_fock, mmat_coeff, mmat_cgto,
                 mcube_coul);
         size_t tnnmo = vault.get_mnnmo();
-        cout << tnnmo << " " << mnnmo << endl;
         if (tnnmo == mnnmo) result = true;
 
         return result;

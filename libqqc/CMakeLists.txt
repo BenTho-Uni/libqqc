@@ -6,11 +6,9 @@
 # setting variables according to folder structure
 # additional
 set(SRC_ADDITIONAL
-    folder/file1.cpp
 )
 
 set(HDR_ADDITIONAL
-    folder/file1.h
 )
 
 set(SRC_GRIDS
@@ -54,13 +52,19 @@ set(HDR_VAULTS
     vaults/vault_qmp2.cpp
 )
 
+# For compiling without Eigen, GPU or OpenMP
+set(SRC_COMMON
+    methods/do_qmp2.cpp
+    loader/loader_qmp2_from_file.cpp
+    )
+set(HDR_COMMON
+    )
+
 # for compiling with the Eigen library
 set(SRC_EIGEN
-    eigen_folder/file3_eigen.cpp
 )
 
 set(HDR_EIGEN
-    eigen_folder/file3_eigen.h
 )
 
 # for compiling for the GPU
@@ -72,13 +76,11 @@ set(HDR_GPU
 
 # for compiling with MPI
 set(SRC_MPI
-    mpi_folder/file2_mpi.cpp
     methods/do_qmp2_mpi.cpp
     loader/loader_qmp2_from_file_mpi.cpp
 )
 
 set(HDR_MPI
-    mpi_folder/file2_mpi.h
 )
 
 #SRC_ is a variable name
@@ -134,11 +136,11 @@ elseif(LIBQQC_MPI)
 else()
     set(SRC
         ${SRC}
-        methods/do_qmp2.cpp
-        loader/loader_qmp2_from_file.cpp
+        ${SRC_COMMON}
         )
     set(HDR
         ${HDR}
+        ${HDR_COMMON}
         )
 endif()
 

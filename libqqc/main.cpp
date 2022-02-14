@@ -1,10 +1,9 @@
 #include <iostream>
 #include <sstream>
 
-#include "folder/file1.h"
 
 #if LIBQQC_WITH_MPI
-    #include "mpi_folder/file2_mpi.h"
+//    #include "mpi_folder/file2_mpi.h"
 #endif
 
 using namespace std;
@@ -17,11 +16,10 @@ namespace libqqc {
         ostringstream out;
         out.str("");
 
-        function1(out);
         cout <<out.str() <<endl;
 
 #if LIBQQC_WITH_MPI
-        function_mpi();
+//        function_mpi();
 #endif
 
         return 0;
