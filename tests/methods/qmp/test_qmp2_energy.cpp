@@ -1,8 +1,8 @@
 //include file header
-#include "test_qmp2_energy.h"
 
 // includes of the to be tested headers
-#include "../../../libqqc/methods/qmp/qmp2_energy.h"
+// TODO: How to do this better?
+#include "../../../libqqc/methods/qmp/qmp2_energy_eigen.h"
 
 #include <iomanip>
 
