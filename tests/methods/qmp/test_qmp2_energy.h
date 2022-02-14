@@ -6,7 +6,7 @@
 #include <sstream>
 #include <string>
 
-#include "../../../libqqc/methods/qmp/qmp2_energy.h"
+#include "../../../libqqc/methods/qmp/qmp2_energy_eigen.h"
 
 using namespace std;
 

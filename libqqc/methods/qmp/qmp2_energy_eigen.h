@@ -2,7 +2,7 @@
 #define LIBQQC_QMP2_ENERGY_H
 
 #include <stddef.h> //needed for size_t
-#include <Eigen/Eigen>
+#include <Eigen>
 #include <vector>
 
 using namespace std;
@@ -98,8 +98,8 @@ namespace libqqc {
             ///
             double compute (){
                 //Setting um the Vector and Matrix Maps to use Eigen methods
-                using MatMap = const Map<const MatrixXd>;
-                using VecMap = const Map<const VectorXd>;
+                using MatMap = Map<MatrixXd>;
+                using VecMap = Map<VectorXd>;
                 
                 MatMap map_mmo(mmo, m3Dnpts, mnocc);
                 MatMap map_mmv(mmv, m3Dnpts, mnvirt);
@@ -120,8 +120,6 @@ namespace libqqc {
                 VectorXd v_p;
                 MatrixXd c2_p;
 
-                cout << "FUCKCUFKCUKFUC" << endl;
-
                 double energy = 0;
 #pragma omp parallel for reduction(+:energy) schedule(dynamic) default(none)\
                 private(o_p, v_p, c2_p)\
@@ -135,11 +133,11 @@ namespace libqqc {
                             .cwiseProduct(map_mm1Deps_o.row(k).transpose());
                         v_p = map_mmv.col(p)
                             .cwiseProduct(map_mm1Deps_v.row(k).transpose());
-                        c2_p = MatMap(*mc_c[p * mnocc * mnvirt], mnocc, mnvirt)
+                        c2_p = MatMap(mc_c + p * mnocc * mnvirt, mnocc, mnvirt)
                             .cwiseProduct(map_mm1Deps_ov[k]);
 
                         for (int q = 0; q <= p; q++){
-                            MatMap map_mc_c_q(*mc_c[q * mnocc * mnvirt], 
+                            MatMap map_mc_c_q(mc_c + q * mnocc * mnvirt, 
                                     mnocc, mnvirt);
                             double jo = 0;
                             for (int a = 0; a < mnvirt; a++){
@@ -149,8 +147,8 @@ namespace libqqc {
                                 jo += tmp1 * tmp2;
                             }//a 
                             double j = (c2_p.cwiseProduct(map_mc_c_q)).sum();
-                            double o = (o_p).dot(map_mm_o.col(q));
-                            double v = (v_p).dot(map_mm_v.col(q));
+                            double o = (o_p).dot(map_mmo.col(q));
+                            double v = (v_p).dot(map_mmv.col(q));
                             double sum = (jo - 2 * j * o) * v;
                             if (p != q){
                                 sum *= 2.0;
