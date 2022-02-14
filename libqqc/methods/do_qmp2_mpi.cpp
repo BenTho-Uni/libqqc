@@ -1,5 +1,5 @@
 ///
-/// Methods for the setup of qmp2
+/// Methods for the MPI setup of qmp2
 /// @file do_mp2.cpp
 /// @author Benjamin Thomitzni
 /// @version 0.1 01-01-2020
@@ -11,6 +11,7 @@
 
 //external headers
 #include <cmath>
+#include <mpi.h>
 
 using namespace std;
 
@@ -50,6 +51,13 @@ namespace libqqc {
         // Save a Transpose of the Matrix for better cache alignment
         //
         double mcoeff_t[ nao * nmo];
+
+        // Set up MPI environment and set important variables
+        //MPI_Init (NULL, NULL); //Initialize MPI
+        int pid, max_id; // pid is rank and max_id is maxrank
+        MPI_Comm_rank(MPI_COMM_WORLD, &pid);
+        MPI_Comm_size(MPI_COMM_WORLD, &max_id);
+        MPI_Status status;
 
 #pragma omp parallel for schedule(dynamic) default(none)\
         shared(nao, nmo, mcoeff_t, mcoeff)\
@@ -153,9 +161,19 @@ namespace libqqc {
         }//for k 
         
         size_t offset = 0;
-        size_t npts_to_proc = p3Dnpts;
-        double energy = 0.0;
+        size_t npts_to_proc = p3Dnpts/(2*max_id);
+        size_t remaining_elements = p3Dnpts - npts_to_proc * max_id * 2;
 
+        if ((pid == 0) && (mvault.get_mprnt_lvl() >=1)){
+            cout << "Master (pid 0) reporting:" << endl 
+                <<"There are " << p3Dnpts << " elements and " << max_id 
+                << ((max_id == 1) ? " node." : " nodes.") << endl;
+            cout << "Elements to process per node -> 2x" 
+                << npts_to_proc << ", remaining elements -> " 
+                << remaining_elements << endl;
+        }
+
+        double energy = 0.0;
 
         Qmp2_energy  qmp2_energy(
                 p1Dnpts, 
@@ -175,10 +193,37 @@ namespace libqqc {
                 offset,
                 npts_to_proc);
 
-        energy = qmp2_energy.compute();
+        // First batch of points from the beginning of the data, easier work load
+        offset = pid * npts_to_proc;
+        energy += qmp2_energy.compute();
 
-        out << endl;
-        out << "Q-MP(2) Ground State Energy (eV): " << energy;
+        // Second set of points 
+        offset = p3Dnpts - (1 + pid) * npts_to_proc;
+        energy += qmp2_energy.compute();
+
+        //now lets differentiate which node does what
+        if (pid == 0){
+            double tmp = 0.0;
+            // Get all partial energies from servants
+            for (int i = 1; i < max_id; i++){
+                MPI_Recv(&tmp, 1, MPI_DOUBLE, MPI_ANY_SOURCE, 0, 
+                        MPI_COMM_WORLD, &status);
+                energy += tmp;
+            }
+
+            // Calculate missing elements. 
+            // TODO: parallelize this!
+            offset = max_id * npts_to_proc;
+            npts_to_proc = remaining_elements;
+            energy += qmp2_energy.compute();
+
+            out << endl;
+            out << "Q-MP(2) Ground State Energy (eV): " << energy;
+        } else{
+            // Send servant energies to master
+            MPI_Send(&energy, 1, MPI_DOUBLE, 0,0, MPI_COMM_WORLD); 
+        }
+
 
         delete[] c_c;
         delete[] m_v;

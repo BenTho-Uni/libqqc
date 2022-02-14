@@ -97,7 +97,7 @@ make install
 - [x] add timing object
 - [x] add grid object
 - [x] add vault object
-- [ ] add real loader
+- [x] add real loader
 - [ ] add missing badges
 - [ ] add data/h2o with bashscripts to download h3coh/, anthracene/, porphyrine/
 - [ ] transfer MP2 variants to libqqc

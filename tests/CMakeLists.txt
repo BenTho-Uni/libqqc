@@ -3,16 +3,10 @@
 \authors Benjamin Thomitzni
 ]]
 
-set(SRC_FOLDER
-    folder/test_file1.cpp
-    )
-set(HDR_FOLDER
-    folder/test_file1.h
-    )
 
 set(SRC_LOADER
-    loader/test_loader_qmp2.cpp
     loader/test_loader_qmp2_from_file.cpp
+    loader/test_loader_qmp2.cpp
     )
 set(HDR_LOADER
     loader/test_loader_qmp2.h
@@ -51,32 +45,7 @@ set(HDR_VAULTS
     vaults/test_vault_qmp2.h
     )
 
-# for compiling with the Eigen library
-set(SRC_EIGEN
-    eigen_folder/test_file3_eigen.cpp
-    )
-
-set(HDR_EIGEN
-    eigen_folder/test_file3_eigen.cpp
-    )
-
-# for compiling for the GPU
-set(SRC_GPU
-    )
-
-set(HDR_GPU
-    )
-
-set(SRC_MPI
-    mpi_folder/test_file2_mpi.cpp
-    )
-
-set(HDR_MPI
-    mpi_folder/test_file2_mpi.cpp
-    )
-
 set(SRC
-    ${SRC_FOLDER}
     ${SRC_LOADER}
     ${SRC_GRIDS}
     ${SRC_METHODS}
@@ -86,7 +55,6 @@ set(SRC
     )
 
 set(HDR
-    ${HDR_FOLDER}
     ${HDR_LOADER}
     ${HDR_GRIDS}
     ${HDR_METHODS}
@@ -94,41 +62,6 @@ set(HDR
     ${HDR_UTILS}
     )
 
-if(LIBQQC_EIGEN)
-    set(SRC
-        ${SRC}
-        ${SRC_EIGEN}
-        )
-
-    set(HDR
-        ${HDR}
-        ${HDR_EIGEN}
-        )
-endif(LIBQQC_EIGEN)
-
-if(LIBQQC_GPU)
-    set(SRC
-        ${SRC}
-        ${SRC_GPU}
-        )
-
-    set(HDR
-        ${HDR}
-        ${HDR_GPU}
-        )
-endif(LIBQQC_GPU)
-
-if(LIBQQC_MPI)
-    set(SRC
-        ${SRC}
-        ${SRC_MPI}
-        )
-
-    set(HDR
-        ${HDR}
-        ${HDR_MPI}
-        )
-endif(LIBQQC_MPI)
 
 set(TARGETS
     libqqc_tests
@@ -140,12 +73,37 @@ set(TARGETS
     )
 
 add_library(qqc_tests ${SRC} ${HDR})
-add_executable(libqqc_tests ${SRC} ${HDR})
-add_executable(libqqc_loader_tests loader/libqqc_loader_tests.cpp ${SRC_LOADER} ${HDR_LOADER})
-add_executable(libqqc_grids_tests grids/libqqc_grids_tests.cpp ${SRC_GRIDS} ${HDR_GRIDS})
-add_executable(libqqc_methods_tests methods/libqqc_methods_tests.cpp ${SRC_METHODS} ${HDR_METHODS})
-add_executable(libqqc_utils_tests utils/libqqc_utils_tests.cpp ${SRC_UTILS} ${HDR_UTILS})
-add_executable(libqqc_vaults_tests vaults/libqqc_vaults_tests.cpp ${SRC_VAULTS} ${HDR_VAULTS})
+
+if(LIBQQC_EIGEN)
+    add_executable(libqqc_tests ${SRC} ${HDR})
+    add_executable(libqqc_loader_tests loader/libqqc_loader_tests.cpp ${SRC_LOADER} ${HDR_LOADER})
+    add_executable(libqqc_grids_tests grids/libqqc_grids_tests.cpp ${SRC_GRIDS} ${HDR_GRIDS})
+    add_executable(libqqc_methods_tests methods/libqqc_methods_tests.cpp ${SRC_METHODS} ${HDR_METHODS})
+    add_executable(libqqc_utils_tests utils/libqqc_utils_tests.cpp ${SRC_UTILS} ${HDR_UTILS})
+    add_executable(libqqc_vaults_tests vaults/libqqc_vaults_tests.cpp ${SRC_VAULTS} ${HDR_VAULTS})
+elseif(LIBQQC_GPU)
+    add_executable(libqqc_tests ${SRC} ${HDR})
+    add_executable(libqqc_loader_tests loader/libqqc_loader_tests.cpp ${SRC_LOADER} ${HDR_LOADER})
+    add_executable(libqqc_grids_tests grids/libqqc_grids_tests.cpp ${SRC_GRIDS} ${HDR_GRIDS})
+    add_executable(libqqc_methods_tests methods/libqqc_methods_tests.cpp ${SRC_METHODS} ${HDR_METHODS})
+    add_executable(libqqc_utils_tests utils/libqqc_utils_tests.cpp ${SRC_UTILS} ${HDR_UTILS})
+    add_executable(libqqc_vaults_tests vaults/libqqc_vaults_tests.cpp ${SRC_VAULTS} ${HDR_VAULTS})
+elseif(LIBQQC_MPI)
+    add_executable(libqqc_tests ${SRC} ${HDR})
+    add_executable(libqqc_loader_tests loader/libqqc_loader_tests_mpi.cpp ${SRC_LOADER} ${HDR_LOADER})
+    add_executable(libqqc_grids_tests grids/libqqc_grids_tests.cpp ${SRC_GRIDS} ${HDR_GRIDS})
+    add_executable(libqqc_methods_tests methods/libqqc_methods_tests_mpi.cpp ${SRC_METHODS} ${HDR_METHODS})
+    add_executable(libqqc_utils_tests utils/libqqc_utils_tests.cpp ${SRC_UTILS} ${HDR_UTILS})
+    add_executable(libqqc_vaults_tests vaults/libqqc_vaults_tests.cpp ${SRC_VAULTS} ${HDR_VAULTS})
+else()
+    add_executable(libqqc_tests ${SRC} ${HDR})
+    add_executable(libqqc_loader_tests loader/libqqc_loader_tests.cpp ${SRC_LOADER} ${HDR_LOADER})
+    add_executable(libqqc_grids_tests grids/libqqc_grids_tests.cpp ${SRC_GRIDS} ${HDR_GRIDS})
+    add_executable(libqqc_methods_tests methods/libqqc_methods_tests.cpp ${SRC_METHODS} ${HDR_METHODS})
+    add_executable(libqqc_utils_tests utils/libqqc_utils_tests.cpp ${SRC_UTILS} ${HDR_UTILS})
+    add_executable(libqqc_vaults_tests vaults/libqqc_vaults_tests.cpp ${SRC_VAULTS} ${HDR_VAULTS})
+endif()
+
 add_test(LIBQQC_LOADER_TESTS libqqc_loader_tests)
 add_test(LIBQQC_GRIDS_TESTS libqqc_grids_tests)
 add_test(LIBQQC_METHODS_TESTS libqqc_methods_tests)

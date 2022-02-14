@@ -40,8 +40,6 @@ namespace libqqc {
                 m1Deps_v, m1Deps_ov, vf, v1Dpts, v1Dwts, v3Dwts, offset, npts_to_proc);
 
         double ene = qmp2_energy.compute();
-        cout << fixed << setprecision(10) << endl << ene << endl;
-        //double ref = -67079871.458116568625;
         double ref = -83854163.66417963;
         double tol = 10e-8;
         result = (abs(ene - ref) < tol);
