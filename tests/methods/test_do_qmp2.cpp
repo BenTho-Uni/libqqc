@@ -15,6 +15,7 @@ namespace libqqc {
     bool Test_Do_qmp2 :: test_run() {
         bool result = false;
 
+    cout << "arrived" <<endl;
         Loader_qmp2_from_file loader("../../data/h2o/");
         Vault_qmp2 vault(loader);
 

@@ -2,6 +2,9 @@
 #define LIBQQC_QMP2_ENERGY_H
 
 #include <stddef.h> //needed for size_t
+#include <iostream> 
+
+using namespace std;
 
 namespace libqqc {
 
@@ -89,13 +92,13 @@ namespace libqqc {
             ///
             /// @details This function computes the Q-MP2 energy of a system.
             ///
-            /// @return e_mp2 Energie of system
+            /// @return energy Energie of system
             ///
             double compute (){
 
 
-                double e_mp2 = 0;
-#pragma omp parallel for reduction(+:e_mp2) schedule(dynamic) default(none)\
+                double energy = 0;
+#pragma omp parallel for reduction(+:energy) schedule(dynamic) default(none)\
                 shared(moffset, mnpts_to_proc, m1Dnpts, m3Dnpts, mnocc, mnvirt, mv1Dwts, mmo, mm1Deps_o, mmv, mm1Deps_v, mc_c, mm1Deps_ov)\
                 collapse(2)
                 // We loop over the points on the 1D grid quadrature of 
@@ -187,11 +190,11 @@ namespace libqqc {
 
                             // and finally we weight the energy part for this 
                             // point on the 1D grid.
-                            e_mp2 += sum * mv1Dwts[k];
+                            energy += sum * mv1Dwts[k];
                         }//q for
                     }//p
                 }//for k 
-                return e_mp2;
+                return energy;
             };//calc_mp2
     };
 

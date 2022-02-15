@@ -98,7 +98,7 @@ namespace libqqc {
             ///
             double compute (){
                 //Setting um the Vector and Matrix Maps to use Eigen methods
-                using MatMap = Map<MatrixXd>;
+                using MatMap = Map<Matrix <double, Dynamic, Dynamic, RowMajor>>;
                 using VecMap = Map<VectorXd>;
                 
                 MatMap map_mmo(mmo, m3Dnpts, mnocc);
@@ -129,9 +129,9 @@ namespace libqqc {
                 collapse(2)
                 for (int k = 0; k < m1Dnpts; k++){
                     for (int p = moffset; p < moffset + mnpts_to_proc; p++){
-                        o_p = map_mmo.col(p)
+                        o_p = map_mmo.row(p).transpose()
                             .cwiseProduct(map_mm1Deps_o.row(k).transpose());
-                        v_p = map_mmv.col(p)
+                        v_p = map_mmv.row(p).transpose()
                             .cwiseProduct(map_mm1Deps_v.row(k).transpose());
                         c2_p = MatMap(mc_c + p * mnocc * mnvirt, mnocc, mnvirt)
                             .cwiseProduct(map_mm1Deps_ov[k]);
@@ -142,13 +142,13 @@ namespace libqqc {
                             double jo = 0;
                             for (int a = 0; a < mnvirt; a++){
                                 double tmp1 = o_p.dot(map_mc_c_q.col(a));
-                                double tmp2 = map_mmo.col(q)
+                                double tmp2 = map_mmo.row(q).transpose()
                                     .dot(map_mc_c_q.col(a));
                                 jo += tmp1 * tmp2;
                             }//a 
                             double j = (c2_p.cwiseProduct(map_mc_c_q)).sum();
-                            double o = (o_p).dot(map_mmo.col(q));
-                            double v = (v_p).dot(map_mmv.col(q));
+                            double o = (o_p).dot(map_mmo.row(q).transpose());
+                            double v = (v_p).dot(map_mmv.row(q).transpose());
                             double sum = (jo - 2 * j * o) * v;
                             if (p != q){
                                 sum *= 2.0;
@@ -157,6 +157,7 @@ namespace libqqc {
                         }//for q
                     }//p
                 }//k
+                cout << "energy is: " << energy << endl;
                 return energy;
 
             };

@@ -2,7 +2,12 @@
 #define LIBQQC_DO_QMP2_H
 
 #include "../vaults/vault_qmp2.h"
-#include "qmp/qmp2_energy.h"
+
+#if LIBQQC_WITH_EIGEN
+    #include "qmp/qmp2_energy_eigen.h"
+#else
+    #include "qmp/qmp2_energy.h"
+#endif 
 
 // Standard Headers
 #include <sstream>
