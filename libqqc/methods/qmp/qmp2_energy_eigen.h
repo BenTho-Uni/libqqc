@@ -109,7 +109,7 @@ namespace libqqc {
                 vector<MatMap> map_mm1Deps_ov;
                 map_mm1Deps_ov.reserve(m1Dnpts);
                 for (size_t i = 0; i < m1Dnpts; i++){
-                    map_mm1Deps_ov.push_back(MatMap(mm1Deps_ov, mnocc, mnvirt));
+                    map_mm1Deps_ov.push_back(MatMap(mm1Deps_ov + i * mnocc * mnvirt, mnocc, mnvirt));
                 }
 
                 VecMap map_mvf(mvf, mnocc+mnvirt);
