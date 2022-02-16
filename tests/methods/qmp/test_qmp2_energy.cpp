@@ -2,7 +2,7 @@
 #include "test_qmp2_energy.h"
 
 // includes of the to be tested headers
-#include "../../../libqqc/methods/qmp/qmp2_energy.h"
+// TODO: How to do this better?
 
 #include <iomanip>
 

@@ -103,6 +103,9 @@ make install
 - [ ] transfer MP2 variants to libqqc
 - [ ] recheck performance on Justus 2.0
 - [ ] update Readme with scalings and results from Justus 2.0
+- [ ] new partitioning scheme to minimize network IO by partitioning virtual space
+- [ ] write better maintainable variant code
+- [ ] remove unneded balast from qmp2 calc, loader, vault
 
 # Credits
 

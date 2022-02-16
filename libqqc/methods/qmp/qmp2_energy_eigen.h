@@ -2,9 +2,11 @@
 #define LIBQQC_QMP2_ENERGY_H
 
 #include <stddef.h> //needed for size_t
-#include <iostream> 
+#include <Eigen>
+#include <vector>
 
 using namespace std;
+using namespace Eigen;
 
 namespace libqqc {
 
@@ -69,11 +71,11 @@ namespace libqqc {
             m3Dnpts(p3Dnpts), mnocc(nocc), mnvirt(nvirt), mmo(mo),
             mmv(mv), mc_c(c_c), mm1Deps_o(m1Deps_o), mm1Deps_v(m1Deps_v),
             mm1Deps_ov(m1Deps_ov), mvf(vf), mv1Dpts(v1Dpts), 
-            mv1Dwts(v1Dwts), mv3Dwts (v3Dwts), moffset(offset), mnpts_to_proc(npts_to_proc)
-        {
+            mv1Dwts(v1Dwts), mv3Dwts (v3Dwts), moffset(offset), 
+            mnpts_to_proc(npts_to_proc){
             //Precalc. Scale all slices of the integral by the weight of 
             //each point
-            //
+            //gg
             #pragma omp parallel for schedule(dynamic) default(none)\
                             shared(m3Dnpts, mnocc, mnvirt, mc_c, mv3Dwts)\
                             collapse(3)
@@ -92,110 +94,94 @@ namespace libqqc {
             ///
             /// @details This function computes the Q-MP2 energy of a system.
             ///
-            /// @return energy Energie of system
+            /// @return e_mp2 Energie of system
             ///
             double compute (){
+                //Setting um the Vector and Matrix Maps to use Eigen methods
+                using MatMap = Map<Matrix <double, Dynamic, Dynamic, RowMajor>>;
+                using VecMap = Map<VectorXd>;
+                
+                // Map memory pointer to Eigen Maps
+                MatMap map_mmo(mmo, m3Dnpts, mnocc); // occupied orbitals
+                MatMap map_mmv(mmv, m3Dnpts, mnvirt); // virtual orbitals 
+                MatMap map_mm1Deps_o(mm1Deps_o, m1Dnpts, mnocc); // prefactors
+                MatMap map_mm1Deps_v(mm1Deps_v, m1Dnpts, mnvirt); // prefactors
 
+                // Create vector of maps of three dimensional 1Deps_ov 
+                vector<MatMap> map_mm1Deps_ov; // prefactors
+                map_mm1Deps_ov.reserve(m1Dnpts);
+                for (size_t i = 0; i < m1Dnpts; i++){
+                    map_mm1Deps_ov.push_back(
+                        MatMap(mm1Deps_ov + i * mnocc * mnvirt, mnocc, mnvirt));
+                }
+
+                VecMap map_mvf(mvf, mnocc+mnvirt); // orbital energies
+                VecMap map_mv1Dpts(mv1Dpts, m1Dnpts); // 1D grid points
+                VecMap map_mv1Dwts(mv1Dwts, m1Dnpts); // 1D grid point weights
+
+                VectorXd o_p; //empty Vectors, so that each OpenMP thread
+                VectorXd v_p; // can use a private copy
+                MatrixXd c2_p;
 
                 double energy = 0;
 #pragma omp parallel for reduction(+:energy) schedule(dynamic) default(none)\
-                shared(moffset, mnpts_to_proc, m1Dnpts, m3Dnpts, mnocc, mnvirt, mv1Dwts, mmo, mm1Deps_o, mmv, mm1Deps_v, mc_c, mm1Deps_ov)\
+                private(o_p, v_p, c2_p)\
+                shared(moffset, mnpts_to_proc, m1Dnpts, m3Dnpts, mnocc, mnvirt, \
+                        map_mv1Dwts, map_mmo, map_mm1Deps_o, map_mmv, \
+                        map_mm1Deps_v, mc_c, map_mm1Deps_ov)\
                 collapse(2)
-                // We loop over the points on the 1D grid quadrature of 
-                // the variable used to remove the energy in the denominator
-                // These are generally <10 points, so no need to mass. parralelize
-                // over this. 
-                for (size_t k = 0; k < m1Dnpts; k++){
-                    // Then we loop over the points on the 3D grid, 
-                    // which are indipendent of each other and can be parallelized
-                    for (size_t p = moffset; p < moffset+mnpts_to_proc; p++){
-                        // First off we scale a copy of the orbitals and integrals
-                        // by the exponent of our energies, which we prescaled,
-                        // as exp functions are expensive
-                        double v_o_p[mnocc];
-                        double v_v_p[mnvirt];
-                        double m_c_p[mnocc][mnvirt];
-                        for (size_t i = 0; i < mnocc; i++) 
-                            v_o_p[i] = mmo[p * mnocc + i] 
-                                * mm1Deps_o[k * mnocc + i]; 
-                        for (size_t a = 0; a < mnvirt; a++) 
-                            v_v_p[a] = mmv[p * mnvirt + a] 
-                                * mm1Deps_v[k * mnvirt + a]; 
-                        for (size_t i =0; i < mnocc; i++) {
-                            for (size_t a = 0; a < mnvirt; a++){
-                                m_c_p[i][a] = 
-                                    mc_c [p * mnocc * mnvirt + i * mnvirt + a] *
-                                    mm1Deps_ov[k * mnocc * mnvirt + i * mnvirt + a]; 
-                            }//for a
-                        }//for i
+                // loop over points on 1D grid
+                for (int k = 0; k < m1Dnpts; k++){
+                    // loop over all points on 3D grid in set of elements
+                    // to compute from offset position
+                    for (int p = moffset; p < moffset + mnpts_to_proc; p++){
+                        // create local copy of with prefactor scaled orbitals
+                        o_p = map_mmo.row(p)
+                            .cwiseProduct(map_mm1Deps_o.row(k));
+                        v_p = map_mmv.row(p)
+                            .cwiseProduct(map_mm1Deps_v.row(k));
+                        c2_p = MatMap(mc_c + p * mnocc * mnvirt, mnocc, mnvirt)
+                            .cwiseProduct(map_mm1Deps_ov[k]);
 
-                        // And then we loop over the inner 3D grid points. 
-                        // These are symmetrix, so we only need to compute 
-                        // one triangle of the "matrix". 
-                        for (size_t q = 0; q <= p; q++){
+                        // loop over inner grid points, utilizing symmetry
+                        for (int q = 0; q <= p; q++){
+                            // local copy of orbitals to minimize transpose
+                            VectorXd o_q = map_mmo.row(q).transpose();
+                            VectorXd v_q = map_mmv.row(q).transpose();
+                            MatMap map_mc_c_q(mc_c + q * mnocc * mnvirt, 
+                                    mnocc, mnvirt);
 
-                            // jo, j, o, v are the names for the parts of the 
-                            // calculations in the original derivation
-                            // by Bloomfield. But this is basically matrix 
-                            // multiplications, with as much cache alignment
-                            // as we ca. 
                             double jo = 0;
-                            for (size_t a = 0; a < mnvirt; a++){
-                                // we have here two intermediates we can precalc
-                                // which saves some cycles
-                                double tmp1 = 0;
-                                double tmp2 = 0;
-                                for (size_t i = 0; i < mnocc; i++){
-                                    // these terms are the only ones with
-                                    // problematic cache alignments, 
-                                    // as we have to move in a and i 
-                                    // direction simultaniously. 
-                                    // Could be remedied by having a transposed
-                                    // copy, but this increases the data footprint.
-                                    tmp1 += v_o_p[i] *
-                                        mc_c[q * mnocc * mnvirt + i * mnvirt + a];
-                                    tmp2 += mmo[q*mnocc+i] * m_c_p[i][a];
-                                }//for 
+                            for (int a = 0; a < mnvirt; a++){
+                                double tmp1 = o_p.dot(map_mc_c_q.col(a));
+                                double tmp2 = o_q.dot(c2_p.col(a));
                                 jo += tmp1 * tmp2;
-                            }//for a
-
-                            //calc j
-                            double j = 0;
-                            for (size_t i = 0; i < mnocc; i++){
-                                for (size_t a = 0; a < mnvirt; a++){
-                                    j += m_c_p[i][a] 
-                                        * mc_c[q * mnocc * mnvirt + i * mnvirt+a];
-                                }
-                            }//for i
-
-                            // calc o
-                            double o = 0;
-                            for (size_t i = 0; i < mnocc; i++){
-                                o += v_o_p[i] *  mmo[q * mnocc + i];
-                            }//for i
-
-                            // calc v
-                            double v = 0;
-                            for (size_t a = 0; a < mnvirt; a++){
-                                v += v_v_p[a] * mmv[q * mnvirt + a];
-                            }
-
+                            }//a 
+                            
+                            double j = (c2_p.cwiseProduct(map_mc_c_q)).sum();
+                            
+                            double o = (o_p).dot(o_q);
+                            
+                            double v = (v_p).dot(v_q);
+                            
                             double sum = (jo - 2 * j * o) * v;
-
-                            // here we finish exploiting the symmetry and account
-                            // for the double values
+                           
+                            // multiplication of p,q pair function is commutative
+                            // so we calculate only unique pairs, so only half
+                            // of the duples and double them 
                             if (p != q){
                                 sum *= 2.0;
-                            }
+                            }//if
 
-                            // and finally we weight the energy part for this 
-                            // point on the 1D grid.
-                            energy += sum * mv1Dwts[k];
-                        }//q for
+                            // weight the energy contribution of 1D grid 
+                            // point
+                            energy += map_mv1Dwts(k) * sum; 
+                        }//for q
                     }//p
-                }//for k 
+                }//k
+
                 return energy;
-            };//calc_mp2
+            };
     };
 
 }

@@ -31,7 +31,6 @@ set(SRC_METHODS
 )
 
 set(HDR_METHODS
-    methods/qmp/qmp2_energy.h
     methods/do_qmp2.h
 )
 
@@ -58,6 +57,7 @@ set(SRC_COMMON
     loader/loader_qmp2_from_file.cpp
     )
 set(HDR_COMMON
+    methods/qmp/qmp2_energy.h
     )
 
 # for compiling with the Eigen library
@@ -65,6 +65,7 @@ set(SRC_EIGEN
 )
 
 set(HDR_EIGEN
+    methods/qmp/qmp2_energy_eigen.h
 )
 
 # for compiling for the GPU
@@ -106,6 +107,7 @@ set(HDR
 if(LIBQQC_EIGEN)
     set(SRC
         ${SRC}
+        ${SRC_COMMON}
         ${SRC_EIGEN}
     )
 

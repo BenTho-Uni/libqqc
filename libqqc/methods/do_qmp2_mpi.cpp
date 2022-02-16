@@ -1,6 +1,6 @@
 ///
 /// Methods for the MPI setup of qmp2
-/// @file do_mp2.cpp
+/// @file do_mp2_mpi.cpp
 /// @author Benjamin Thomitzni
 /// @version 0.1 01-01-2020
 //

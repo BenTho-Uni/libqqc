@@ -26,8 +26,6 @@ namespace libqqc {
 
         string ref =
         "\nQ-MP(2) Ground State Energy (eV): -0.124222";
-        cout << ref << endl;
-        cout << out.str() << endl;
 
         result = (out.str() == ref); 
         return result;
