@@ -27,7 +27,7 @@ int main (){
     MPI_Init (NULL, NULL);
     ostringstream out; //Stringstream for testing outputs
 
-    cout << "Performing tests for libqqc/testfolder ..." << endl;
+    cout << "Performing tests for libqqc/methods ..." << endl;
 
     Test_Qmp2_energy qmp2_energy;
     bool b_qmp2_energy = qmp2_energy.run_all_tests(out);
