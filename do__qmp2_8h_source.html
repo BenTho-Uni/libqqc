@@ -103,32 +103,37 @@ $(document).ready(function(){initNavTree('do__qmp2_8h_source.html',''); initResi
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define LIBQQC_DO_QMP2_H</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;../vaults/vault_qmp2.h&quot;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;qmp/qmp2_energy.h&quot;</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment">// Standard Headers</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;sstream&gt;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">using namespace </span>std;</div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#if LIBQQC_WITH_EIGEN</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">    #include &quot;qmp/qmp2_energy_eigen.h&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#else</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">    #include &quot;qmp/qmp2_energy.h&quot;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#endif </span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keyword">namespace </span>libqqc {</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="classlibqqc_1_1Do__qmp2.html">   21</a></span>    <span class="keyword">class </span><a class="code hl_class" href="classlibqqc_1_1Do__qmp2.html">Do_qmp2</a> {</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>           <a class="code hl_class" href="classlibqqc_1_1Vault__qmp2.html">Vault_qmp2</a> &amp;mvault;</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <span class="keyword">public</span>: </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="classlibqqc_1_1Do__qmp2.html#a6bc6b123306247a2c863e7ee79a292ee">   34</a></span>            <a class="code hl_function" href="classlibqqc_1_1Do__qmp2.html#a6bc6b123306247a2c863e7ee79a292ee">Do_qmp2</a>(<a class="code hl_class" href="classlibqqc_1_1Vault__qmp2.html">Vault_qmp2</a> &amp;pvault) : mvault(pvault) {};</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>            <span class="comment">//</span></div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment"></span>            <span class="keywordtype">void</span> <a class="code hl_function" href="classlibqqc_1_1Do__qmp2.html#a3f9aad92bf15c0714b636ec0d3f588a9">run</a>(ostringstream &amp;out);</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    }; <span class="comment">// class Do_qmp2</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>} <span class="comment">// namespace libqqc</span></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="preprocessor">#endif </span><span class="comment">//LIBQQC_DO_QMP2_H</span></div>
-<div class="ttc" id="aclasslibqqc_1_1Do__qmp2_html"><div class="ttname"><a href="classlibqqc_1_1Do__qmp2.html">libqqc::Do_qmp2</a></div><div class="ttdoc">Q-MP2 setup and calling the calculation.</div><div class="ttdef"><b>Definition:</b> do_qmp2.h:21</div></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment">// Standard Headers</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;sstream&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">using namespace </span>std;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">namespace </span>libqqc {</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="classlibqqc_1_1Do__qmp2.html">   26</a></span>    <span class="keyword">class </span><a class="code hl_class" href="classlibqqc_1_1Do__qmp2.html">Do_qmp2</a> {</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>           <a class="code hl_class" href="classlibqqc_1_1Vault__qmp2.html">Vault_qmp2</a> &amp;mvault;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <span class="keyword">public</span>: </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="classlibqqc_1_1Do__qmp2.html#a6bc6b123306247a2c863e7ee79a292ee">   39</a></span>            <a class="code hl_function" href="classlibqqc_1_1Do__qmp2.html#a6bc6b123306247a2c863e7ee79a292ee">Do_qmp2</a>(<a class="code hl_class" href="classlibqqc_1_1Vault__qmp2.html">Vault_qmp2</a> &amp;pvault) : mvault(pvault) {};</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>            <span class="comment">//</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment"></span>            <span class="keywordtype">void</span> <a class="code hl_function" href="classlibqqc_1_1Do__qmp2.html#a3f9aad92bf15c0714b636ec0d3f588a9">run</a>(ostringstream &amp;out);</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    }; <span class="comment">// class Do_qmp2</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>} <span class="comment">// namespace libqqc</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="preprocessor">#endif </span><span class="comment">//LIBQQC_DO_QMP2_H</span></div>
+<div class="ttc" id="aclasslibqqc_1_1Do__qmp2_html"><div class="ttname"><a href="classlibqqc_1_1Do__qmp2.html">libqqc::Do_qmp2</a></div><div class="ttdoc">Q-MP2 setup and calling the calculation.</div><div class="ttdef"><b>Definition:</b> do_qmp2.h:26</div></div>
 <div class="ttc" id="aclasslibqqc_1_1Do__qmp2_html_a3f9aad92bf15c0714b636ec0d3f588a9"><div class="ttname"><a href="classlibqqc_1_1Do__qmp2.html#a3f9aad92bf15c0714b636ec0d3f588a9">libqqc::Do_qmp2::run</a></div><div class="ttdeci">void run(ostringstream &amp;out)</div><div class="ttdoc">this runs the setup and executes the calculation</div><div class="ttdef"><b>Definition:</b> do_qmp2.cpp:19</div></div>
-<div class="ttc" id="aclasslibqqc_1_1Do__qmp2_html_a6bc6b123306247a2c863e7ee79a292ee"><div class="ttname"><a href="classlibqqc_1_1Do__qmp2.html#a6bc6b123306247a2c863e7ee79a292ee">libqqc::Do_qmp2::Do_qmp2</a></div><div class="ttdeci">Do_qmp2(Vault_qmp2 &amp;pvault)</div><div class="ttdoc">Constructor for the handling of Q-MP2 calculations.</div><div class="ttdef"><b>Definition:</b> do_qmp2.h:34</div></div>
+<div class="ttc" id="aclasslibqqc_1_1Do__qmp2_html_a6bc6b123306247a2c863e7ee79a292ee"><div class="ttname"><a href="classlibqqc_1_1Do__qmp2.html#a6bc6b123306247a2c863e7ee79a292ee">libqqc::Do_qmp2::Do_qmp2</a></div><div class="ttdeci">Do_qmp2(Vault_qmp2 &amp;pvault)</div><div class="ttdoc">Constructor for the handling of Q-MP2 calculations.</div><div class="ttdef"><b>Definition:</b> do_qmp2.h:39</div></div>
 <div class="ttc" id="aclasslibqqc_1_1Vault__qmp2_html"><div class="ttname"><a href="classlibqqc_1_1Vault__qmp2.html">libqqc::Vault_qmp2</a></div><div class="ttdoc">Holder class for data used by Q-QMP2 method.</div><div class="ttdef"><b>Definition:</b> vault_qmp2.h:23</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
