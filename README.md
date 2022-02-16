@@ -92,7 +92,7 @@ make install
 - [x] add templates for libqqc/ and tests/ files for correct structure/documentation
 - [x] add cmake structure for w/o Eigen, w/o OpenMP GPU offloading and  w/o MPI variant compiling (g++/mpic++)
 - [x] add workflow for testing after commit
-- [ ] add testing workflow for MPI, Eigen etc. variants
+- [x] add testing workflow for MPI, Eigen etc. variants
 - [x] add prelim. loader objects
 - [x] add timing object
 - [x] add grid object
@@ -100,12 +100,14 @@ make install
 - [x] add real loader
 - [ ] add missing badges
 - [ ] add data/h2o with bashscripts to download h3coh/, anthracene/, porphyrine/
-- [ ] transfer MP2 variants to libqqc
+- [x] transfer MP2 variants to libqqc
 - [ ] recheck performance on Justus 2.0
 - [ ] update Readme with scalings and results from Justus 2.0
 - [ ] new partitioning scheme to minimize network IO by partitioning virtual space
 - [ ] write better maintainable variant code
 - [ ] remove unneded balast from qmp2 calc, loader, vault
+- [ ] partitioning scheme for remaining elements in MPI
+- [ ] OpenMP GPU variant implementation
 
 # Credits
 
