@@ -99,7 +99,8 @@ make install
 - [x] add vault object
 - [x] add real loader
 - [ ] add missing badges
-- [ ] add data/h2o with bashscripts to download h3coh/, anthracene/, porphyrine/
+- [x] add data/h2o with bashscripts to download h3coh/, anthracene/, porphyrine/
+- [ ] add input/output of host programm which was used to export to testdata
 - [x] transfer MP2 variants to libqqc
 - [ ] recheck performance on Justus 2.0
 - [ ] update Readme with scalings and results from Justus 2.0
