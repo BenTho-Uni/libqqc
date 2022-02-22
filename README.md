@@ -81,10 +81,11 @@ make install
 
 ## FAQ
 
-## Roadmap
+## ToDo
 
-### done
 <details>
+    <summary> finished ToDos
+
 - [x] add primitive libr. structure
 - [x] add doxygen
 - [x] add workflow to build and deploy doxygen doc to github pages
@@ -102,9 +103,9 @@ make install
 - [x] add real loader
 - [x] add data/h2o with bashscripts to download h3coh/, anthracene/, porphyrine/
 - [x] transfer MP2 variants to libqqc
+
 </details>
 
-### ToDo
 - [ ] add missing badges
 - [ ] add input/output of host programm which was used to export to testdata
 - [ ] recheck performance on Justus 2.0
