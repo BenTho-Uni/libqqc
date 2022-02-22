@@ -84,7 +84,7 @@ make install
 ## ToDo
 
 <details>
-    <summary> finished ToDos
+    <summary> finished ToDos</summary>
 
 - [x] add primitive libr. structure
 - [x] add doxygen
