@@ -81,8 +81,10 @@ make install
 
 ## FAQ
 
-## TODO
+## Roadmap
 
+### done
+<details>
 - [x] add primitive libr. structure
 - [x] add doxygen
 - [x] add workflow to build and deploy doxygen doc to github pages
@@ -98,10 +100,13 @@ make install
 - [x] add grid object
 - [x] add vault object
 - [x] add real loader
-- [ ] add missing badges
 - [x] add data/h2o with bashscripts to download h3coh/, anthracene/, porphyrine/
-- [ ] add input/output of host programm which was used to export to testdata
 - [x] transfer MP2 variants to libqqc
+</details>
+
+### ToDo
+- [ ] add missing badges
+- [ ] add input/output of host programm which was used to export to testdata
 - [ ] recheck performance on Justus 2.0
 - [ ] update Readme with scalings and results from Justus 2.0
 - [ ] new partitioning scheme to minimize network IO by partitioning virtual space
