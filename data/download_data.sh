@@ -27,15 +27,18 @@ case $choice in
         wget -c https://heibox.uni-heidelberg.de/f/6979bfd3edfd4e1780bd/?dl=1 -O anthracene.zip
     ;;
     4 ) echo "Downloading Porphyrin 6-31G/Becke Grid in parts. This may take a while."
-        wget -c https://heibox.uni-heidelberg.de/f/8f82321355004a17872d/?dl=1 -O porphyrin.z01
-        wget -c https://heibox.uni-heidelberg.de/f/b4f9e0e3774040db8de9/?dl=1 -O porphyrin.z02
-        wget -c https://heibox.uni-heidelberg.de/f/77afcb7c6c854f5f870b/?dl=1 -O porphyrin.z03
-        wget -c https://heibox.uni-heidelberg.de/f/d3e8d60f8e1b473995df/?dl=1 -O porphyrin.z04
-        wget -c https://heibox.uni-heidelberg.de/f/48411f4f86ed4966bb75/?dl=1 -O porphyrin.z05
-        wget -c https://heibox.uni-heidelberg.de/f/09aa895cb7cc488b8a79/?dl=1 -O porphyrin.z06
-        wget -c https://heibox.uni-heidelberg.de/f/4f84bf8fd19f480795e6/?dl=1 -O porphyrin.z07
-        wget -c https://heibox.uni-heidelberg.de/f/5c8fcfb6a0da4f1aa8be/?dl=1 -O porphyrin.z08
-        wget -c https://heibox.uni-heidelberg.de/f/1d398c2145fb4031ab86/?dl=1 -o porphyrin.zip
+        mkdir porphyrin
+        cd porphyrin
+        wget -c https://heibox.uni-heidelberg.de/f/4a8546aad68f47579297/?dl=1 -O xaa
+        wget -c https://heibox.uni-heidelberg.de/f/0d9ad8ceb52a4a1eb348/?dl=1 -O xab
+        wget -c https://heibox.uni-heidelberg.de/f/9b87284e54d84817820f/?dl=1 -O xac
+        wget -c https://heibox.uni-heidelberg.de/f/06a5209b09e3430ebeb5/?dl=1 -O xad
+        wget -c https://heibox.uni-heidelberg.de/f/3fb3a9bde0124476a173/?dl=1 -O xae
+        wget -c https://heibox.uni-heidelberg.de/f/76ffad119624446a82be/?dl=1 -O xaf
+        wget -c https://heibox.uni-heidelberg.de/f/a7b65ae75cdc48b5820e/?dl=1 -O xag
+        wget -c https://heibox.uni-heidelberg.de/f/77e59d12eb26476e8f05/?dl=1 -O xah
+        cat xa* > porphyrin.zip
+        rm xaa xab xac xad xae xaf xag xah
     ;;
     q ) exit 0
     ;;
