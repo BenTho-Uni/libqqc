@@ -41,12 +41,12 @@ else(LIBQQC_MPI)
 endif(LIBQQC_MPI)
 
 message(STATUS "BUILD type ${CMAKE_BUILD_TYPE}")
-if(CMAKE_BUILD_TYPE EQUAL "RELEASE")
+if(CMAKE_BUILD_TYPE STREQUAL "RELEASE")
     add_definitions(-O3)
     add_definitions(-ffast-math)
     add_definitions(-march=native)
     message("+++ Compiling with RELEASE flags")
-endif(CMAKE_BUILD_TYPE EQUAL "RELEASE")
+endif(CMAKE_BUILD_TYPE STREQUAL "RELEASE")
 
 # additional packages: Doxygen
 find_package(Doxygen)
