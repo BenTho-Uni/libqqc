@@ -205,26 +205,16 @@ namespace libqqc {
 
         // First batch of points from the beginning of the data, easier work load
 	timings.start_new_clock("Starting batch : ", 2, 0);
-        offset = pid * npts_to_proc;
+        offset = pid * npts_to_proc + ((remaining_elements > 0) ?;
 
 	// Now we distribute the middle points left over to the first batch, this will make
 	// the workload slightly uneven
 	size_t npts_to_proc_orig = npts_to_proc;
-	if (remaining_elements != 0 ){
-		int x = remaining_elements % max_id;
-		int y = remaining_elements / max_id;
+    int x = remaining_elements % max_id;
+    int y = remaining_elements / max_id;
+	offset += ((pid < x) ? pid : x) + ((y == 1) ? pid : 0);
+    npts_to_proc += ((pid < x) (1+y) : 0);
 
-		if ( y == 0 ) {
-			if (pid  < x ) npts_to_proc++;
-			offset = offset + ((pid < x) ? pid : x);
-		}
-		if ( y == 1 ) {
-			npts_to_proc++;
-			if (pid < x) npts_to_proc++;
-            offset = offset + ((pid < x) ? pid : x) + ((y == 1) ? pid : 0);
-		}
-
- 	}
 	cout << "Node " << pid << " reporting offset: " << offset << " npts_to_proc: " << npts_to_proc << endl;
         energy += qmp2_energy.compute();
 	npts_to_proc = npts_to_proc_orig;
