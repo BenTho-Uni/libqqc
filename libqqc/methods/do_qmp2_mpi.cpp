@@ -213,7 +213,7 @@ namespace libqqc {
     int x = remaining_elements % max_id;
     int y = remaining_elements / max_id;
 	offset += ((pid < x) ? pid : x) + ((y == 1) ? pid : 0);
-    npts_to_proc += ((pid < x) (1+y) : 0);
+    npts_to_proc += ((pid < x) ? (1+y) : 0);
 
 	cout << "Node " << pid << " reporting offset: " << offset << " npts_to_proc: " << npts_to_proc << endl;
         energy += qmp2_energy.compute();
