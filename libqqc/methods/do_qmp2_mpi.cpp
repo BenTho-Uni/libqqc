@@ -221,7 +221,7 @@ namespace libqqc {
 		if ( y == 1 ) {
 			npts_to_proc++;
 			if (pid < x) npts_to_proc++;
-            offset = offeset + ((pid < x) ? pid : x) + ((y == 1) ? pid : 0);
+            offset = offset + ((pid < x) ? pid : x) + ((y == 1) ? pid : 0);
 		}
 
  	}
