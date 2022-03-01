@@ -95,14 +95,28 @@ namespace libqqc {
         }
 
 
+        // The next AO to MO transformations are done on the large 3D grid
+        // Distribute the points to compute to the nodes
+        // For this, we calculate the number of elements each calculates
+        // This work loop is linear, so we have it easier then later
+        //
+        /* size_t remaining_elements = p3Dnpts % max_id; */
+        /* size_t npts_to_proc = p3Dnpts / max_id */ 
+        /*     + ((pid != 0) ? 0 : remaining_elements); */
+        /* size_t offset = pid * npts_to_proc */ 
+        /*     + ((pid != 0) ? remaining_elements : 0); */
+        size_t remaining_elements = 0;
+        size_t npts_to_proc = p3Dnpts;
+        size_t offset = 0;
+
         // Orbitals O $O_{MO} = O * C$
         //
         size_t pos = 0; // Position on virtual orbital space
 #pragma omp parallel for schedule(dynamic) default(none)\
-        shared(p3Dnpts, nmo, nao, nocc, nvirt, m_o, m_v, mcgto, mcoeff_t)\
+        shared(p3Dnpts, nmo, nao, nocc, nvirt, m_o, m_v, mcgto, mcoeff_t, offset, npts_to_proc, remaining_elements)\
         private(pos) \
         collapse(2)
-        for (size_t p = 0; p < p3Dnpts; p++){
+        for (size_t p = offset; p < offset + npts_to_proc; p++){
             for (size_t q = 0; q < nmo; q++){
                 for (size_t k = 0; k < nao; k++){
                     if (q < nocc){
@@ -118,13 +132,13 @@ namespace libqqc {
             }
         }
 
-        // (weighted) Coulomb Integral U_{MO}^P: for each slice P 
-        // $U_{MO} = rwts^P * C_{occpuid}^T * (u_{AO}^P * C_{virtuals}
-        //
+        // Coulomb Integral AO to MO, U_{MO}^P: for each slice P 
+        // $U_{MO} = C_{occpuid}^T * (u_{AO}^P * C_{virtuals}
+
 #pragma omp parallel for schedule(dynamic) default(none)\
-        shared(p3Dnpts, nocc, nvirt, nao, ccao, mcoeff_t, c_c)\
+        shared(p3Dnpts, nocc, nvirt, nao, ccao, mcoeff_t, c_c, offset, npts_to_proc, remaining_elements)\
         collapse(3)
-        for (size_t p = 0; p < p3Dnpts; p++){
+        for (size_t p = offset; p < offset + npts_to_proc; p++){
             for (size_t i = 0; i < nocc; i++){
                 for (size_t a = 0; a < nvirt; a++){
                     size_t pos_a = nocc + a;
@@ -140,6 +154,19 @@ namespace libqqc {
                 }
             }
         }
+
+        /* // Now gather all data */
+        /* for (size_t i = 0; i < max_id; i++){ */
+        /*     npts_to_proc = p3Dnpts / max_id */ 
+        /*         + ((i != 0) ? 0 : remaining_elements); */
+        /*     offset = i * npts_to_proc + ((i != 0) ? remaining_elements : 0); */
+        /*     MPI_Bcast(m_o + offset * nocc, */ 
+        /*             npts_to_proc, MPI_DOUBLE, i, MPI_COMM_WORLD); */
+        /*     MPI_Bcast(m_v + offset * nvirt, */ 
+        /*             npts_to_proc, MPI_DOUBLE, i, MPI_COMM_WORLD); */
+        /*     MPI_Bcast(c_c + offset * nvirt * nocc, */
+        /*             npts_to_proc, MPI_DOUBLE, i, MPI_COMM_WORLD); */
+        /* } */
         timings.stop_clock(0);
 
         // Precalculating the exponential factors
@@ -167,10 +194,9 @@ namespace libqqc {
             }//for i
         }//for k 
 
-
-        size_t offset = 0;
-        size_t npts_to_proc = p3Dnpts/(2*max_id);
-        size_t remaining_elements = p3Dnpts - npts_to_proc * max_id * 2;
+        offset = 0;
+        npts_to_proc = p3Dnpts/(2*max_id);
+        remaining_elements = p3Dnpts - npts_to_proc * max_id * 2;
 
         if ((pid == 0) && (mvault.get_mprnt_lvl() >=1)){
             cout << "Master (pid 0) reporting:" << endl 
@@ -224,6 +250,8 @@ namespace libqqc {
         energy += qmp2_energy.compute();
         timings.stop_clock(3);
 
+        cout << "end batch done." << endl;
+
         //now lets differentiate which node does what
         if (pid == 0){
             timings.start_new_clock("Gathering partial energies from nodes : ", 4, 0);
@@ -235,14 +263,6 @@ namespace libqqc {
                 energy += tmp;
             }
             timings.stop_clock(4);
-
-            // Calculate missing elements. 
-            // TODO: parallelize this!
-            //timings.start_new_clock("Calculate missing middle batch on master node : ", 5, 0);
-            //offset = max_id * npts_to_proc;
-            //npts_to_proc = remaining_elements;
-            //energy += qmp2_energy.compute();
-            //timings.stop_clock(5);
 
             out << timings.print_all_clocks();
 
