@@ -7,6 +7,8 @@
 #include "../../libqqc/vaults/vault_qmp2.h"
 #include "../../libqqc/grids/grid.h"
 
+#include <string>
+
 // namespaces
 
 using namespace std;
@@ -24,10 +26,9 @@ namespace libqqc {
         ostringstream out;
         qmp2.run(out);
 
-        string ref =
-        "\nQ-MP(2) Ground State Energy (eV): -0.124222";
+        string ref ="-0.124222";
 
-        result = (out.str() == ref); 
+        result = (out.str().find(ref) != string::npos); 
         return result;
     }
 
