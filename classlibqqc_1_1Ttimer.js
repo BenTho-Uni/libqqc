@@ -6,5 +6,5 @@ var classlibqqc_1_1Ttimer =
     [ "print_clocks", "classlibqqc_1_1Ttimer.html#a88450196dfe571bf8027fb35bb7f552b", null ],
     [ "start_new_clock", "classlibqqc_1_1Ttimer.html#acdddbf572794bc63f0cc92ca54df409f", null ],
     [ "stop_all_clocks", "classlibqqc_1_1Ttimer.html#a75c10754bef837282601d16fa1b3f342", null ],
-    [ "stop_clocks", "classlibqqc_1_1Ttimer.html#ace84edc05743f92a49c979efeb3eeaab", null ]
+    [ "stop_clock", "classlibqqc_1_1Ttimer.html#a64ffc89745ea0643e158b82029dcb0fc", null ]
 ];
