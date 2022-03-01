@@ -8,6 +8,7 @@
 #include "do_qmp2.h"
 
 //internal headers
+#include "../utils/ttimer.h"
 
 //external headers
 #include <cmath>
@@ -18,6 +19,9 @@ using namespace std;
 namespace libqqc {
 
     void Do_qmp2 :: run(ostringstream &out){
+
+	Ttimer timings(0);
+
     
         // Grabbing the calculation data we need
         size_t p1Dnpts = mvault.get_m1Dgrid().get_mnpts();
@@ -58,6 +62,8 @@ namespace libqqc {
         MPI_Comm_rank(MPI_COMM_WORLD, &pid);
         MPI_Comm_size(MPI_COMM_WORLD, &max_id);
         MPI_Status status;
+
+	timings.start_new_clock("Timings do_mp2::run AO to MO transformations : ", 0, 0);
 
 #pragma omp parallel for schedule(dynamic) default(none)\
         shared(nao, nmo, mcoeff_t, mcoeff)\
@@ -134,6 +140,7 @@ namespace libqqc {
                 }
             }
         }
+	timings.stop_clock(0);
 
         // Precalculating the exponential factors
 #pragma omp parallel for schedule(dynamic) default(none)\
@@ -160,6 +167,7 @@ namespace libqqc {
             }//for i
         }//for k 
         
+
         size_t offset = 0;
         size_t npts_to_proc = p3Dnpts/(2*max_id);
         size_t remaining_elements = p3Dnpts - npts_to_proc * max_id * 2;
@@ -174,6 +182,8 @@ namespace libqqc {
         }
 
         double energy = 0.0;
+
+	timings.start_new_clock("Timing Qmp2_energy::compute : ", 1, 0);
 
         Qmp2_energy  qmp2_energy(
                 p1Dnpts, 
@@ -194,15 +204,42 @@ namespace libqqc {
                 npts_to_proc);
 
         // First batch of points from the beginning of the data, easier work load
+	timings.start_new_clock("Starting batch : ", 2, 0);
         offset = pid * npts_to_proc;
+
+	// Now we distribute the middle points left over to the first batch, this will make
+	// the workload slightly uneven
+	size_t npts_to_proc_orig = npts_to_proc;
+	if (remaining_elements != 0 ){
+		int x = remaining_elements % max_id;
+		int y = remaining_elements / max_id;
+
+		if ( y == 0 ) {
+			if (pid  < x ) npts_to_proc++;
+			offset = offset + ((pid < x) ? pid : x);
+		}
+		if ( y == 1 ) {
+			npts_to_proc++;
+			if (pid < x) npts_to_proc++;
+            offset = offeset + ((pid < x) ? pid : x) + ((y == 1) ? pid : 0);
+		}
+
+ 	}
+	cout << "Node " << pid << " reporting offset: " << offset << " npts_to_proc: " << npts_to_proc << endl;
         energy += qmp2_energy.compute();
+	npts_to_proc = npts_to_proc_orig;
+	timings.stop_clock(2);
 
         // Second set of points 
+	timings.start_new_clock("End batch : ", 3, 0);
         offset = p3Dnpts - (1 + pid) * npts_to_proc;
+	cout << "Node " << pid << " reporting offset: " << offset << " npts_to_proc: " << npts_to_proc << endl;
         energy += qmp2_energy.compute();
+	timings.stop_clock(3);
 
         //now lets differentiate which node does what
         if (pid == 0){
+	    timings.start_new_clock("Gathering partial energies from nodes : ", 4, 0);
             double tmp = 0.0;
             // Get all partial energies from servants
             for (int i = 1; i < max_id; i++){
@@ -210,12 +247,17 @@ namespace libqqc {
                         MPI_COMM_WORLD, &status);
                 energy += tmp;
             }
+	    timings.stop_clock(4);
 
             // Calculate missing elements. 
             // TODO: parallelize this!
-            offset = max_id * npts_to_proc;
-            npts_to_proc = remaining_elements;
-            energy += qmp2_energy.compute();
+	    //timings.start_new_clock("Calculate missing middle batch on master node : ", 5, 0);
+            //offset = max_id * npts_to_proc;
+            //npts_to_proc = remaining_elements;
+            //energy += qmp2_energy.compute();
+	    //timings.stop_clock(5);
+
+	    out << timings.print_all_clocks();
 
             out << endl;
             out << "Q-MP(2) Ground State Energy (eV): " << energy;

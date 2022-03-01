@@ -11,7 +11,7 @@ echo "Which of the available data sets would you like to download?"
 echo "1: H2O with 6-31G/Becke Grid, exported from Q-Chem (1.7 MB, zip)"
 echo "2: H3COH with 6-31G/Becke Grid, exported from Q-Chem (15.3 MB, zip)"
 echo "3: Anthracene with 6-31G/Becke Grid, exported from Q-Chem (3.6 GB, zip)"
-echo "4: Porphyrine with 6-31G/Becke Grid, exported from Q-Chem (19.6 GB, zip)"
+echo "4: Porphyrin with 6-31G/Becke Grid, exported from Q-Chem (16.6 GB, zip)"
 echo "q: Exit"
 
 read choice

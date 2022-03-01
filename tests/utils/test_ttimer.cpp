@@ -143,13 +143,13 @@ namespace libqqc {
         return result;
     }
 
-    bool Test_Ttimer :: test_stop_clocks() {
+    bool Test_Ttimer :: test_stop_clock() {
         bool result = false;
 
         Ttimer test(2);
         test.start_new_clock("Clock 1", 0, 1);
         test.start_new_clock("Clock 2", 0, 1);
-        test.stop_clocks(0);
+        test.stop_clock(0);
 
         vector<Tclock> clocks = test.get_clocks(0);
         result = ((!clocks[0].get_mrun() && !clocks[1].get_mrun()) ? true : false);
@@ -179,7 +179,7 @@ namespace libqqc {
         test.start_new_clock("Clock 1", 0, 1);
         test.start_new_clock("Clock 2", 0, 1);
         test.start_new_clock("Clock 3", 1, 1);
-        test.stop_clocks(0);
+        test.stop_clock(0);
 
         string reference = "  Clock 1 Timer - CPU: 0 ms ; Wall: 0 ms\n";
         reference += "  Clock 2 Timer - CPU: 0 ms ; Wall: 0 ms\n";
@@ -197,8 +197,8 @@ namespace libqqc {
         test.start_new_clock("Clock 1", 0, 1);
         test.start_new_clock("Clock 2", 0, 1);
         test.start_new_clock("Clock 3", 1, 1);
-        test.stop_clocks(0);
-        test.stop_clocks(1);
+        test.stop_clock(0);
+        test.stop_clock(1);
 
         string reference = "  Clock 1 Timer - CPU: 0 ms ; Wall: 0 ms\n";
         reference += "  Clock 2 Timer - CPU: 0 ms ; Wall: 0 ms\n";
@@ -222,8 +222,8 @@ namespace libqqc {
         out << "    Testing Ttimer::start_new_clock()  ... " << flush
             << (b_start ? "passed" : "failed") << endl;
 
-        bool b_stop1 = test_stop_clocks();
-        out << "    Testing Ttimer::stop_clocks()      ... " << flush
+        bool b_stop1 = test_stop_clock();
+        out << "    Testing Ttimer::stop_clock()      ... " << flush
             << (b_stop1 ? "passed" : "failed") << endl;
 
         bool b_stopA = test_stop_all_clocks();

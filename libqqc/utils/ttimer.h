@@ -212,7 +212,7 @@ namespace libqqc {
             ///
             /// @param[in] id ID of the clock to be stoped
             ///
-            void stop_clocks(int id) {
+            void stop_clock(int id) {
                 //Looping over all clocḱ ID to find the instances in which the 
                 //ID is equal and stopping the Tclock element in mclocks with
                 //the same index

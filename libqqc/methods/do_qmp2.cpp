@@ -11,13 +11,16 @@
 
 //external headers
 #include <cmath>
+#include "../utils/ttimer.h"
 
 using namespace std;
 
 namespace libqqc {
 
     void Do_qmp2 :: run(ostringstream &out){
-    
+
+	Ttimer timings(0);
+
         // Grabbing the calculation data we need
         size_t p1Dnpts = mvault.get_m1Dgrid().get_mnpts();
         size_t p3Dnpts = mvault.get_m3Dgrid().get_mnpts();
@@ -44,6 +47,8 @@ namespace libqqc {
         double* c_c = new double[p3Dnpts * nocc * nvirt]();
         double vf[nmo] = {};
 
+	
+	timings.start_new_clock("Timings do_mp2::run AO to MO transformations : ", 0, 0);
         // AO to MO transformations
         // Fock-Matrix F $F_{MO} = C^T F_{AO} C
         // 
@@ -126,6 +131,7 @@ namespace libqqc {
                 }
             }
         }
+	timings.stop_clock(0);
 
         // Precalculating the exponential factors
 #pragma omp parallel for schedule(dynamic) default(none)\
@@ -156,7 +162,7 @@ namespace libqqc {
         size_t npts_to_proc = p3Dnpts;
         double energy = 0.0;
 
-
+	timings.start_new_clock("Timing Qmp2_energy::compute : ", 1, 0);
         Qmp2_energy  qmp2_energy(
                 p1Dnpts, 
                 p3Dnpts, 
@@ -176,6 +182,10 @@ namespace libqqc {
                 npts_to_proc);
 
         energy = qmp2_energy.compute();
+
+	timings.stop_clock(1);
+
+	out << timings.print_all_clocks();
 
         out << endl;
         out << "Q-MP(2) Ground State Energy (eV): " << energy;

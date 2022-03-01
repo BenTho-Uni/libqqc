@@ -123,14 +123,14 @@ namespace libqqc {
             bool test_start_new_clock();
 
             ///
-            /// @brief method for testing stop_clocks
+            /// @brief method for testing stop_clock
             ///
             /// @details This method tests the function and returns TRUE or 
             /// false depending on correct behaviour
             ///
             /// @return bool result of comparison to reference
             ///
-            bool test_stop_clocks();
+            bool test_stop_clock();
 
             ///
             /// @brief method for testing stop_all_clocks
