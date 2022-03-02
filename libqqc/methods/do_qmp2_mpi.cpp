@@ -100,14 +100,11 @@ namespace libqqc {
         // For this, we calculate the number of elements each calculates
         // This work loop is linear, so we have it easier then later
         //
-        /* size_t remaining_elements = p3Dnpts % max_id; */
-        /* size_t npts_to_proc = p3Dnpts / max_id */ 
-        /*     + ((pid != 0) ? 0 : remaining_elements); */
-        /* size_t offset = pid * npts_to_proc */ 
-        /*     + ((pid != 0) ? remaining_elements : 0); */
-        size_t remaining_elements = 0;
-        size_t npts_to_proc = p3Dnpts;
-        size_t offset = 0;
+        size_t remaining_elements = p3Dnpts % max_id;
+        size_t npts_to_proc = p3Dnpts / max_id 
+            + ((pid != 0) ? 0 : remaining_elements);
+        size_t offset = pid * npts_to_proc 
+            + ((pid != 0) ? remaining_elements : 0);
 
         // Orbitals O $O_{MO} = O * C$
         //
@@ -155,18 +152,18 @@ namespace libqqc {
             }
         }
 
-        /* // Now gather all data */
-        /* for (size_t i = 0; i < max_id; i++){ */
-        /*     npts_to_proc = p3Dnpts / max_id */ 
-        /*         + ((i != 0) ? 0 : remaining_elements); */
-        /*     offset = i * npts_to_proc + ((i != 0) ? remaining_elements : 0); */
-        /*     MPI_Bcast(m_o + offset * nocc, */ 
-        /*             npts_to_proc, MPI_DOUBLE, i, MPI_COMM_WORLD); */
-        /*     MPI_Bcast(m_v + offset * nvirt, */ 
-        /*             npts_to_proc, MPI_DOUBLE, i, MPI_COMM_WORLD); */
-        /*     MPI_Bcast(c_c + offset * nvirt * nocc, */
-        /*             npts_to_proc, MPI_DOUBLE, i, MPI_COMM_WORLD); */
-        /* } */
+        // Now gather all data
+        for (size_t i = 0; i < max_id; i++){
+            npts_to_proc = p3Dnpts / max_id 
+                + ((i != 0) ? 0 : remaining_elements);
+            offset = i * npts_to_proc + ((i != 0) ? remaining_elements : 0);
+            MPI_Bcast(m_o + offset * nocc, 
+                    npts_to_proc * nocc, MPI_DOUBLE, i, MPI_COMM_WORLD);
+            MPI_Bcast(m_v + offset * nvirt, 
+                    npts_to_proc * nvirt, MPI_DOUBLE, i, MPI_COMM_WORLD);
+            MPI_Bcast(c_c + offset * nvirt * nocc,
+                    npts_to_proc * nvirt * nocc, MPI_DOUBLE, i, MPI_COMM_WORLD);
+        }
         timings.stop_clock(0);
 
         // Precalculating the exponential factors
