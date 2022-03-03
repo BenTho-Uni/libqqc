@@ -247,8 +247,6 @@ namespace libqqc {
         energy += qmp2_energy.compute();
         timings.stop_clock(3);
 
-        cout << "end batch done." << endl;
-
         //now lets differentiate which node does what
         if (pid == 0){
             timings.start_new_clock("Gathering partial energies from nodes : ", 4, 0);
