@@ -165,6 +165,7 @@ namespace libqqc {
                     npts_to_proc * nvirt * nocc, MPI_DOUBLE, i, MPI_COMM_WORLD);
         }
         timings.stop_clock(0);
+        if (pid == 0) cout << timings.print_clocks(0);
 
         // Precalculating the exponential factors
 #pragma omp parallel for schedule(dynamic) default(none)\
@@ -240,12 +241,14 @@ namespace libqqc {
         energy += qmp2_energy.compute();
         npts_to_proc = npts_to_proc_orig;
         timings.stop_clock(2);
+        if (pid == 0) cout << timings.print_clocks(2);
 
         // Second set of points 
         timings.start_new_clock("End batch : ", 3, 0);
         offset = p3Dnpts - (1 + pid) * npts_to_proc;
         energy += qmp2_energy.compute();
         timings.stop_clock(3);
+        if (pid == 0) cout << timings.print_clocks(3);
 
         //now lets differentiate which node does what
         if (pid == 0){
@@ -258,8 +261,7 @@ namespace libqqc {
                 energy += tmp;
             }
             timings.stop_clock(4);
-
-            out << timings.print_all_clocks();
+            cout << timings.print_clocks(0);
 
             out << endl;
             out << "Q-MP(2) Ground State Energy (eV): " << energy;

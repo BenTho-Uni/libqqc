@@ -19,7 +19,7 @@ namespace libqqc {
 
     void Do_qmp2 :: run(ostringstream &out){
 
-	Ttimer timings(0);
+        Ttimer timings(0);
 
         // Grabbing the calculation data we need
         size_t p1Dnpts = mvault.get_m1Dgrid().get_mnpts();
@@ -47,8 +47,8 @@ namespace libqqc {
         double* c_c = new double[p3Dnpts * nocc * nvirt]();
         double vf[nmo] = {};
 
-	
-	timings.start_new_clock("Timings do_mp2::run AO to MO transformations : ", 0, 0);
+
+        timings.start_new_clock("Timings do_mp2::run AO to MO transformations : ", 0, 0);
         // AO to MO transformations
         // Fock-Matrix F $F_{MO} = C^T F_{AO} C
         // 
@@ -65,7 +65,7 @@ namespace libqqc {
             }
         }
 
-// This could be collapse(2) but needs a reduction on vf[p]
+        // This could be collapse(2) but needs a reduction on vf[p]
 #pragma omp parallel for reduction(+:vf) schedule(dynamic) default(none)\
         shared(nmo, nao, mfao, mcoeff_t)\
         collapse(2)
@@ -122,8 +122,8 @@ namespace libqqc {
                     for (size_t l = 0; l < nao; l++){
                         double temp = 0;
                         for (size_t k = 0; k < nao; k++){
-                           temp += ccao[p * nao * nao + l * nao + k] 
-                               * mcoeff_t[pos_a * nao + k];
+                            temp += ccao[p * nao * nao + l * nao + k] 
+                                * mcoeff_t[pos_a * nao + k];
                         }
                         c_c [p * nvirt * nocc + i * nvirt + a] += 
                             mcoeff_t[i * nao + l] * temp;
@@ -131,7 +131,8 @@ namespace libqqc {
                 }
             }
         }
-	timings.stop_clock(0);
+        timings.stop_clock(0);
+        cout << timings.print_clocks(0);
 
         // Precalculating the exponential factors
 #pragma omp parallel for schedule(dynamic) default(none)\
@@ -157,12 +158,12 @@ namespace libqqc {
                 }//for a     
             }//for i
         }//for k 
-        
+
         size_t offset = 0;
         size_t npts_to_proc = p3Dnpts;
         double energy = 0.0;
 
-	timings.start_new_clock("Timing Qmp2_energy::compute : ", 1, 0);
+        timings.start_new_clock("Timing Qmp2_energy::compute : ", 1, 0);
         Qmp2_energy  qmp2_energy(
                 p1Dnpts, 
                 p3Dnpts, 
@@ -183,9 +184,9 @@ namespace libqqc {
 
         energy = qmp2_energy.compute();
 
-	timings.stop_clock(1);
+        timings.stop_clock(1);
+        cout << timings.print_clocks(1);
 
-	out << timings.print_all_clocks();
 
         out << endl;
         out << "Q-MP(2) Ground State Energy (eV): " << energy;
