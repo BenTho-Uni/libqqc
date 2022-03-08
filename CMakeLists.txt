@@ -54,7 +54,7 @@ find_package(Doxygen)
 add_subdirectory(libqqc)
 
 # generating variable if test should be compiled, if, add directory
-option(LIBQQC_TESTS "building libqqc tests" ON) 
+option(LIBQQC_TESTS "building libqqc tests" OFF) 
 if(LIBQQC_TESTS)
     enable_testing()
     add_subdirectory(tests)
