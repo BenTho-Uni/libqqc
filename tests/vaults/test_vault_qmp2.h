@@ -35,9 +35,7 @@ namespace libqqc {
             double mmat_coeff[3 * 3] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 
                 7.0, 8.0, 9.0}; ///< dummy coefficient matrix
             double mmat_cgto[2 * 3] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0}; ///< dummy cgto matrix
-            double mcube_coul[2 * 3 * 3] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, ///< dummy coulomb tensor
-                7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0,
-                17.0, 18.0};
+            double mcube_coul[2 * 1  * 2] = {1.0, 2.0, 3.0, 4.0}; ///< dummy coulomb tensor
 
             ///
             /// @brief method for checking both constructors

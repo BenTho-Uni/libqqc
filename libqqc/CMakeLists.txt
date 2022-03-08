@@ -44,11 +44,10 @@ set(HDR_UTILS
 )
 
 set(SRC_VAULTS
-    vaults/vault_qmp2.cpp
 )
 
 set(HDR_VAULTS
-    vaults/vault_qmp2.cpp
+    vaults/vault_qmp2.h
 )
 
 # For compiling without Eigen, GPU or OpenMP

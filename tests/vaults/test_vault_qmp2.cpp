@@ -17,29 +17,8 @@ namespace libqqc {
     bool Test_Vault_qmp2 :: test_Vault_qmp2() {
         bool result = true;
 
-        Vault_qmp2 vault2(mnocc, mnvirt, mnao, m1Dtol, mprnt_lvl, m1Dgrid,
-                m3Dgrid, mmat_fock, mmat_coeff, mmat_cgto,
-                mcube_coul);
-        if (vault2.get_mnocc() == 1) result = true;
-        if (vault2.get_mnvirt() == 2) result = result && true;
-        if (vault2.get_mnao() == 3) result = result && true;
-        if (vault2.get_m1Dtol() == 0) result = result && true;
-        if (vault2.get_mprnt_lvl() == 0) result = result && true;
-        if (vault2.get_m1Dgrid().get_mnpts() == 2) result = result && true;
-        if (vault2.get_m1Dgrid().get_mndim() == 2) result = result && true;
-        if (vault2.get_m1Dgrid().get_mpts()[0] == 1.0) result = result && true;
-        if (vault2.get_m1Dgrid().get_mwts()[0] == 1.0) result = result && true;
-        if (vault2.get_m3Dgrid().get_mnpts() == 2) result = result && true;
-        if (vault2.get_m3Dgrid().get_mndim() == 2) result = result && true;
-        if (vault2.get_m3Dgrid().get_mpts()[0] == 1.0) result = result && true;
-        if (vault2.get_m3Dgrid().get_mwts()[0] == 1.0) result = result && true;
-        if (vault2.get_mmat_fock()[0] == 1.0) result = true;
-        if (vault2.get_mmat_coeff()[0] == 1.0) result = result && true;
-        if (vault2.get_mmat_cgto()[0] == 1.0) result = result && true;
-        if (vault2.get_mcube_coul()[0] == 1.0) result = result && true;
-
         Loader_qmp2 loader;
-        Vault_qmp2 vault(loader);
+        Vault_qmp2<Loader_qmp2> vault(loader);
         if (vault.get_mnocc() == 4) result = true;
         if (vault.get_mnvirt() == 5) result = result && true;
         if (vault.get_mnao() == 9) result = result && true;
@@ -54,7 +33,6 @@ namespace libqqc {
         if (vault.get_m3Dgrid().get_mpts()[0] == 1.0) result = result && true;
         if (vault.get_m3Dgrid().get_mwts()[0] == 1.0) result = result && true;
         if (vault.get_mmat_fock()[0] == 1.0) result = true;
-        if (vault.get_mmat_coeff()[0] == 1.0) result = result && true;
         if (vault.get_mmat_cgto()[0] == 1.0) result = result && true;
         if (vault.get_mcube_coul()[0] == 1.0) result = result && true;
 
