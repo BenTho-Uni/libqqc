@@ -18,14 +18,12 @@ using namespace std;
 
 namespace libqqc {
 
-    void Loader_qmp2_from_file :: load_nocc (string filename, size_t &nocc){
+    void Loader_qmp2_from_file :: load_nocc (size_t &nocc){
 
         vector<size_t> dim = {16, 1, 1};
 
         double array[dim.at(0) * dim.at(1) * dim.at(2)];
 
-        // Open the MPI environment to load the file 
-        //MPI_Init(NULL, NULL);
         int pid, max_id; //pid is id of current node, max_id number of max. nodes
         MPI_Comm_rank(MPI_COMM_WORLD, &pid); //Grab the current node id
         MPI_Comm_size(MPI_COMM_WORLD, &max_id); //Grab the max number of nodes
@@ -33,26 +31,21 @@ namespace libqqc {
 
         if (pid == 0){
             // On the master node with pid 0 load in the input file
-            load_array_from_file(msrc_folder+filename, dim, array, ' ', 1);
+            load_array_from_file(msrc_folder+mfname_inputs, dim, array, ' ', 1);
         }
         // Now distribute the data to all nodes
         MPI_Bcast(array, dim.at(0) * dim.at(1) * dim.at(2),
                 MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
-        //MPI_Finalize(); // Close MPI
 
         nocc = array[12];
-
     } //Loader_qmp2_from_file::load_nocc
 
-    void Loader_qmp2_from_file :: load_nvirt(string filename, size_t &nvirt) {
+    void Loader_qmp2_from_file :: load_nvirt(size_t &nvirt) {
 
         vector<size_t> dim = {16, 1, 1};
 
         double array[dim.at(0) * dim.at(1) * dim.at(2)];
 
-        // Open the MPI environment to load the file 
-        //MPI_Init(NULL, NULL);
         int pid, max_id; //pid is id of current node, max_id number of max. nodes
         MPI_Comm_rank(MPI_COMM_WORLD, &pid); //Grab the current node id
         MPI_Comm_size(MPI_COMM_WORLD, &max_id); //Grab the max number of nodes
@@ -60,26 +53,21 @@ namespace libqqc {
 
         if (pid == 0){
             // On the master node with pid 0 load in the input file
-            load_array_from_file(msrc_folder+filename, dim, array, ' ', 1);
+            load_array_from_file(msrc_folder+mfname_inputs, dim, array, ' ', 1);
         }
         // Now distribute the data to all nodes
         MPI_Bcast(array, dim.at(0) * dim.at(1) * dim.at(2),
                 MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
-        //MPI_Finalize(); // Close MPI
 
         nvirt = array[13];
-    
     }
 
-    void Loader_qmp2_from_file :: load_nao(string filename, size_t &nao) {
+    void Loader_qmp2_from_file :: load_nao(size_t &nao) {
 
         vector<size_t> dim = {16, 1, 1};
 
         double array[dim.at(0) * dim.at(1) * dim.at(2)];
 
-        // Open the MPI environment to load the file 
-        //MPI_Init(NULL, NULL);
         int pid, max_id; //pid is id of current node, max_id number of max. nodes
         MPI_Comm_rank(MPI_COMM_WORLD, &pid); //Grab the current node id
         MPI_Comm_size(MPI_COMM_WORLD, &max_id); //Grab the max number of nodes
@@ -87,26 +75,21 @@ namespace libqqc {
 
         if (pid == 0){
             // On the master node with pid 0 load in the input file
-            load_array_from_file(msrc_folder+filename, dim, array, ' ', 1);
+            load_array_from_file(msrc_folder+mfname_inputs, dim, array, ' ', 1);
         }
         // Now distribute the data to all nodes
         MPI_Bcast(array, dim.at(0) * dim.at(1) * dim.at(2),
                 MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
-        //MPI_Finalize(); // Close MPI
 
         nao = array[15];
-    
     }
 
-    void Loader_qmp2_from_file :: load_1Dtol(string filename, double &p1Dtol) {
+    void Loader_qmp2_from_file :: load_1Dtol(double &p1Dtol) {
 
         vector<size_t> dim = {16, 1, 1};
 
         double array[dim.at(0) * dim.at(1) * dim.at(2)];
 
-        // Open the MPI environment to load the file 
-        //MPI_Init(NULL, NULL);
         int pid, max_id; //pid is id of current node, max_id number of max. nodes
         MPI_Comm_rank(MPI_COMM_WORLD, &pid); //Grab the current node id
         MPI_Comm_size(MPI_COMM_WORLD, &max_id); //Grab the max number of nodes
@@ -114,27 +97,21 @@ namespace libqqc {
 
         if (pid == 0){
             // On the master node with pid 0 load in the input file
-            load_array_from_file(msrc_folder+filename, dim, array, ' ', 1);
+            load_array_from_file(msrc_folder+mfname_inputs, dim, array, ' ', 1);
         }
         // Now distribute the data to all nodes
         MPI_Bcast(array, dim.at(0) * dim.at(1) * dim.at(2),
                 MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
-        //MPI_Finalize(); // Close MPI
 
         p1Dtol = array[9];
-
-    
     }
 
-    void Loader_qmp2_from_file :: load_prnt_lvl(string filename, int &prnt_lvl) {
+    void Loader_qmp2_from_file :: load_prnt_lvl(int &prnt_lvl) {
 
         vector<size_t> dim = {16, 1, 1};
 
         double array[dim.at(0) * dim.at(1) * dim.at(2)];
 
-        // Open the MPI environment to load the file 
-        //MPI_Init(NULL, NULL);
         int pid, max_id; //pid is id of current node, max_id number of max. nodes
         MPI_Comm_rank(MPI_COMM_WORLD, &pid); //Grab the current node id
         MPI_Comm_size(MPI_COMM_WORLD, &max_id); //Grab the max number of nodes
@@ -142,16 +119,13 @@ namespace libqqc {
 
         if (pid == 0){
             // On the master node with pid 0 load in the input file
-            load_array_from_file(msrc_folder+filename, dim, array, ' ', 1);
+            load_array_from_file(msrc_folder+mfname_inputs, dim, array, ' ', 1);
         }
         // Now distribute the data to all nodes
         MPI_Bcast(array, dim.at(0) * dim.at(1) * dim.at(2),
                 MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-        //MPI_Finalize(); // Close MPI
-
         prnt_lvl = array[11];
-    
     }
 
     void Loader_qmp2_from_file :: load_grid(string filename_pts, 
@@ -161,13 +135,10 @@ namespace libqqc {
         vector<size_t> dim_pts = {};
         vector<size_t> dim_wts = {};
 
-        // Open the MPI environment to load the file 
-        //MPI_Init(NULL, NULL);
         int pid, max_id; //pid is id of current node, max_id number of max. nodes
         MPI_Comm_rank(MPI_COMM_WORLD, &pid); //Grab the current node id
         MPI_Comm_size(MPI_COMM_WORLD, &max_id); //Grab the max number of nodes
         MPI_Status status; 
-
 
         size_t dim_pts_size = 0;
         size_t dim_wts_size = 0;
@@ -205,21 +176,13 @@ namespace libqqc {
         MPI_Bcast(wts, dim_wts.at(0) * dim_wts.at(1) * dim_wts.at(2),
                 MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-        //MPI_Finalize(); // Close MPI
-
-        // Check if number of points are the same
-
         grid.set_grid(dim_pts.at(1), dim_pts.at(0), pts, wts);
-    
     }
 
-    void Loader_qmp2_from_file :: load_mat_fock(string filename, 
-            double* mat_fock, size_t dim1, size_t dim2) {
+    void Loader_qmp2_from_file :: load_mat_fock(double* mat_fock) {
 
         vector<size_t> dim = {dim1, dim2, 1};
 
-        // Open the MPI environment to load the file 
-        //MPI_Init(NULL, NULL);
         int pid, max_id; //pid is id of current node, max_id number of max. nodes
         MPI_Comm_rank(MPI_COMM_WORLD, &pid); //Grab the current node id
         MPI_Comm_size(MPI_COMM_WORLD, &max_id); //Grab the max number of nodes
@@ -232,9 +195,6 @@ namespace libqqc {
         // Now distribute the data to all nodes
         MPI_Bcast(mat_fock, dim.at(0) * dim.at(1) * dim.at(2),
                 MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
-        //MPI_Finalize(); // Close MPI
-    
     }
 
     void Loader_qmp2_from_file :: load_mat_coeff(string filename, 
