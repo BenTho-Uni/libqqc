@@ -127,12 +127,6 @@ namespace libqqc {
                 for (size_t l = 0; l < nao; l++){
                     double temp = 0;
                     for (size_t k = 0; k < nao; k++){
-                        // Matrix Multiplication A*B multiplies the Row of A with 
-                        // Column of B. That is a Problem in B, as we have filled it 
-                        // Row major which would lead to cache misses. 
-                        // We therefore traferce over the transposed matrix instead, 
-                        // as we don't have to adhere to simulating "matrix multiplication"
-                        // and multiply row A with row of B^T
                         temp += fock_ao[l * nao + k] * coeff[k * nmo + q];
                     }
                     mat_fock[q * nmo + p] += coeff[l * nmo + p] * temp;

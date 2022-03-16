@@ -20,8 +20,9 @@ namespace libqqc {
 
     void Do_qmp2 :: run(ostringstream &out){
 
-        Ttimer timings(0);
-
+        int prnt_lvl = mvault.get_mprnt_lvl();
+        prnt_lvl = 0;
+        Ttimer timings(prnt_lvl);
 
         // Grabbing the calculation data we need
         size_t p1Dnpts = mvault.get_m1Dgrid().get_mnpts();
@@ -31,10 +32,9 @@ namespace libqqc {
         size_t nmo = nocc + nvirt;
         size_t nao = mvault.get_mnao(); 
 
-        double* mcoeff = mvault.get_mmat_coeff();
-        double* mfao = mvault.get_mmat_fock();
+        double* mf = mvault.get_mmat_fock();
         double* mcgto = mvault.get_mmat_cgto();
-        double* ccao = mvault.get_mcube_coul();
+        double* c_c = mvault.get_mcube_coul();
         double* v1Dpts = mvault.get_m1Dgrid().get_mpts();
         double* v1Dwts = mvault.get_m1Dgrid().get_mwts();
         double* v3Dwts = mvault.get_m3Dgrid().get_mwts();
@@ -46,126 +46,31 @@ namespace libqqc {
         double* c1Deps_ov = new double[p1Dnpts * nocc * nvirt]();
         double* m_o = new double[p3Dnpts * nocc]();
         double* m_v = new double[p3Dnpts * nvirt]();
-        double* c_c = new double[p3Dnpts * nocc * nvirt]();
         double vf[nmo] = {};
 
-        // AO to MO transformations
-        // Fock-Matrix F $F_{MO} = C^T F_{AO} C
-        // 
-        // Save a Transpose of the Matrix for better cache alignment
-        //
-        double mcoeff_t[ nao * nmo];
-
         // Set up MPI environment and set important variables
-        //MPI_Init (NULL, NULL); //Initialize MPI
         int pid, max_id; // pid is rank and max_id is maxrank
         MPI_Comm_rank(MPI_COMM_WORLD, &pid);
         MPI_Comm_size(MPI_COMM_WORLD, &max_id);
         MPI_Status status;
 
-        timings.start_new_clock("Timings do_mp2::run AO to MO transformations : ", 0, 0);
-
-#pragma omp parallel for schedule(dynamic) default(none)\
-        shared(nao, nmo, mcoeff_t, mcoeff)\
-        collapse(2)
-        for (size_t i = 0; i < nao; i++){
-            for (size_t j = 0; j < nmo; j++){
-                mcoeff_t[j * nao + i ] = mcoeff [i * nmo + j];
-            }
-        }
-
-        // This could be collapse(2) but needs a reduction on vf[p]
-#pragma omp parallel for reduction(+:vf) schedule(dynamic) default(none)\
-        shared(nmo, nao, mfao, mcoeff_t)\
-        collapse(2)
         for (size_t p = 0; p < nmo; p ++){
-            for (size_t l = 0; l < nao; l++){
-                double temp = 0;
-                for (size_t k = 0; k < nao; k++){
-                    // Matrix Multiplication A*B multiplies the Row of A with 
-                    // Column of B. That is a Problem in B, as we have filled it 
-                    // Row major which would lead to cache misses. 
-                    // We therefore traferce over the transposed matrix instead, 
-                    // as we don't have to adhere to simulating "matrix multiplication"
-                    // and multiply row A with row of B^T
-                    temp += mfao[l * nao + k] * mcoeff_t[p * nao + k];
-                }
-                vf[p] += mcoeff_t[p * nao + l] * temp;
-            }
+                vf[p] = mf[p * nmo + p];
         }
 
-
-        // The next AO to MO transformations are done on the large 3D grid
-        // Distribute the points to compute to the nodes
-        // For this, we calculate the number of elements each calculates
-        // This work loop is linear, so we have it easier then later
-        //
-        size_t remaining_elements = p3Dnpts % max_id;
-        size_t npts_to_proc = p3Dnpts / max_id 
-            + ((pid != 0) ? 0 : remaining_elements);
-        size_t offset = pid * npts_to_proc 
-            + ((pid != 0) ? remaining_elements : 0);
-
-        // Orbitals O $O_{MO} = O * C$
-        //
+        // Part the cgto matrix into occupied and virtual spaces
         size_t pos = 0; // Position on virtual orbital space
-#pragma omp parallel for schedule(dynamic) default(none)\
-        shared(p3Dnpts, nmo, nao, nocc, nvirt, m_o, m_v, mcgto, mcoeff_t, offset, npts_to_proc, remaining_elements)\
-        private(pos) \
-        collapse(2)
-        for (size_t p = offset; p < offset + npts_to_proc; p++){
+        for (size_t p = 0; p < p3Dnpts; p++){
             for (size_t q = 0; q < nmo; q++){
-                for (size_t k = 0; k < nao; k++){
-                    if (q < nocc){
-                        m_o[p * nocc + q] += mcgto[p * nao + k] 
-                            * mcoeff_t[q * nao + k];
-                    }
-                    else {
-                        pos = q - nocc; // q covers nmo, so substr. num. of occ.
-                        m_v[p * nvirt + pos] += mcgto[p * nao + k] 
-                            * mcoeff_t[q * nao + k];
-                    }
+                if (q < nocc){
+                    m_o[p * nocc + q] = mcgto[p * nmo + q];
+                }
+                else {
+                    pos = q - nocc; // q covers nmo, so substr. num. of occ.
+                    m_v[p * nvirt + pos] = mcgto[p * nmo + q];
                 }
             }
         }
-
-        // Coulomb Integral AO to MO, U_{MO}^P: for each slice P 
-        // $U_{MO} = C_{occpuid}^T * (u_{AO}^P * C_{virtuals}
-
-#pragma omp parallel for schedule(dynamic) default(none)\
-        shared(p3Dnpts, nocc, nvirt, nao, ccao, mcoeff_t, c_c, offset, npts_to_proc, remaining_elements)\
-        collapse(3)
-        for (size_t p = offset; p < offset + npts_to_proc; p++){
-            for (size_t i = 0; i < nocc; i++){
-                for (size_t a = 0; a < nvirt; a++){
-                    size_t pos_a = nocc + a;
-                    for (size_t l = 0; l < nao; l++){
-                        double temp = 0;
-                        for (size_t k = 0; k < nao; k++){
-                            temp += ccao[p * nao * nao + l * nao + k] 
-                                * mcoeff_t[pos_a * nao + k];
-                        }
-                        c_c [p * nvirt * nocc + i * nvirt + a] += 
-                            mcoeff_t[i * nao + l] * temp;
-                    }
-                }
-            }
-        }
-
-        // Now gather all data
-        for (size_t i = 0; i < max_id; i++){
-            npts_to_proc = p3Dnpts / max_id 
-                + ((i != 0) ? 0 : remaining_elements);
-            offset = i * npts_to_proc + ((i != 0) ? remaining_elements : 0);
-            MPI_Bcast(m_o + offset * nocc, 
-                    npts_to_proc * nocc, MPI_DOUBLE, i, MPI_COMM_WORLD);
-            MPI_Bcast(m_v + offset * nvirt, 
-                    npts_to_proc * nvirt, MPI_DOUBLE, i, MPI_COMM_WORLD);
-            MPI_Bcast(c_c + offset * nvirt * nocc,
-                    npts_to_proc * nvirt * nocc, MPI_DOUBLE, i, MPI_COMM_WORLD);
-        }
-        timings.stop_clock(0);
-        if (pid == 0) cout << timings.print_clocks(0);
 
         // Precalculating the exponential factors
 #pragma omp parallel for schedule(dynamic) default(none)\
@@ -192,9 +97,9 @@ namespace libqqc {
             }//for i
         }//for k 
 
-        offset = 0;
-        npts_to_proc = p3Dnpts/(2*max_id);
-        remaining_elements = p3Dnpts - npts_to_proc * max_id * 2;
+        size_t offset = 0;
+        size_t npts_to_proc = p3Dnpts/(2 * max_id);
+        size_t remaining_elements = p3Dnpts - npts_to_proc * max_id * 2;
 
         if ((pid == 0) && (mvault.get_mprnt_lvl() >=1)){
             cout << "Master (pid 0) reporting:" << endl 
@@ -207,7 +112,7 @@ namespace libqqc {
 
         double energy = 0.0;
 
-        timings.start_new_clock("Timing Qmp2_energy::compute : ", 1, 0);
+        timings.start_new_clock("Timing Qmp2_energy::compute : ", 0, prnt_lvl);
 
         Qmp2_energy  qmp2_energy(
                 p1Dnpts, 
@@ -228,7 +133,7 @@ namespace libqqc {
                 npts_to_proc);
 
         // First batch of points from the beginning of the data, easier work load
-        timings.start_new_clock("Starting batch : ", 2, 0);
+        timings.start_new_clock("Starting batch : ", 1, prnt_lvl);
 
         // Now we distribute the middle points left over to the first batch, this will make
         // the workload slightly uneven
@@ -236,23 +141,23 @@ namespace libqqc {
         int x = remaining_elements % max_id;
         int y = remaining_elements / max_id;
         offset = pid * npts_to_proc + ((pid < x) ? pid : x) + ((y == 1) ? pid : 0);
-        npts_to_proc += ((pid < x) ? (1+y) : y);
+        npts_to_proc += ((pid < x) ? (1 + y) : y);
 
         energy += qmp2_energy.compute();
         npts_to_proc = npts_to_proc_orig;
+        timings.stop_clock(1);
+        if (pid == 0) cout << timings.print_clocks(1);
+
+        // Second set of points 
+        timings.start_new_clock("End batch : ", 2, prnt_lvl);
+        offset = p3Dnpts - (1 + pid) * npts_to_proc;
+        energy += qmp2_energy.compute();
         timings.stop_clock(2);
         if (pid == 0) cout << timings.print_clocks(2);
 
-        // Second set of points 
-        timings.start_new_clock("End batch : ", 3, 0);
-        offset = p3Dnpts - (1 + pid) * npts_to_proc;
-        energy += qmp2_energy.compute();
-        timings.stop_clock(3);
-        if (pid == 0) cout << timings.print_clocks(3);
-
         //now lets differentiate which node does what
         if (pid == 0){
-            timings.start_new_clock("Gathering partial energies from nodes : ", 4, 0);
+            timings.start_new_clock("Gathering partial energies from nodes : ", 3, 0);
             double tmp = 0.0;
             // Get all partial energies from servants
             for (int i = 1; i < max_id; i++){
@@ -260,7 +165,8 @@ namespace libqqc {
                         MPI_COMM_WORLD, &status);
                 energy += tmp;
             }
-            timings.stop_clock(4);
+            timings.stop_clock(3);
+            cout << timings.print_clocks(3);
             cout << timings.print_clocks(0);
 
             out << endl;
@@ -271,7 +177,6 @@ namespace libqqc {
         }
 
 
-        delete[] c_c;
         delete[] m_v;
         delete[] m_o;
         delete[] c1Deps_ov;

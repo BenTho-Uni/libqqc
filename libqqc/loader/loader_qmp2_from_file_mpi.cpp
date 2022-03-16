@@ -126,6 +126,7 @@ namespace libqqc {
                 MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
         prnt_lvl = array[11];
+
     }
 
     void Loader_qmp2_from_file :: load_grid(string filename_pts, 
@@ -181,92 +182,336 @@ namespace libqqc {
 
     void Loader_qmp2_from_file :: load_mat_fock(double* mat_fock) {
 
-        vector<size_t> dim = {dim1, dim2, 1};
-
         int pid, max_id; //pid is id of current node, max_id number of max. nodes
         MPI_Comm_rank(MPI_COMM_WORLD, &pid); //Grab the current node id
         MPI_Comm_size(MPI_COMM_WORLD, &max_id); //Grab the max number of nodes
         MPI_Status status; 
 
+        // First lets init the dimensions, load them in on master and distribute
+        // them
+        size_t nao = 0;
+        size_t nocc = 0;
+        size_t nvirt = 0;
+
+        load_nao(nao);
+        load_nocc(nocc);
+        load_nvirt(nvirt);
+        size_t nmo = nocc + nvirt;
+
+        //Now we calculate the AOtoMO transformed Fock Matrix on master, as this
+        //will be very small
+
         if (pid == 0){
-            // On the master node with pid 0 load in the input file
-            load_array_from_file(msrc_folder+filename, dim, mat_fock, ' ', 1);
+
+            // read in the AO fock matrix
+            vector<size_t> dim_fock = {nao, nao, 1};
+            double fock_ao[nao * nao];
+            load_array_from_file(msrc_folder+mfname_fock, dim_fock, 
+                    fock_ao, ' ', 1);
+
+            // read in the coefficient C matrix
+            vector<size_t> dim_coeff = {nao, nmo, 1};
+            double coeff[nao * nmo];
+            load_array_from_file(msrc_folder+mfname_coeff, dim_coeff, 
+                    coeff, ' ', 1);
+
+            //transform the Fock matrix
+#pragma omp parallel for schedule(dynamic) default(none)\
+            shared(nmo, nao, fock_ao, coeff, mat_fock)\
+            collapse(2)
+            for (size_t q = 0; q < nmo; q++){
+                for (size_t p = 0; p < nmo; p++){
+                    mat_fock[q * nmo + p] = 0;
+                    for (size_t l = 0; l < nao; l++){
+                        double temp = 0;
+                        for (size_t k = 0; k < nao; k++){
+                            temp += fock_ao[l * nao + k] * coeff[k * nmo + q];
+                        }
+                        mat_fock[q * nmo + p] += coeff[l * nmo + p] * temp;
+                    }
+                }
+            } 
+
         }
-        // Now distribute the data to all nodes
-        MPI_Bcast(mat_fock, dim.at(0) * dim.at(1) * dim.at(2),
+        MPI_Bcast(mat_fock, nmo * nmo,
                 MPI_DOUBLE, 0, MPI_COMM_WORLD);
     }
 
-    void Loader_qmp2_from_file :: load_mat_coeff(string filename, 
-            double* mat_coeff, size_t dim1, size_t dim2) {
+    void Loader_qmp2_from_file :: load_mat_coeff(double* mat_coeff) {
 
-        vector<size_t> dim = {dim1, dim2, 1};
-
-        // Open the MPI environment to load the file 
-        //MPI_Init(NULL, NULL);
         int pid, max_id; //pid is id of current node, max_id number of max. nodes
         MPI_Comm_rank(MPI_COMM_WORLD, &pid); //Grab the current node id
         MPI_Comm_size(MPI_COMM_WORLD, &max_id); //Grab the max number of nodes
         MPI_Status status; 
 
-        if (pid == 0){
-            // On the master node with pid 0 load in the input file
-            load_array_from_file(msrc_folder+filename, dim, mat_coeff, ' ', 1);
-        }
-        // Now distribute the data to all nodes
-        MPI_Bcast(mat_coeff, dim.at(0) * dim.at(1) * dim.at(2),
-                MPI_DOUBLE, 0, MPI_COMM_WORLD);
+        // First lets init the dimensions, load them in on master and distribute
+        // them
+        size_t nao = 0;
+        size_t nocc = 0;
+        size_t nvirt = 0;
 
-        //MPI_Finalize(); // Close MPI
-    
+        load_nao(nao);
+        load_nocc(nocc);
+        load_nvirt(nvirt);
+        size_t nmo = nocc + nvirt;
+
+        //Then load the coeff C matrix in on master
+        if (pid == 0){
+            // read in the coefficient C matrix
+            vector<size_t> dim_coeff = {nao, nmo, 1};
+            double coeff[nao * nmo];
+            load_array_from_file(msrc_folder+mfname_coeff, dim_coeff, 
+                    coeff, ' ', 1);
+        }
+
+        // Now distribute the data to all nodes
+        MPI_Bcast(mat_coeff, nao * nmo,
+                MPI_DOUBLE, 0, MPI_COMM_WORLD);
+ 
     }
 
-    void Loader_qmp2_from_file :: load_mat_cgto(string filename, 
-            double* mat_cgto, size_t dim1, size_t dim2) {
+    void Loader_qmp2_from_file :: load_mat_cgto(double* mat_cgto) {
 
-        vector<size_t> dim = {dim1, dim2, 1};
-
-        // Open the MPI environment to load the file 
-        //MPI_Init(NULL, NULL);
         int pid, max_id; //pid is id of current node, max_id number of max. nodes
         MPI_Comm_rank(MPI_COMM_WORLD, &pid); //Grab the current node id
         MPI_Comm_size(MPI_COMM_WORLD, &max_id); //Grab the max number of nodes
         MPI_Status status; 
 
-        if (pid == 0){
-            // On the master node with pid 0 load in the input file
-            load_array_from_file(msrc_folder+filename, dim, mat_cgto, ' ', 1);
-        }
-        // Now distribute the data to all nodes
-        MPI_Bcast(mat_cgto, dim.at(0) * dim.at(1) * dim.at(2),
-                MPI_DOUBLE, 0, MPI_COMM_WORLD);
+        // First lets init the dimensions, load them in on master and distribute
+        // them
+        size_t nao = 0;
+        size_t nocc = 0;
+        size_t nvirt = 0;
+        load_nao(nao);
+        load_nocc(nocc);
+        load_nvirt(nvirt);
+        size_t nmo = nocc + nvirt;
 
-        //MPI_Finalize(); // Close MPI
-    
+        //for the number of 3D points we need to load in the grid 
+        size_t p3Dnpts = 0;
+        Grid p3Dgrid;
+        load_3Dgrid(p3Dgrid);
+        p3Dnpts = p3Dgrid.get_mnpts();
+        
+        // Now load in the coeff C matrix and the AO CGTO matrix on master,
+        // distribute the CMatrix and the part of the AO matrix that matches
+        // the batch load. For this, we have to first calculate the batch. 
+        size_t remaining_elements = p3Dnpts % max_id;
+        size_t npts_to_proc = p3Dnpts / max_id 
+            + ((pid != 0) ? 0 : remaining_elements);
+        size_t offset = pid * npts_to_proc
+            + ((pid != 0) ? remaining_elements : 0);
+
+        // Set up the coefficienct C matrix
+        vector<size_t> dim_coeff = {nao, nmo, 1};
+        double coeff[nao * nmo];
+
+        if (pid == 0){
+            //read in on master
+            load_array_from_file(msrc_folder+mfname_coeff, dim_coeff, 
+                    coeff, ' ', 1);
+        }
+        //Distribute the Coefficient matrix
+        MPI_Bcast(coeff, nao * nmo, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+        //Now set up the AO part of the cgto matrix for this node
+        double* cgto_ao_node = new double[npts_to_proc * nao];
+        vector<size_t> dim_ao = {p3Dnpts, nao, 1};
+        vector<size_t> dim_mo = {p3Dnpts, nmo, 1};
+        double* cgto_ao_full = NULL;
+
+        if (pid == 0) {
+            //on master, read in the full cgto matrix
+            cgto_ao_full = new double[p3Dnpts * nao];
+            load_array_from_file(msrc_folder+mfname_cgto, dim_ao, cgto_ao_full,
+                    ' ', 1);
+        }
+
+        //now distribute the bach part of the AO matrix 
+        //
+        if (pid == 0){
+            for (int i = 1; i < max_id; i++){
+                size_t offset_on_i = i * npts_to_proc + remaining_elements;
+                size_t npts_to_proc_on_i = p3Dnpts / max_id;
+                MPI_Send(cgto_ao_full + offset_on_i, npts_to_proc_on_i * nao, 
+                        MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
+            }
+        }
+        else {
+            MPI_Recv(cgto_ao_node, npts_to_proc * nao, MPI_DOUBLE, 0, 0, 
+                    MPI_COMM_WORLD, &status);
+        }
+        // Delete Full array from before
+        if (pid == 0) {
+            for (size_t p = 0; p < npts_to_proc; p++){
+                for (size_t a = 0; a < nao; a++){
+                    cgto_ao_node[p * nao + a] = cgto_ao_full[p * nao + a];
+                }
+            }
+        }
+        delete[] cgto_ao_full;
+
+        //Now we do the transformation
+        // Orbitals O $O_{MO} = O * C$
+        //
+        size_t pos = 0; // Position on virtual orbital space
+#pragma omp parallel for schedule(dynamic) default(none)\
+        shared(npts_to_proc, nmo, nao, nocc, nvirt, cgto_ao_node, coeff, mat_cgto, offset)\
+        private(pos) \
+        collapse(2)
+        for (size_t p = offset; p < npts_to_proc + offset; p++){
+            for (size_t q = 0; q < nmo; q++){
+                mat_cgto[p * nmo + q] = 0;
+                for (size_t k = 0; k < nao; k++){
+                    mat_cgto[p * nmo + q] += cgto_ao_node[p * nao + k] 
+                        * coeff[k * nmo + q];
+                }
+            }
+        }
+
+        //Now get all the Data that we didnt calculate on this node
+        //
+        for (int i = 0; i < max_id; i++){
+            if (i == pid){
+                MPI_Bcast(mat_cgto + offset, npts_to_proc * nao, MPI_DOUBLE, 
+                        pid, MPI_COMM_WORLD);
+            }
+            else {
+                size_t npts_to_proc_on_i = p3Dnpts / max_id 
+                    + ((i != 0) ? 0 : remaining_elements);
+                size_t offset_on_i = i * npts_to_proc
+                    + ((i != 0) ? remaining_elements : 0);
+                MPI_Bcast(mat_cgto + offset_on_i, npts_to_proc_on_i * nao, 
+                        MPI_DOUBLE, i, MPI_COMM_WORLD);
+            }
+        }
+
+        delete[] cgto_ao_node;
     }
 
-    void Loader_qmp2_from_file :: load_cube_coul(string filename, 
-            double* cube_coul, size_t dim1, size_t dim2, size_t dim3) {
+    void Loader_qmp2_from_file :: load_cube_coul(double* cube_coul) {
 
-        vector<size_t> dim = {dim1, dim2, dim3};
-
-        // Open the MPI environment to load the file 
-        //MPI_Init(NULL, NULL);
         int pid, max_id; //pid is id of current node, max_id number of max. nodes
         MPI_Comm_rank(MPI_COMM_WORLD, &pid); //Grab the current node id
         MPI_Comm_size(MPI_COMM_WORLD, &max_id); //Grab the max number of nodes
         MPI_Status status; 
 
-        if (pid == 0){
-            // On the master node with pid 0 load in the input file
-            load_array_from_file(msrc_folder+filename, dim, cube_coul, ' ', 1);
-        }
-        // Now distribute the data to all nodes
-        MPI_Bcast(cube_coul, dim.at(0) * dim.at(1) * dim.at(2),
-                MPI_DOUBLE, 0, MPI_COMM_WORLD);
+        // First lets init the dimensions, load them in on master and distribute
+        // them
+        size_t nao = 0;
+        size_t nocc = 0;
+        size_t nvirt = 0;
+        load_nao(nao);
+        load_nocc(nocc);
+        load_nvirt(nvirt);
 
-        //MPI_Finalize(); // Close MPI
-    
+        size_t nmo = nocc + nvirt;
+
+        size_t p3Dnpts = 0;
+        //for the number of 3D points we need to load in the grid 
+        Grid p3Dgrid;
+        load_3Dgrid(p3Dgrid);
+        p3Dnpts = p3Dgrid.get_mnpts();
+        
+        // Now load in the coeff C matrix and the AO CGTO matrix on master,
+        // distribute the CMatrix and the part of the AO matrix that matches
+        // the batch load. For this, we have to first calculate the batch. 
+        size_t remaining_elements = p3Dnpts % max_id;
+        size_t npts_to_proc = p3Dnpts / max_id 
+            + ((pid != 0) ? 0 : remaining_elements);
+        size_t offset = pid * npts_to_proc
+            + ((pid != 0) ? remaining_elements : 0);
+
+        // Set up the coefficienct C matrix
+        vector<size_t> dim_coeff = {nao, nmo, 1};
+        double coeff[nao * nmo];
+
+        if (pid == 0){
+            //read in on master
+            load_array_from_file(msrc_folder+mfname_coeff, dim_coeff, 
+                    coeff, ' ', 1);
+        }
+        //Distribute the Coefficient matrix
+        MPI_Bcast(coeff, nao * nmo, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+        //Now set up the AO part of the coulomb matrix for this node
+        double* coul_ao_node = new double[npts_to_proc * nao * nao];
+        vector<size_t> dim_ao = {nao, nao, p3Dnpts};
+        vector<size_t> dim_mo = {nocc, nvirt, p3Dnpts};
+
+        double* coul_ao_full = NULL;
+        MPI_Barrier(MPI_COMM_WORLD);
+        if (pid == 0) {
+            coul_ao_full = new double[p3Dnpts * nao * nao];
+            //on master, read in the full coulomb matrix
+            load_array_from_file(msrc_folder+mfname_coul, dim_ao, coul_ao_full,
+                    ' ', 1);
+        }
+        MPI_Barrier(MPI_COMM_WORLD);
+
+        //now distribute the bach part of the AO matrix 
+        //
+        if (pid == 0){
+            for (int i = 1; i < max_id; i++){
+                size_t offset_on_i = i * npts_to_proc + remaining_elements;
+                size_t npts_to_proc_on_i = p3Dnpts / max_id;
+                MPI_Send(coul_ao_full + offset_on_i, npts_to_proc_on_i * nao * nao, 
+                        MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
+            }
+        }
+        else {
+            MPI_Recv(coul_ao_node, npts_to_proc * nao * nao, MPI_DOUBLE, 0, 0, 
+                    MPI_COMM_WORLD, &status);
+        }
+        // Delete Full array from before
+        if (pid == 0) {
+            for (size_t p = 0; p < npts_to_proc; p++){
+                for (size_t a = 0; a < nao; a++){
+                    for (size_t b = 0; b < nao; b++){
+                        coul_ao_node[p * nao * nao + a * nao + b] = 
+                            coul_ao_full[p * nao * nao + a * nao + b];
+                    }
+                }
+            }
+        }
+        delete[] coul_ao_full;
+
+        //Now we do the transformation
+        // Orbitals O $O_{MO} = O * C$
+        //
+        size_t pos = 0; // Position on virtual orbital space
+#pragma omp parallel for schedule(dynamic) default(none)\
+        shared(offset, npts_to_proc, nmo, nao, nocc, nvirt, coul_ao_node, coeff, cube_coul)\
+        private(pos) \
+        collapse(2)
+        for (size_t p = offset; p < npts_to_proc + offset; p++){
+            for (size_t q = 0; q < nmo; q++){
+                cube_coul[p * nmo + q] = 0;
+                for (size_t k = 0; k < nao; k++){
+                    cube_coul[p * nmo + q] += coul_ao_node[p * nao + k] 
+                        * coeff[k * nmo + q];
+                }
+            }
+        }
+
+        //Now get all the Data that we didnt calculate on this node
+        //
+        for (int i = 0; i < max_id; i++){
+            if (i == pid){
+                MPI_Bcast(cube_coul + offset, npts_to_proc * nao, MPI_DOUBLE, 
+                        pid, MPI_COMM_WORLD);
+            }
+            else {
+                size_t npts_to_proc_on_i = p3Dnpts / max_id 
+                    + ((i != 0) ? 0 : remaining_elements);
+                size_t offset_on_i = i * npts_to_proc
+                    + ((i != 0) ? remaining_elements : 0);
+                MPI_Bcast(cube_coul + offset_on_i, npts_to_proc_on_i * nao, 
+                        MPI_DOUBLE, i, MPI_COMM_WORLD);
+            }
+        }
+
+        delete[] coul_ao_node;    
     }
 
 } //namespace libqqc
