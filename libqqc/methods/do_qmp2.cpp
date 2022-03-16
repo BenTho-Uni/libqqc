@@ -62,6 +62,44 @@ namespace libqqc {
                 }
             }
         }
+
+        //print out for debugging
+        cout << "fock" << endl;
+        for (int i = 0; i < nmo; i++){
+            for (int j = 0; j < nmo; j++){
+                cout << mf[i * nmo + j] << 
+                    ((j == (nmo-1)) ? "\n" : "\t");
+            }
+        }
+        cout << endl;
+
+        cout << "m_o" << endl;
+        for (int p = 0; p < 1; p ++){
+            for (size_t m = 0; m < nocc; m++){
+                cout << m_o [p * nocc + m] <<
+                    ((m == (nocc-1)) ? "\n" : "\t");
+            }
+        }
+
+        cout << "m_v" << endl;
+        for (int p = 0; p < 1; p ++){
+            for (size_t m = 0; m < nvirt; m++){
+                cout << m_v [p * nvirt + m] <<
+                    ((m == (nvirt-1)) ? "\n" : "\t");
+            }
+        }
+
+        cout << "c_c" << endl;
+        for (int p = 0; p < 1; p++){
+            for (size_t o = 0; o < nocc; o++){
+                for (size_t a = 0; a < nvirt; a++){
+                    cout << c_c[p * nocc * nvirt + o * nvirt + a] <<
+                        ((a == (nvirt-1)) ? "\n" : "\t");
+                }
+            }
+        }
+
+
         
         // Precalculating the exponential factors
 #pragma omp parallel for schedule(dynamic) default(none)\

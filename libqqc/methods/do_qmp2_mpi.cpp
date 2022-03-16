@@ -71,6 +71,17 @@ namespace libqqc {
                 }
             }
         }
+        if (pid == 0) {
+            cout << "c_c" << endl;
+            for (int p = 0; p < p3Dnpts; p++){
+                for (size_t o = 0; o < nocc; o++){
+                    for (size_t a = 0; a < nvirt; a++){
+                        cout << c_c[p * nocc * nvirt + o * nvirt + a] <<
+                            ((a == (nvirt-1)) ? "\n" : "\t");
+                    }
+                }
+            }
+        }
 
         // Precalculating the exponential factors
 #pragma omp parallel for schedule(dynamic) default(none)\
