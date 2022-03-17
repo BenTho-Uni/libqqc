@@ -135,7 +135,7 @@ namespace libqqc {
                 if (mprnt_lvl <= out_prnt_lvl)
                 {
                     out << std::fixed << std::setprecision(0) 
-                        << "  " << mname <<" Timer - "
+                        << mname <<" Timer - "
                         <<"CPU: "
                         <<1000.0 * cpu_time() / CLOCKS_PER_SEC << " ms ; "
                         << "Wall: "
