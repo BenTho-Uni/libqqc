@@ -32,7 +32,7 @@ int main (){
 
     qmp2.run(out);
     timings.stop_clock(2);
-    if (id == 0) cout << timings.print_clocks(0);
+    if (id == 0) cout << timings.print_clocks(2);
     out << endl;
 
     if (id == 0) cout << out.str() << endl;
