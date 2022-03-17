@@ -302,13 +302,6 @@ namespace libqqc {
         size_t offset = pid * npts_to_proc
             + ((pid != 0) ? remaining_elements : 0);
 
-        if (pid == 0) cout << "max id: " << max_id << endl
-            << "offset: " << offset << endl
-            << "npts_to_proc: " << npts_to_proc << endl;
-        if (pid == 1) cout << "max id: " << max_id << endl
-            << "offset: " << offset << endl
-            << "npts_to_proc: " << npts_to_proc << endl;
-
         // Set up the coefficienct C matrix
         vector<size_t> dim_coeff = {nao, nmo, 1};
         double coeff[nao * nmo];
@@ -324,13 +317,15 @@ namespace libqqc {
         //Now set up the AO part of the cgto matrix for this node
         double* cgto_ao_node = new double[npts_to_proc * nao];
         vector<size_t> dim_ao = {p3Dnpts, nao, 1};
-        vector<size_t> dim_mo = {p3Dnpts, nmo, 1};
 
         if (pid == 0) {
             //on master, read in the full cgto matrix
             double* cgto_ao_full = new double[p3Dnpts * nao];
             load_array_from_file(msrc_folder+mfname_cgto, dim_ao, cgto_ao_full,
                     ' ', 1);
+
+            //now distribute the batch part of the AO matrix 
+            //
             for (int i = 1; i < max_id; i++){
                 size_t npts_to_proc_on_i = p3Dnpts / max_id 
                     + ((i != 0) ? 0 : remaining_elements);
@@ -340,6 +335,7 @@ namespace libqqc {
                         (npts_to_proc_on_i * nao), 
                         MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
             }
+            // Delete Full array from before
             for (size_t p = 0; p < npts_to_proc; p++){
                 for (size_t a = 0; a < nao; a++){
                     cgto_ao_node[p * nao + a] = cgto_ao_full[p * nao + a];
@@ -355,10 +351,8 @@ namespace libqqc {
         //Now we do the transformation
         // Orbitals O $O_{MO} = O * C$
         //
-        size_t pos = 0; // Position on virtual orbital space
 #pragma omp parallel for schedule(dynamic) default(none)\
         shared(npts_to_proc, nmo, nao, nocc, nvirt, cgto_ao_node, coeff, mat_cgto, offset)\
-        private(pos) \
         collapse(2)
         for (size_t p = 0; p < npts_to_proc; p++){
             for (size_t q = 0; q < nmo; q++){
@@ -388,10 +382,7 @@ namespace libqqc {
             }
         }
 
-        cout << pid << " reporting cgto done, deleting" << endl;
         delete[] cgto_ao_node;
-        cout << pid << " deleting done" << endl;
-        MPI_Barrier(MPI_COMM_WORLD);
     }
 
     void Loader_qmp2_from_file :: load_cube_coul(double* cube_coul) {
@@ -442,34 +433,25 @@ namespace libqqc {
         //Now set up the AO part of the coulomb matrix for this node
         double* coul_ao_node = new double[npts_to_proc * nao * nao];
         vector<size_t> dim_ao = {nao, nao, p3Dnpts};
-        vector<size_t> dim_mo = {nocc, nvirt, p3Dnpts};
 
-        double* coul_ao_full = NULL;
-        MPI_Barrier(MPI_COMM_WORLD);
         if (pid == 0) {
-            coul_ao_full = new double[p3Dnpts * nao * nao];
+            double* coul_ao_full = new double[p3Dnpts * nao * nao];
             //on master, read in the full coulomb matrix
             load_array_from_file(msrc_folder+mfname_coul, dim_ao, coul_ao_full,
                     ' ', 1);
-        }
-        MPI_Barrier(MPI_COMM_WORLD);
 
-        //now distribute the bach part of the AO matrix 
-        //
-        if (pid == 0){
+            //now distribute the batch part of the AO matrix 
+            //
             for (int i = 1; i < max_id; i++){
-                size_t offset_on_i = i * npts_to_proc + remaining_elements;
-                size_t npts_to_proc_on_i = p3Dnpts / max_id;
-                MPI_Send(coul_ao_full + offset_on_i, npts_to_proc_on_i * nao * nao, 
+                size_t npts_to_proc_on_i = p3Dnpts / max_id 
+                    + ((i != 0) ? 0 : remaining_elements);
+                size_t offset_on_i = i * npts_to_proc_on_i
+                    + ((i != 0) ? remaining_elements : 0);
+                MPI_Send(coul_ao_full + (offset_on_i * nao * nao), 
+                        (npts_to_proc_on_i * nao * nao), 
                         MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
             }
-        }
-        else {
-            MPI_Recv(coul_ao_node, npts_to_proc * nao * nao, MPI_DOUBLE, 0, 0, 
-                    MPI_COMM_WORLD, &status);
-        }
-        // Delete Full array from before
-        if (pid == 0) {
+            // Delete Full array from before
             for (size_t p = 0; p < npts_to_proc; p++){
                 for (size_t a = 0; a < nao; a++){
                     for (size_t b = 0; b < nao; b++){
@@ -478,11 +460,12 @@ namespace libqqc {
                     }
                 }
             }
+            delete[] coul_ao_full;
         }
-        delete[] coul_ao_full;
-
-        cout << pid << " reporting in." << endl;
-        MPI_Barrier(MPI_COMM_WORLD);
+        else {
+            MPI_Recv(coul_ao_node, (npts_to_proc * nao * nao), MPI_DOUBLE, 0, 0, 
+                    MPI_COMM_WORLD, &status);
+        }
 
         // Coulomb Integral U_{MO}^P: for each slice P 
         // $U_{MO} = C_{occpuid}^T * (u_{AO}^P * C_{virtuals}
@@ -508,14 +491,13 @@ namespace libqqc {
                 }
             }
         }
-        cout << pid << " reporting in." << endl;
-        MPI_Barrier(MPI_COMM_WORLD);
 
         //Now get all the Data that we didnt calculate on this node
         //
         for (int i = 0; i < max_id; i++){
             if (i == pid){
-                MPI_Bcast(cube_coul + offset, npts_to_proc * nocc * nvirt, MPI_DOUBLE, 
+                MPI_Bcast(cube_coul + (offset * nocc * nvirt), 
+                        (npts_to_proc * nocc * nvirt), MPI_DOUBLE, 
                         pid, MPI_COMM_WORLD);
             }
             else {
@@ -523,7 +505,8 @@ namespace libqqc {
                     + ((i != 0) ? 0 : remaining_elements);
                 size_t offset_on_i = i * npts_to_proc
                     + ((i != 0) ? remaining_elements : 0);
-                MPI_Bcast(cube_coul + offset_on_i, npts_to_proc_on_i * nocc * nvirt, 
+                MPI_Bcast(cube_coul + (offset_on_i * nocc * nvirt), 
+                        (npts_to_proc_on_i * nocc * nvirt), 
                         MPI_DOUBLE, i, MPI_COMM_WORLD);
             }
         }
