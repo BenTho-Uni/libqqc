@@ -30,7 +30,9 @@ int main (){
     timings.start_new_clock("Timing Do_qmp2:: qmp2 and run : " , 2, 0);
     Do_qmp2 qmp2(vault);
 
+    cout << endl;
     qmp2.run(out);
+    cout << endl;
     timings.stop_clock(2);
     if (id == 0) cout << timings.print_clocks(2);
     out << endl;
