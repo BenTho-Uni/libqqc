@@ -503,7 +503,7 @@ namespace libqqc {
             else {
                 size_t npts_to_proc_on_i = p3Dnpts / max_id 
                     + ((i != 0) ? 0 : remaining_elements);
-                size_t offset_on_i = i * npts_to_proc
+                size_t offset_on_i = i * npts_to_proc_on_i
                     + ((i != 0) ? remaining_elements : 0);
                 MPI_Bcast(cube_coul + (offset_on_i * nocc * nvirt), 
                         (npts_to_proc_on_i * nocc * nvirt), 
