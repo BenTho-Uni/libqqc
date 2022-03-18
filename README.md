@@ -114,6 +114,10 @@ make install
 - [ ] update Readme with scalings and results from Justus 2.0
 - [ ] write better maintainable variant code
 - [ ] OpenMP GPU variant implementation
+- [ ] write printer
+- [ ] remove 1dtol from vault
+- [ ] rename mnnmo to mnmo 
+- [ ] write/rewrite test for printer, vault, loader, do_qmp2
 
 # Credits
 

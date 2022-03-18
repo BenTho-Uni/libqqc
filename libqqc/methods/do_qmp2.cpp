@@ -5,13 +5,15 @@
 /// @version 0.1 01-01-2020
 //
 
-#include "do_qmp2.h"
 
 //internal headers
+#include "do_qmp2.h"
+#include "../utils/printers/printer_qmp2.h"
+#include "../utils/ttimer.h"
+
 
 //external headers
 #include <cmath>
-#include "../utils/ttimer.h"
 
 using namespace std;
 
@@ -19,7 +21,8 @@ namespace libqqc {
 
     void Do_qmp2 :: run(ostringstream &out){
 
-        Ttimer timings(0);
+        int prnt_lvl = mvault.get_mprnt_lvl();
+        Ttimer timings(prnt_lvl);
 
         // Grabbing the calculation data we need
         size_t p1Dnpts = mvault.get_m1Dgrid().get_mnpts();
@@ -52,53 +55,17 @@ namespace libqqc {
 
         // Part CGTO matrix to m_o and m_v
         //
+        size_t pos = 0;
         for (size_t p = 0; p < p3Dnpts; p++){
             for (size_t m = 0; m < nmo; m++){
                 if (m < nocc) 
                     m_o[p * nocc + m] = mcgto[p * nmo + m];
                 else {
-                    size_t pos = m - nocc;
+                    pos = m - nocc;
                     m_v[p * nvirt + pos] = mcgto[p * nmo + m];
                 }
             }
         }
-
-        //print out for debugging
-        cout << "fock" << endl;
-        for (int i = 0; i < nmo; i++){
-            for (int j = 0; j < nmo; j++){
-                cout << mf[i * nmo + j] << 
-                    ((j == (nmo-1)) ? "\n" : "\t");
-            }
-        }
-        cout << endl;
-
-        cout << "m_o" << endl;
-        for (int p = 0; p < 1; p ++){
-            for (size_t m = 0; m < nocc; m++){
-                cout << m_o [p * nocc + m] <<
-                    ((m == (nocc-1)) ? "\n" : "\t");
-            }
-        }
-
-        cout << "m_v" << endl;
-        for (int p = 0; p < 1; p ++){
-            for (size_t m = 0; m < nvirt; m++){
-                cout << m_v [p * nvirt + m] <<
-                    ((m == (nvirt-1)) ? "\n" : "\t");
-            }
-        }
-
-        cout << "c_c" << endl;
-        for (int p = 0; p < 1; p++){
-            for (size_t o = 0; o < nocc; o++){
-                for (size_t a = 0; a < nvirt; a++){
-                    cout << c_c[p * nocc * nvirt + o * nvirt + a] <<
-                        ((a == (nvirt-1)) ? "\n" : "\t");
-                }
-            }
-        }
-
 
         
         // Precalculating the exponential factors
@@ -130,7 +97,7 @@ namespace libqqc {
         size_t npts_to_proc = p3Dnpts;
         double energy = 0.0;
 
-        timings.start_new_clock("Timing Qmp2_energy::compute : ", 1, 0);
+        timings.start_new_clock("Timing Qmp2_energy::compute : ", 0, 1);
         Qmp2_energy  qmp2_energy(
                 p1Dnpts, 
                 p3Dnpts, 
@@ -151,12 +118,12 @@ namespace libqqc {
 
         energy = qmp2_energy.compute();
 
-        timings.stop_clock(1);
-        cout << timings.print_clocks(1);
+        timings.stop_clock(0);
 
+        out << "* Ground State Energy Correction (eV): " << energy;
 
-        out << endl;
-        out << "Q-MP(2) Ground State Energy (eV): " << energy;
+        Printer_qmp2 printer(mvault, timings);
+        printer.print_final(out);
 
         delete[] m_v;
         delete[] m_o;
@@ -166,4 +133,4 @@ namespace libqqc {
 
     } //Do_qmp2::member_fn
 
-} //namespace libqqc
+} //

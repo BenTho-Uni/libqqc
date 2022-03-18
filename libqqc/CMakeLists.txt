@@ -41,6 +41,7 @@ set(SRC_UTILS
 set(HDR_UTILS
     utils/ttimer.h
     utils/load_from_file.h
+    utils/printers/printer_qmp2
 )
 
 set(SRC_VAULTS

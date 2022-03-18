@@ -6,6 +6,7 @@ if(LIBQQC_OPENMP)
     message("+++ Compiling with OpenMP.")
     # required packages: OpenMP
     find_package(OpenMP REQUIRED)
+    add_compile_definitions(LIBQQC_WITH_OPENMP)
 else(LIBQQC_OPENMP)
     message("+++ Compiling without OpenMP.")
 endif(LIBQQC_OPENMP)

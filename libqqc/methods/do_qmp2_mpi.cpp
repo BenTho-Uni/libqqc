@@ -9,6 +9,7 @@
 
 //internal headers
 #include "../utils/ttimer.h"
+#include "../utils/printers/printer_qmp2.h"
 
 //external headers
 #include <cmath>
@@ -21,7 +22,6 @@ namespace libqqc {
     void Do_qmp2 :: run(ostringstream &out){
 
         int prnt_lvl = mvault.get_mprnt_lvl();
-        prnt_lvl = 0;
         Ttimer timings(prnt_lvl);
 
         // Grabbing the calculation data we need
@@ -100,19 +100,9 @@ namespace libqqc {
         size_t offset = 0;
         size_t npts_to_proc = p3Dnpts/(2 * max_id);
         size_t remaining_elements = p3Dnpts - npts_to_proc * max_id * 2;
-
-        if ((pid == 0) && (mvault.get_mprnt_lvl() >=1)){
-            cout << "Master (pid 0) reporting:" << endl 
-                <<"There are " << p3Dnpts << " elements and " << max_id 
-                << ((max_id == 1) ? " node." : " nodes.") << endl;
-            cout << "Elements to process per node -> 2x" 
-                << npts_to_proc << ", remaining elements -> " 
-                << remaining_elements << endl;
-        }
-
         double energy = 0.0;
 
-        timings.start_new_clock("Timing Qmp2_energy::compute : ", 0, prnt_lvl);
+        timings.start_new_clock("Timing Qmp2_energy::compute : ", 0, 1);
 
         Qmp2_energy  qmp2_energy(
                 p1Dnpts, 
@@ -133,32 +123,32 @@ namespace libqqc {
                 npts_to_proc);
 
         // First batch of points from the beginning of the data, easier work load
-        timings.start_new_clock("Starting batch : ", 1, prnt_lvl);
-
-
         // Now we distribute the middle points left over to the first batch, this will make
         // the workload slightly uneven
         size_t npts_to_proc_orig = npts_to_proc;
         int x = remaining_elements % max_id;
         int y = remaining_elements / max_id;
+
+        timings.start_new_clock("    -- Calc. Batch 1/2: ", 1, 2);
         offset = pid * npts_to_proc + ((pid < x) ? pid : x) + ((y == 1) ? pid : 0);
         npts_to_proc += ((pid < x) ? (1 + y) : y);
-
         energy += qmp2_energy.compute();
+
         npts_to_proc = npts_to_proc_orig;
         timings.stop_clock(1);
-        if (pid == 0) cout << timings.print_clocks(1);
 
         // Second set of points 
-        timings.start_new_clock("End batch : ", 2, prnt_lvl);
+        timings.start_new_clock("    -- Calc. Batch 2/2: ", 2, 2);
         offset = p3Dnpts - (1 + pid) * npts_to_proc;
         energy += qmp2_energy.compute();
+
         timings.stop_clock(2);
-        if (pid == 0) cout << timings.print_clocks(2);
+
+        timings.stop_clock(0);
 
         //now lets differentiate which node does what
         if (pid == 0){
-            timings.start_new_clock("Gathering partial energies from nodes : ", 3, 0);
+            timings.start_new_clock("Gather result fr. nodes : ", 3, 1);
             double tmp = 0.0;
             // Get all partial energies from servants
             for (int i = 1; i < max_id; i++){
@@ -167,11 +157,12 @@ namespace libqqc {
                 energy += tmp;
             }
             timings.stop_clock(3);
-            cout << timings.print_clocks(3);
-            cout << timings.print_clocks(0);
 
-            out << endl;
-            out << "Q-MP(2) Ground State Energy (eV): " << energy;
+            out << "* Ground State Energy Correction (eV): " << energy;
+
+            Printer_qmp2 printer(mvault, timings);
+            printer.print_final(out);
+
         } else{
             // Send servant energies to master
             MPI_Send(&energy, 1, MPI_DOUBLE, 0,0, MPI_COMM_WORLD); 
