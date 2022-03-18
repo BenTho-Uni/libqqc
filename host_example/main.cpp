@@ -11,7 +11,7 @@ int main (){
     ostringstream out;
     Ttimer timings(0);
 
-    timings.start_new_clock("Timing Loader_qmp2_from_file:: loader", 0, 0);
+    timings.start_new_clock("Timing Loader_qmp2_from_file:: loader :", 0, 0);
     Loader_qmp2_from_file loader("../data/h2o/");
     timings.stop_clock(0);
     cout << timings.print_clocks(0);
