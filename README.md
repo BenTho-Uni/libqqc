@@ -104,6 +104,8 @@ make install
 - [x] add data/h2o with bashscripts to download h3coh/, anthracene/, porphyrine/
 - [x] transfer MP2 variants to libqqc
 - [x] partitioning scheme for remaining elements in MPI
+- [x] remove unneded balast from qmp2 calc, loader, vault
+- [x] write printer
 
 </details>
 
@@ -112,8 +114,8 @@ make install
 - [ ] recheck performance on Justus 2.0
 - [ ] update Readme with scalings and results from Justus 2.0
 - [ ] write better maintainable variant code
-- [ ] remove unneded balast from qmp2 calc, loader, vault
 - [ ] OpenMP GPU variant implementation
+- [ ] write/rewrite test for printer, vault, loader, do_qmp2
 
 # Credits
 

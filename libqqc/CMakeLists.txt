@@ -41,14 +41,14 @@ set(SRC_UTILS
 set(HDR_UTILS
     utils/ttimer.h
     utils/load_from_file.h
+    utils/printers/printer_qmp2
 )
 
 set(SRC_VAULTS
-    vaults/vault_qmp2.cpp
 )
 
 set(HDR_VAULTS
-    vaults/vault_qmp2.cpp
+    vaults/vault_qmp2.h
 )
 
 # For compiling without Eigen, GPU or OpenMP

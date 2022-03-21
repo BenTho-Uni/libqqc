@@ -5,13 +5,15 @@
 /// @version 0.1 01-01-2020
 //
 
-#include "do_qmp2.h"
 
 //internal headers
+#include "do_qmp2.h"
+#include "../utils/printers/printer_qmp2.h"
+#include "../utils/ttimer.h"
+
 
 //external headers
 #include <cmath>
-#include "../utils/ttimer.h"
 
 using namespace std;
 
@@ -19,7 +21,8 @@ namespace libqqc {
 
     void Do_qmp2 :: run(ostringstream &out){
 
-        Ttimer timings(0);
+        int prnt_lvl = mvault.get_mprnt_lvl();
+        Ttimer timings(prnt_lvl);
 
         // Grabbing the calculation data we need
         size_t p1Dnpts = mvault.get_m1Dgrid().get_mnpts();
@@ -29,10 +32,9 @@ namespace libqqc {
         size_t nmo = nocc + nvirt;
         size_t nao = mvault.get_mnao(); 
 
-        double* mcoeff = mvault.get_mmat_coeff();
-        double* mfao = mvault.get_mmat_fock();
         double* mcgto = mvault.get_mmat_cgto();
-        double* ccao = mvault.get_mcube_coul();
+        double* mf = mvault.get_mmat_fock();
+        double* c_c = mvault.get_mcube_coul();
         double* v1Dpts = mvault.get_m1Dgrid().get_mpts();
         double* v1Dwts = mvault.get_m1Dgrid().get_mwts();
         double* v3Dwts = mvault.get_m3Dgrid().get_mwts();
@@ -44,96 +46,28 @@ namespace libqqc {
         double* c1Deps_ov = new double[p1Dnpts * nocc * nvirt]();
         double* m_o = new double[p3Dnpts * nocc]();
         double* m_v = new double[p3Dnpts * nvirt]();
-        double* c_c = new double[p3Dnpts * nocc * nvirt]();
         double vf[nmo] = {};
 
-
-        timings.start_new_clock("Timings do_mp2::run AO to MO transformations : ", 0, 0);
-        // AO to MO transformations
-        // Fock-Matrix F $F_{MO} = C^T F_{AO} C
-        // 
-        // Save a Transpose of the Matrix for better cache alignment
-        //
-        double mcoeff_t[ nao * nmo];
-
-#pragma omp parallel for schedule(dynamic) default(none)\
-        shared(nao, nmo, mcoeff_t, mcoeff)\
-        collapse(2)
-        for (size_t i = 0; i < nao; i++){
-            for (size_t j = 0; j < nmo; j++){
-                mcoeff_t[j * nao + i ] = mcoeff [i * nmo + j];
-            }
+        // Reading in the Diagonal of the MO Fock matrix
+        for (size_t p = 0; p < nmo; p++){
+            vf[p] = mf[p * nmo + p];
         }
 
-        // This could be collapse(2) but needs a reduction on vf[p]
-#pragma omp parallel for reduction(+:vf) schedule(dynamic) default(none)\
-        shared(nmo, nao, mfao, mcoeff_t)\
-        collapse(2)
-        for (size_t p = 0; p < nmo; p ++){
-            for (size_t l = 0; l < nao; l++){
-                double temp = 0;
-                for (size_t k = 0; k < nao; k++){
-                    // Matrix Multiplication A*B multiplies the Row of A with 
-                    // Column of B. That is a Problem in B, as we have filled it 
-                    // Row major which would lead to cache misses. 
-                    // We therefore traferce over the transposed matrix instead, 
-                    // as we don't have to adhere to simulating "matrix multiplication"
-                    // and multiply row A with row of B^T
-                    temp += mfao[l * nao + k] * mcoeff_t[p * nao + k];
-                }
-                vf[p] += mcoeff_t[p * nao + l] * temp;
-            }
-        }
-
-
-        // Orbitals O $O_{MO} = O * C$
+        // Part CGTO matrix to m_o and m_v
         //
-        size_t pos = 0; // Position on virtual orbital space
-#pragma omp parallel for schedule(dynamic) default(none)\
-        shared(p3Dnpts, nmo, nao, nocc, nvirt, m_o, m_v, mcgto, mcoeff_t)\
-        private(pos) \
-        collapse(2)
+        size_t pos = 0;
         for (size_t p = 0; p < p3Dnpts; p++){
-            for (size_t q = 0; q < nmo; q++){
-                for (size_t k = 0; k < nao; k++){
-                    if (q < nocc){
-                        m_o[p * nocc + q] += mcgto[p * nao + k] 
-                            * mcoeff_t[q * nao + k];
-                    }
-                    else {
-                        pos = q - nocc; // q covers nmo, so substr. num. of occ.
-                        m_v[p * nvirt + pos] += mcgto[p * nao + k] 
-                            * mcoeff_t[q * nao + k];
-                    }
+            for (size_t m = 0; m < nmo; m++){
+                if (m < nocc) 
+                    m_o[p * nocc + m] = mcgto[p * nmo + m];
+                else {
+                    pos = m - nocc;
+                    m_v[p * nvirt + pos] = mcgto[p * nmo + m];
                 }
             }
         }
 
-        // (weighted) Coulomb Integral U_{MO}^P: for each slice P 
-        // $U_{MO} = rwts^P * C_{occpuid}^T * (u_{AO}^P * C_{virtuals}
-        //
-#pragma omp parallel for schedule(dynamic) default(none)\
-        shared(p3Dnpts, nocc, nvirt, nao, ccao, mcoeff_t, c_c)\
-        collapse(3)
-        for (size_t p = 0; p < p3Dnpts; p++){
-            for (size_t i = 0; i < nocc; i++){
-                for (size_t a = 0; a < nvirt; a++){
-                    size_t pos_a = nocc + a;
-                    for (size_t l = 0; l < nao; l++){
-                        double temp = 0;
-                        for (size_t k = 0; k < nao; k++){
-                            temp += ccao[p * nao * nao + l * nao + k] 
-                                * mcoeff_t[pos_a * nao + k];
-                        }
-                        c_c [p * nvirt * nocc + i * nvirt + a] += 
-                            mcoeff_t[i * nao + l] * temp;
-                    }
-                }
-            }
-        }
-        timings.stop_clock(0);
-        cout << timings.print_clocks(0);
-
+        
         // Precalculating the exponential factors
 #pragma omp parallel for schedule(dynamic) default(none)\
         shared(p1Dnpts, nocc, nvirt, m1Deps_o, m1Deps_v, c1Deps_ov, \
@@ -163,7 +97,7 @@ namespace libqqc {
         size_t npts_to_proc = p3Dnpts;
         double energy = 0.0;
 
-        timings.start_new_clock("Timing Qmp2_energy::compute : ", 1, 0);
+        timings.start_new_clock("Timing Qmp2_energy::compute : ", 0, 1);
         Qmp2_energy  qmp2_energy(
                 p1Dnpts, 
                 p3Dnpts, 
@@ -184,14 +118,13 @@ namespace libqqc {
 
         energy = qmp2_energy.compute();
 
-        timings.stop_clock(1);
-        cout << timings.print_clocks(1);
+        timings.stop_clock(0);
 
+        out << "* Ground State Energy Correction (eV): " << energy;
 
-        out << endl;
-        out << "Q-MP(2) Ground State Energy (eV): " << energy;
+        Printer_qmp2 printer(mvault, timings);
+        printer.print_final(out);
 
-        delete[] c_c;
         delete[] m_v;
         delete[] m_o;
         delete[] c1Deps_ov;
@@ -200,4 +133,4 @@ namespace libqqc {
 
     } //Do_qmp2::member_fn
 
-} //namespace libqqc
+} //

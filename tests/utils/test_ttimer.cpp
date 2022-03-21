@@ -5,6 +5,8 @@
 // includes of the to be tested headers
 #include "../../libqqc/utils/ttimer.h"
 
+#include <cstring>
+
 // namespaces
 
 using namespace std;
@@ -74,14 +76,14 @@ namespace libqqc {
     bool Test_Tclock :: test_print_time(){
         bool result = false;
 
-        Tclock test ("Testing clock");
+        Tclock test ("Testing clock - ");
         //making some time difference
         this_thread::sleep_for(chrono::milliseconds(100)); //sleeps for 100 ms
         test.stop_clock();
         //testing the output string
-        string reference = "  Testing clock Timer - CPU: 0 ms ; Wall: 100 ms\n";
+        string reference = "Testing clock - CPU: 0 ms ; Wall: 100 ms\n";
         string test_output = test.print_time(0);
-        result = (reference == test_output) ? true : false;
+        result = (strcmp(test_output.c_str(), reference.c_str()) == 0) ? true : false;
 
         return result;
     }
@@ -176,16 +178,16 @@ namespace libqqc {
         bool result = false;
 
         Ttimer test(2);
-        test.start_new_clock("Clock 1", 0, 1);
-        test.start_new_clock("Clock 2", 0, 1);
-        test.start_new_clock("Clock 3", 1, 1);
+        test.start_new_clock("Clock 1 - ", 0, 1);
+        test.start_new_clock("Clock 2 - ", 0, 1);
+        test.start_new_clock("Clock 3 - ", 1, 1);
         test.stop_clock(0);
 
-        string reference = "  Clock 1 Timer - CPU: 0 ms ; Wall: 0 ms\n";
-        reference += "  Clock 2 Timer - CPU: 0 ms ; Wall: 0 ms\n";
+        string reference = "Clock 1 - CPU: 0 ms ; Wall: 0 ms\n";
+        reference += "Clock 2 - CPU: 0 ms ; Wall: 0 ms\n";
         string test_string = test.print_clocks(0);
 
-        result = ((reference == test_string) ? true : false);
+        result = ((strcmp(reference.c_str(), test_string.c_str()) == 0) ? true : false);
 
         return result;
     }
@@ -194,19 +196,19 @@ namespace libqqc {
         bool result = false;
 
         Ttimer test(2);
-        test.start_new_clock("Clock 1", 0, 1);
-        test.start_new_clock("Clock 2", 0, 1);
-        test.start_new_clock("Clock 3", 1, 1);
+        test.start_new_clock("Clock 1 - ", 0, 1);
+        test.start_new_clock("Clock 2 - ", 0, 1);
+        test.start_new_clock("Clock 3 - ", 1, 1);
         test.stop_clock(0);
         test.stop_clock(1);
 
-        string reference = "  Clock 1 Timer - CPU: 0 ms ; Wall: 0 ms\n";
-        reference += "  Clock 2 Timer - CPU: 0 ms ; Wall: 0 ms\n";
-        reference += "  Clock 3 Timer - CPU: 0 ms ; Wall: 0 ms\n";
+        string reference = "Clock 1 - CPU: 0 ms ; Wall: 0 ms\n";
+        reference += "Clock 2 - CPU: 0 ms ; Wall: 0 ms\n";
+        reference += "Clock 3 - CPU: 0 ms ; Wall: 0 ms\n";
         string test_string = test.print_all_clocks();
 
-        result = ((reference == test_string) ? true : false);
-
+        result = ((strcmp(reference.c_str(), test_string.c_str()) == 0) ? true : false);
+        
         return result;
     }
 
@@ -223,7 +225,7 @@ namespace libqqc {
             << (b_start ? "passed" : "failed") << endl;
 
         bool b_stop1 = test_stop_clock();
-        out << "    Testing Ttimer::stop_clock()      ... " << flush
+        out << "    Testing Ttimer::stop_clock()       ... " << flush
             << (b_stop1 ? "passed" : "failed") << endl;
 
         bool b_stopA = test_stop_all_clocks();

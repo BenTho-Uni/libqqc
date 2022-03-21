@@ -44,3 +44,5 @@ exe/*
 
 # Lib
 lib/*
+
+*.swp

@@ -2,12 +2,13 @@
 #define LIBQQC_VAULT_QMP2_H
 
 #include "../grids/grid.h"
-#include "../loader/loader_qmp2.h"
-#include "../loader/loader_qmp2_from_file.h"
 
 //Additional libraries
 #include <stdexcept>
 #include <iostream>
+
+#include "../loader/loader_qmp2.h"
+#include "../loader/loader_qmp2_from_file.h"
 
 using namespace std; 
 
@@ -26,11 +27,10 @@ namespace libqqc {
             // Meta information
             size_t mnocc = 0; ///< Number of occupied orbitals
             size_t mnvirt = 0; ///< Number of virtual orbitals
-            size_t mnnmo = 0; ///< Number of molecular orbitals
+            size_t mnmo = 0; ///< Number of molecular orbitals
             size_t mnao = 0; ///< Number of atomic orbitals
 
             // Input informations
-            double m1Dtol = 0; ///< Tolerance of 1D grid
             int mprnt_lvl = 0; ///< Selected print level
 
             // Grid objects
@@ -39,7 +39,6 @@ namespace libqqc {
 
             // Matrices 
             double* mmat_fock = NULL; ///< Fock matrix in AO $F_{\nu \mu}$
-            double* mmat_coeff = NULL; ///< Coeffivient matrix $C_{\nu p}$
             double* mmat_cgto = NULL; ///< Contracted gaussian type AO evaluated at grid point $\phi_\nu (r_p$)
             double* mcube_coul = NULL; ///< Coulomb type integral $u_{\nu \mu}$ in AO 
 
@@ -54,7 +53,28 @@ namespace libqqc {
             ///
             /// @return [return]
             ///
-            bool check_data_validity();
+            bool check_data_validity() {
+
+                if (mnocc == 0) throw invalid_argument(
+                        "Number of occupied orbitals shouldn't be 0.");
+                if (mnmo == 0) throw invalid_argument(
+                        "Number of molecular orbitals shouldn't be 0.");
+                if (mnao == 0) throw invalid_argument(
+                        "Number of atomic orbitals shouldn't be 0.");
+                if (!m1Dgrid.check_data_validity()) throw invalid_argument(
+                        "1D Grid data not valid.");
+                if (!m3Dgrid.check_data_validity()) throw invalid_argument(
+                        "3D Grid data not valid.");
+                if (!mmat_fock) throw invalid_argument(
+                        "Fock matrix pointer cannot be NULL.");
+                if (!mmat_cgto) throw invalid_argument(
+                        "Cgto matrix pointer cannot be NULL.");
+                if (!mcube_coul) throw invalid_argument(
+                        "Coulomb integral matrix pointer cannot be NULL.");
+
+                return true;
+
+            };
 
             ///
             /// @brief Default constructor of vault class with loader object
@@ -62,103 +82,75 @@ namespace libqqc {
             /// @details Constructor of vault class, setting the variables
             /// through the loader given in its argument
             ///
-            /// @param[in] loader Loader for the qmp2 calculation
+            /// @param[in] loader template for Loader for the qmp2 calculation
             ///
-            Vault_qmp2(Loader_qmp2 loader); 
+            Vault_qmp2(Loader_qmp2 loader) {
+
+                // check if loader is empty
+                // loading meta information
+                loader.load_nocc (mnocc);
+                loader.load_nvirt (mnvirt);
+                mnmo = mnocc + mnvirt;
+                loader.load_nao (mnao);
+
+                // loading input information
+                loader.load_prnt_lvl (mprnt_lvl);
+
+                // load grid object
+                loader.load_1Dgrid (m1Dgrid);
+                loader.load_3Dgrid (m3Dgrid);
+
+                // loading in matrices
+                size_t nao2 = mnao * mnao;
+                size_t npts = m3Dgrid.get_mnpts();
+                mmat_fock = new double[mnmo * mnmo];
+                loader.load_mat_fock (mmat_fock);
+                mmat_cgto = new double[npts * mnmo];
+                loader.load_mat_cgto (mmat_cgto);
+                mcube_coul = new double[npts * mnocc * mnvirt];
+                loader.load_cube_coul (mcube_coul);
+
+                check_data_validity();
+            }; 
 
             ///
-            /// @brief Constructor of vault class with loader object when
-            /// loading from file
+            /// @brief Default constructor of vault class with loader object
             ///
             /// @details Constructor of vault class, setting the variables
             /// through the loader given in its argument
             ///
-            /// @param[in] loader Loader for the qmp2 calculation from file
+            /// @param[in] loader template for Loader for the qmp2 calculation
             ///
-            Vault_qmp2(Loader_qmp2_from_file loader); 
+            Vault_qmp2(Loader_qmp2_from_file loader) {
 
-            ///
-            /// @brief Constructor of vault class
-            ///
-            /// @details Constructor of vault class, setting and checking the 
-            /// needed variables
-            ///
-            /// @param[in] nocc Number of occupied orbitals
-            /// @param[in] nvirt Number of virtual orbitals
-            /// @param[in] nao Number of atomic orbitals
-            /// @param[in] p1Dtol Tolerance of 1D grid
-            /// @param[in] prnt_lvl Print level of the program
-            /// @param[in] p1Dgrid Holder object for 1D grid
-            /// @param[in] p3Dgrid Holder object for 3d grid
-            /// @param[in,out] mat_fock pointer to Fock matrix to be copied
-            /// @param[in,out] mat_coeff pointer to coefficient matrix to be copied
-            /// @param[in,out] mat_cgto pointer to CGTO matrix to be copied
-            /// @param[in,out] mat_coul pointer to coulomb integral matrix to be copied
-            ///
-            Vault_qmp2(size_t nocc, size_t nvirt, size_t nao, double p1Dtol,
-                    int prnt_lvl, Grid p1Dgrid, Grid p3Dgrid, double* mat_fock, 
-                    double* mat_coeff, double* mat_cgto, double* cube_coul) :
-                mnocc(nocc), mnvirt(nvirt), mnao(nao), m1Dtol(p1Dtol), 
-                mprnt_lvl(prnt_lvl), m1Dgrid(p1Dgrid), m3Dgrid(p3Dgrid) {
+                // check if loader is empty
+                //TODO: do this if loader is done
 
-                if (nocc == 0) throw invalid_argument(
-                        "Number of occupied orbitals cannot be 0.");
-                if (nao == 0) throw invalid_argument(
-                        "Number of atomiv orbitals cannot be 0.");
-                if (!p1Dgrid.check_data_validity()) throw invalid_argument(
-                        "1D Grid data not valid.");
-                if (!p3Dgrid.check_data_validity()) throw invalid_argument(
-                        "3D Grid data not valid.");
-                // get number of points to be looped over, used later
+                // loading meta information
+                loader.load_nocc (mnocc);
+                loader.load_nvirt (mnvirt);
+                mnmo = mnocc + mnvirt;
+                loader.load_nao (mnao);
+
+                // loading input information
+                loader.load_prnt_lvl (mprnt_lvl);
+
+                // load grid object
+                loader.load_1Dgrid (m1Dgrid);
+                loader.load_3Dgrid (m3Dgrid);
+
+                // loading in matrices
+                size_t nao2 = mnao * mnao;
                 size_t npts = m3Dgrid.get_mnpts();
-                if (!mat_fock) throw invalid_argument(
-                        "Fock matrix pointer cannot be NULL.");
-                if (!mat_coeff) throw invalid_argument(
-                        "Coefficient matrix pointer cannot be NULL.");
-                if (!mat_cgto) throw invalid_argument(
-                        "CGTO matrix pointer cannot be NULL.");
-                if (!cube_coul) throw invalid_argument(
-                        "Coulomb matrix pointer cannot be NULL.");
-
-                if (m1Dtol < 0) m1Dtol *= -1; //ensuring that tolerance is positive
-
-                //looping through the given array, copying the dat
-                mnnmo = mnocc + mnvirt;
-                size_t mnao2 = mnao * mnao;
-
-                mmat_fock = new double[mnao2];
-                for (size_t i = 0; i < mnao; i++) {
-                    for (size_t j = 0; j < mnao; j++){
-                        mmat_fock[i * mnao + j] = mat_fock[i * mnao + j];
-                    }
-                }
-
-                mmat_coeff = new double[mnao * mnnmo];
-                for (size_t i = 0; i < nao; i++) {
-                    for (size_t j = 0; j < mnnmo; j++){
-                        mmat_coeff[i * mnnmo + j] = mat_coeff[i * mnnmo + j];
-                    }
-                }
-
-                mmat_cgto = new double[npts * mnao];
-                for (size_t i = 0; i < npts; i++) {
-                    for (size_t j = 0; j < mnao; j++){
-                        mmat_cgto[i * mnao + j] = mat_cgto[i * mnao + j];
-                    }
-                }
-
-                mcube_coul = new double[npts * mnao2];
-                for (size_t i = 0; i < npts; i++) {
-                    for (size_t j = 0; j < mnao; j++){
-                        for (size_t k = 0; k < mnao; k++){
-                            mcube_coul[i * mnao2 + j * mnao + k] = 
-                                cube_coul[i * mnao2 + j * mnao + k];
-                        }
-                    }
-                } 
+                mmat_fock = new double[mnmo * mnmo];
+                loader.load_mat_fock (mmat_fock);
+                mmat_cgto = new double[npts * mnmo];
+                loader.load_mat_cgto (mmat_cgto);
+                mcube_coul = new double[npts * mnocc * mnvirt];
+                loader.load_cube_coul (mcube_coul);
 
                 check_data_validity();
-            };
+            }; 
 
             ///
             /// @brief Destructor of vault class
@@ -167,7 +159,6 @@ namespace libqqc {
             ///
             ~Vault_qmp2() {
                 delete[] mmat_fock;
-                delete[] mmat_coeff;
                 delete[] mmat_cgto;
                 delete[] mcube_coul;
             };
@@ -195,12 +186,12 @@ namespace libqqc {
             ///
             /// @brief Get the number of molecular orbitals 
             ///
-            /// @return mnnmo number of molecular orbitals
+            /// @return mnmo number of molecular orbitals
             ///
-            size_t get_mnnmo() {
-                if (mnnmo == 0) throw invalid_argument(
+            size_t get_mnmo() {
+                if (mnmo == 0) throw invalid_argument(
                         "Number of molecular orbitals shouldn't be 0.");
-                return mnnmo;
+                return mnmo;
             };
 
             ///
@@ -212,15 +203,6 @@ namespace libqqc {
                 if (mnao == 0) throw invalid_argument(
                         "Number of atomic orbitals shouldn't be 0.");
                 return mnao;
-            };
-
-            ///
-            /// @brief Get the tolerance of the 1D grid 
-            ///
-            /// @return m1Dtol tolerance of 1D grid
-            ///
-            size_t get_m1Dtol() {
-                return m1Dtol;
             };
 
             ///
@@ -260,20 +242,9 @@ namespace libqqc {
             /// @return pass the pointer to Fock matrix
             ///
             double* get_mmat_fock() {
-            if (!mmat_fock) throw invalid_argument(
-                    "Fock matrix pointer cannot be NULL.");
+                if (!mmat_fock) throw invalid_argument(
+                        "Fock matrix pointer cannot be NULL.");
                 return mmat_fock;
-            };
-
-            ///
-            /// @brief Get the pointer to Coeff matrix
-            ///
-            /// @return pass the pointer to Coeff matrix
-            ///
-            double* get_mmat_coeff() {
-            if (!mmat_coeff) throw invalid_argument(
-                    "Coeff matrix pointer cannot be NULL.");
-                return mmat_coeff;
             };
 
             ///
@@ -282,8 +253,8 @@ namespace libqqc {
             /// @return pass the pointer to CGTO matrix
             ///
             double* get_mmat_cgto() {
-            if (!mmat_cgto) throw invalid_argument(
-                    "Cgto matrix pointer cannot be NULL.");
+                if (!mmat_cgto) throw invalid_argument(
+                        "Cgto matrix pointer cannot be NULL.");
                 return mmat_cgto;
             };
 
@@ -293,8 +264,8 @@ namespace libqqc {
             /// @return pass the pointer to coulomb integral tensor
             ///
             double* get_mcube_coul() {
-            if (!mcube_coul) throw invalid_argument(
-                    "Coulomb integral matrix pointer cannot be NULL.");
+                if (!mcube_coul) throw invalid_argument(
+                        "Coulomb integral matrix pointer cannot be NULL.");
                 return mcube_coul;
             };
     }; // class Vault_qmp2
