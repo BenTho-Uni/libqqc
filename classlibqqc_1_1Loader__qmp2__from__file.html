@@ -114,80 +114,118 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Loader_qmp2_from_file</b> (string src_folder)</td></tr>
 <tr class="memdesc:ab5db8756a00ec6e9578f8d4ef4e08f55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor of loader_qmp2_from_file class. <br /></td></tr>
 <tr class="separator:ab5db8756a00ec6e9578f8d4ef4e08f55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa626d1f78cef9863b42f7c281e25b970"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#aa626d1f78cef9863b42f7c281e25b970">load_nocc</a> (string filename, size_t &amp;nocc)</td></tr>
-<tr class="memdesc:aa626d1f78cef9863b42f7c281e25b970"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads number of occupied orbitals into reference  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#aa626d1f78cef9863b42f7c281e25b970">More...</a><br /></td></tr>
-<tr class="separator:aa626d1f78cef9863b42f7c281e25b970"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a19909b03127c8c6ef615760e5adbb208"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#a19909b03127c8c6ef615760e5adbb208">load_nvirt</a> (string filename, size_t &amp;nvirt)</td></tr>
-<tr class="memdesc:a19909b03127c8c6ef615760e5adbb208"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads number of virtual orbitals into reference  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#a19909b03127c8c6ef615760e5adbb208">More...</a><br /></td></tr>
-<tr class="separator:a19909b03127c8c6ef615760e5adbb208"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8dbe0a9010fe6de7546e0bef5ed30ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#ad8dbe0a9010fe6de7546e0bef5ed30ff">load_nao</a> (string filename, size_t &amp;nao)</td></tr>
-<tr class="memdesc:ad8dbe0a9010fe6de7546e0bef5ed30ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads number of atomic orbitals into reference  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#ad8dbe0a9010fe6de7546e0bef5ed30ff">More...</a><br /></td></tr>
-<tr class="separator:ad8dbe0a9010fe6de7546e0bef5ed30ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a061d037b8b4dd33d57409bc1d4a2c888"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#a061d037b8b4dd33d57409bc1d4a2c888">load_1Dtol</a> (string filename, double &amp;p1Dtol)</td></tr>
-<tr class="memdesc:a061d037b8b4dd33d57409bc1d4a2c888"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads tolerance of 1D grid into reference  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#a061d037b8b4dd33d57409bc1d4a2c888">More...</a><br /></td></tr>
-<tr class="separator:a061d037b8b4dd33d57409bc1d4a2c888"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a871b6289ac1b5249024523eaae3d3e34"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#a871b6289ac1b5249024523eaae3d3e34">load_prnt_lvl</a> (string filename, int &amp;prnt_lvl)</td></tr>
-<tr class="memdesc:a871b6289ac1b5249024523eaae3d3e34"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads printing level into reference  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#a871b6289ac1b5249024523eaae3d3e34">More...</a><br /></td></tr>
-<tr class="separator:a871b6289ac1b5249024523eaae3d3e34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e4b06dfff90a6df87fa491c2622362d"><td class="memItemLeft" align="right" valign="top"><a id="a0e4b06dfff90a6df87fa491c2622362d" name="a0e4b06dfff90a6df87fa491c2622362d"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Loader_qmp2_from_file</b> (string src_folder, string fname_inputs, string fname_1Dpts, string fname_1Dwts, string fname_3Dpts, string fname_3Dwts, string fname_fock, string fname_coeff, string fname_cgto, string fname_coul)</td></tr>
+<tr class="memdesc:a0e4b06dfff90a6df87fa491c2622362d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor of loader_qmp2_from_file class. <br /></td></tr>
+<tr class="separator:a0e4b06dfff90a6df87fa491c2622362d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75e4b8ad25719b77ca93715c4edd6aa0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#a75e4b8ad25719b77ca93715c4edd6aa0">load_nocc</a> (size_t &amp;nocc)</td></tr>
+<tr class="memdesc:a75e4b8ad25719b77ca93715c4edd6aa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads number of occupied orbitals into reference  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#a75e4b8ad25719b77ca93715c4edd6aa0">More...</a><br /></td></tr>
+<tr class="separator:a75e4b8ad25719b77ca93715c4edd6aa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad70aab6e222f868a09bad4bf9ae4ba84"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#ad70aab6e222f868a09bad4bf9ae4ba84">load_nvirt</a> (size_t &amp;nvirt)</td></tr>
+<tr class="memdesc:ad70aab6e222f868a09bad4bf9ae4ba84"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads number of virtual orbitals into reference  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#ad70aab6e222f868a09bad4bf9ae4ba84">More...</a><br /></td></tr>
+<tr class="separator:ad70aab6e222f868a09bad4bf9ae4ba84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31b773951e66156c0d5513c2cc82c9ad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#a31b773951e66156c0d5513c2cc82c9ad">load_nao</a> (size_t &amp;nao)</td></tr>
+<tr class="memdesc:a31b773951e66156c0d5513c2cc82c9ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads number of atomic orbitals into reference  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#a31b773951e66156c0d5513c2cc82c9ad">More...</a><br /></td></tr>
+<tr class="separator:a31b773951e66156c0d5513c2cc82c9ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abae02c44ae77255a8829399db3372b0b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#abae02c44ae77255a8829399db3372b0b">load_prnt_lvl</a> (int &amp;prnt_lvl)</td></tr>
+<tr class="memdesc:abae02c44ae77255a8829399db3372b0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads printing level into reference  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#abae02c44ae77255a8829399db3372b0b">More...</a><br /></td></tr>
+<tr class="separator:abae02c44ae77255a8829399db3372b0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fe6060f70c03f7880afe97e3dd48880"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#a1fe6060f70c03f7880afe97e3dd48880">load_grid</a> (string filename_pts, string filename_wts, <a class="el" href="classlibqqc_1_1Grid.html">Grid</a> &amp;grid)</td></tr>
 <tr class="memdesc:a1fe6060f70c03f7880afe97e3dd48880"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads points and weights and sets a grid  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#a1fe6060f70c03f7880afe97e3dd48880">More...</a><br /></td></tr>
 <tr class="separator:a1fe6060f70c03f7880afe97e3dd48880"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc3377c71bf3f8b0556fa72a1b6b8682"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#adc3377c71bf3f8b0556fa72a1b6b8682">load_mat_fock</a> (string filename, double *mat_fock, size_t dim1, size_t dim2)</td></tr>
-<tr class="memdesc:adc3377c71bf3f8b0556fa72a1b6b8682"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads values into the Fock matrix  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#adc3377c71bf3f8b0556fa72a1b6b8682">More...</a><br /></td></tr>
-<tr class="separator:adc3377c71bf3f8b0556fa72a1b6b8682"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6fc1c59b5c6e831b5ce2a0470ead2639"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#a6fc1c59b5c6e831b5ce2a0470ead2639">load_mat_coeff</a> (string filename, double *mat_coeff, size_t dim1, size_t dim2)</td></tr>
-<tr class="memdesc:a6fc1c59b5c6e831b5ce2a0470ead2639"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads values into the coefficient matrix  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#a6fc1c59b5c6e831b5ce2a0470ead2639">More...</a><br /></td></tr>
-<tr class="separator:a6fc1c59b5c6e831b5ce2a0470ead2639"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69a03accbdd5619f4a07ad0431c64655"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#a69a03accbdd5619f4a07ad0431c64655">load_mat_cgto</a> (string filename, double *mat_cgto, size_t dim1, size_t dim2)</td></tr>
-<tr class="memdesc:a69a03accbdd5619f4a07ad0431c64655"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads values into the CGTO matrix  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#a69a03accbdd5619f4a07ad0431c64655">More...</a><br /></td></tr>
-<tr class="separator:a69a03accbdd5619f4a07ad0431c64655"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3bef4878028cea2416ef486e84f3601f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#a3bef4878028cea2416ef486e84f3601f">load_cube_coul</a> (string filename, double *cube_coul, size_t dim1, size_t dim2, size_t dim3)</td></tr>
-<tr class="memdesc:a3bef4878028cea2416ef486e84f3601f"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads values into the coulomb integral tensor  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#a3bef4878028cea2416ef486e84f3601f">More...</a><br /></td></tr>
-<tr class="separator:a3bef4878028cea2416ef486e84f3601f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d2d5503f80f10f4b25c0cd90a4a210a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#a3d2d5503f80f10f4b25c0cd90a4a210a">load_1Dgrid</a> (<a class="el" href="classlibqqc_1_1Grid.html">Grid</a> &amp;grid)</td></tr>
+<tr class="memdesc:a3d2d5503f80f10f4b25c0cd90a4a210a"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads points and weights and sets a 1D grid  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#a3d2d5503f80f10f4b25c0cd90a4a210a">More...</a><br /></td></tr>
+<tr class="separator:a3d2d5503f80f10f4b25c0cd90a4a210a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78a8243d862cda9af0666f9a2caf9a7e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#a78a8243d862cda9af0666f9a2caf9a7e">load_3Dgrid</a> (<a class="el" href="classlibqqc_1_1Grid.html">Grid</a> &amp;grid)</td></tr>
+<tr class="memdesc:a78a8243d862cda9af0666f9a2caf9a7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads points and weights and sets a 3D grid  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#a78a8243d862cda9af0666f9a2caf9a7e">More...</a><br /></td></tr>
+<tr class="separator:a78a8243d862cda9af0666f9a2caf9a7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7483d6b400a7419fc74ac78145464fd1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#a7483d6b400a7419fc74ac78145464fd1">load_mat_fock</a> (double *mat_fock)</td></tr>
+<tr class="memdesc:a7483d6b400a7419fc74ac78145464fd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads values into the Fock matrix  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#a7483d6b400a7419fc74ac78145464fd1">More...</a><br /></td></tr>
+<tr class="separator:a7483d6b400a7419fc74ac78145464fd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac56a2d304455aa76c42e9ba9e6cc3d80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#ac56a2d304455aa76c42e9ba9e6cc3d80">load_mat_coeff</a> (double *mat_coeff)</td></tr>
+<tr class="memdesc:ac56a2d304455aa76c42e9ba9e6cc3d80"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads values into the coefficient matrix  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#ac56a2d304455aa76c42e9ba9e6cc3d80">More...</a><br /></td></tr>
+<tr class="separator:ac56a2d304455aa76c42e9ba9e6cc3d80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85359edc28195da2a93b1a7225243dc7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#a85359edc28195da2a93b1a7225243dc7">load_mat_cgto</a> (double *mat_cgto)</td></tr>
+<tr class="memdesc:a85359edc28195da2a93b1a7225243dc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads values into the CGTO matrix  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#a85359edc28195da2a93b1a7225243dc7">More...</a><br /></td></tr>
+<tr class="separator:a85359edc28195da2a93b1a7225243dc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa565da6e3a42772c9256ef5749b21cff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlibqqc_1_1Loader__qmp2__from__file.html#aa565da6e3a42772c9256ef5749b21cff">load_cube_coul</a> (double *cube_coul)</td></tr>
+<tr class="memdesc:aa565da6e3a42772c9256ef5749b21cff"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads values into the coulomb integral tensor  <a href="classlibqqc_1_1Loader__qmp2__from__file.html#aa565da6e3a42772c9256ef5749b21cff">More...</a><br /></td></tr>
+<tr class="separator:aa565da6e3a42772c9256ef5749b21cff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Data input into vault. </p>
 <p >This class handles the input of data into the holder vault class. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a061d037b8b4dd33d57409bc1d4a2c888" name="a061d037b8b4dd33d57409bc1d4a2c888"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a061d037b8b4dd33d57409bc1d4a2c888">&#9670;&nbsp;</a></span>load_1Dtol()</h2>
+<a id="a3d2d5503f80f10f4b25c0cd90a4a210a" name="a3d2d5503f80f10f4b25c0cd90a4a210a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d2d5503f80f10f4b25c0cd90a4a210a">&#9670;&nbsp;</a></span>load_1Dgrid()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void libqqc::Loader_qmp2_from_file::load_1Dtol </td>
+          <td class="memname">void libqqc::Loader_qmp2_from_file::load_1Dgrid </td>
           <td>(</td>
-          <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>filename</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype"><a class="el" href="classlibqqc_1_1Grid.html">Grid</a> &amp;&#160;</td>
+          <td class="paramname"><em>grid</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">double &amp;&#160;</td>
-          <td class="paramname"><em>p1Dtol</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>loads tolerance of 1D grid into reference </p>
+<p>loads points and weights and sets a 1D grid </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>name of file as string </td></tr>
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">p1Dtol</td><td>reference to tolerance </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">grid</td><td>grid reference </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a3bef4878028cea2416ef486e84f3601f" name="a3bef4878028cea2416ef486e84f3601f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3bef4878028cea2416ef486e84f3601f">&#9670;&nbsp;</a></span>load_cube_coul()</h2>
+<a id="a78a8243d862cda9af0666f9a2caf9a7e" name="a78a8243d862cda9af0666f9a2caf9a7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78a8243d862cda9af0666f9a2caf9a7e">&#9670;&nbsp;</a></span>load_3Dgrid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void libqqc::Loader_qmp2_from_file::load_3Dgrid </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classlibqqc_1_1Grid.html">Grid</a> &amp;&#160;</td>
+          <td class="paramname"><em>grid</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>loads points and weights and sets a 3D grid </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">grid</td><td>grid reference </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa565da6e3a42772c9256ef5749b21cff" name="aa565da6e3a42772c9256ef5749b21cff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa565da6e3a42772c9256ef5749b21cff">&#9670;&nbsp;</a></span>load_cube_coul()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -195,37 +233,9 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void libqqc::Loader_qmp2_from_file::load_cube_coul </td>
           <td>(</td>
-          <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>filename</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">double *&#160;</td>
-          <td class="paramname"><em>cube_coul</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>cube_coul</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>dim1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>dim2</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>dim3</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -233,7 +243,6 @@ Public Member Functions</h2></td></tr>
 <p>loads values into the coulomb integral tensor </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>name of file as string </td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">mat_fock</td><td>pointer to coulomb integral tensor </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">dim1</td><td>first dimension of the tensor </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">dim2</td><td>second dimension of the tensor </td></tr>
@@ -288,8 +297,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a69a03accbdd5619f4a07ad0431c64655" name="a69a03accbdd5619f4a07ad0431c64655"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a69a03accbdd5619f4a07ad0431c64655">&#9670;&nbsp;</a></span>load_mat_cgto()</h2>
+<a id="a85359edc28195da2a93b1a7225243dc7" name="a85359edc28195da2a93b1a7225243dc7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85359edc28195da2a93b1a7225243dc7">&#9670;&nbsp;</a></span>load_mat_cgto()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -297,31 +306,9 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void libqqc::Loader_qmp2_from_file::load_mat_cgto </td>
           <td>(</td>
-          <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>filename</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">double *&#160;</td>
-          <td class="paramname"><em>mat_cgto</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>mat_cgto</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>dim1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>dim2</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -329,7 +316,6 @@ Public Member Functions</h2></td></tr>
 <p>loads values into the CGTO matrix </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>name of file as string </td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">mat_cgto</td><td>pointer to cgto matrix </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">dim1</td><td>first dimension of the matrix </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">dim2</td><td>second dimension of the matrix </td></tr>
@@ -339,8 +325,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a6fc1c59b5c6e831b5ce2a0470ead2639" name="a6fc1c59b5c6e831b5ce2a0470ead2639"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6fc1c59b5c6e831b5ce2a0470ead2639">&#9670;&nbsp;</a></span>load_mat_coeff()</h2>
+<a id="ac56a2d304455aa76c42e9ba9e6cc3d80" name="ac56a2d304455aa76c42e9ba9e6cc3d80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac56a2d304455aa76c42e9ba9e6cc3d80">&#9670;&nbsp;</a></span>load_mat_coeff()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -348,31 +334,9 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void libqqc::Loader_qmp2_from_file::load_mat_coeff </td>
           <td>(</td>
-          <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>filename</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">double *&#160;</td>
-          <td class="paramname"><em>mat_coeff</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>mat_coeff</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>dim1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>dim2</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -380,7 +344,6 @@ Public Member Functions</h2></td></tr>
 <p>loads values into the coefficient matrix </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>name of file as string </td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">mat_coeff</td><td>pointer to coefficient matrix </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">dim1</td><td>first dimension of the matrix </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">dim2</td><td>second dimension of the matrix </td></tr>
@@ -390,8 +353,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="adc3377c71bf3f8b0556fa72a1b6b8682" name="adc3377c71bf3f8b0556fa72a1b6b8682"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adc3377c71bf3f8b0556fa72a1b6b8682">&#9670;&nbsp;</a></span>load_mat_fock()</h2>
+<a id="a7483d6b400a7419fc74ac78145464fd1" name="a7483d6b400a7419fc74ac78145464fd1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7483d6b400a7419fc74ac78145464fd1">&#9670;&nbsp;</a></span>load_mat_fock()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -399,31 +362,9 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void libqqc::Loader_qmp2_from_file::load_mat_fock </td>
           <td>(</td>
-          <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>filename</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">double *&#160;</td>
-          <td class="paramname"><em>mat_fock</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>mat_fock</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>dim1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>dim2</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -431,7 +372,6 @@ Public Member Functions</h2></td></tr>
 <p>loads values into the Fock matrix </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>name of file as string </td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">mat_fock</td><td>pointer to Fock matrix </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">dim1</td><td>first dimension of the matrix </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">dim2</td><td>second dimension of the matrix </td></tr>
@@ -441,8 +381,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ad8dbe0a9010fe6de7546e0bef5ed30ff" name="ad8dbe0a9010fe6de7546e0bef5ed30ff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad8dbe0a9010fe6de7546e0bef5ed30ff">&#9670;&nbsp;</a></span>load_nao()</h2>
+<a id="a31b773951e66156c0d5513c2cc82c9ad" name="a31b773951e66156c0d5513c2cc82c9ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31b773951e66156c0d5513c2cc82c9ad">&#9670;&nbsp;</a></span>load_nao()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -450,19 +390,9 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void libqqc::Loader_qmp2_from_file::load_nao </td>
           <td>(</td>
-          <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>filename</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">size_t &amp;&#160;</td>
-          <td class="paramname"><em>nao</em>&#160;</td>
-        </tr>
-        <tr>
+          <td class="paramname"><em>nao</em></td><td>)</td>
           <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -470,7 +400,6 @@ Public Member Functions</h2></td></tr>
 <p>loads number of atomic orbitals into reference </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>name of file as string </td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">nao</td><td>reference to number of atomic orbitals </td></tr>
   </table>
   </dd>
@@ -478,8 +407,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aa626d1f78cef9863b42f7c281e25b970" name="aa626d1f78cef9863b42f7c281e25b970"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa626d1f78cef9863b42f7c281e25b970">&#9670;&nbsp;</a></span>load_nocc()</h2>
+<a id="a75e4b8ad25719b77ca93715c4edd6aa0" name="a75e4b8ad25719b77ca93715c4edd6aa0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75e4b8ad25719b77ca93715c4edd6aa0">&#9670;&nbsp;</a></span>load_nocc()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -487,19 +416,9 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void libqqc::Loader_qmp2_from_file::load_nocc </td>
           <td>(</td>
-          <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>filename</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">size_t &amp;&#160;</td>
-          <td class="paramname"><em>nocc</em>&#160;</td>
-        </tr>
-        <tr>
+          <td class="paramname"><em>nocc</em></td><td>)</td>
           <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -507,7 +426,6 @@ Public Member Functions</h2></td></tr>
 <p>loads number of occupied orbitals into reference </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>name of file as string </td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">nocc</td><td>reference to number of occupied orbitals </td></tr>
   </table>
   </dd>
@@ -515,8 +433,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a19909b03127c8c6ef615760e5adbb208" name="a19909b03127c8c6ef615760e5adbb208"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a19909b03127c8c6ef615760e5adbb208">&#9670;&nbsp;</a></span>load_nvirt()</h2>
+<a id="ad70aab6e222f868a09bad4bf9ae4ba84" name="ad70aab6e222f868a09bad4bf9ae4ba84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad70aab6e222f868a09bad4bf9ae4ba84">&#9670;&nbsp;</a></span>load_nvirt()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -524,19 +442,9 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void libqqc::Loader_qmp2_from_file::load_nvirt </td>
           <td>(</td>
-          <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>filename</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">size_t &amp;&#160;</td>
-          <td class="paramname"><em>nvirt</em>&#160;</td>
-        </tr>
-        <tr>
+          <td class="paramname"><em>nvirt</em></td><td>)</td>
           <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -544,7 +452,6 @@ Public Member Functions</h2></td></tr>
 <p>loads number of virtual orbitals into reference </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>name of file as string </td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">nvirt</td><td>reference to number of virtual orbitals </td></tr>
   </table>
   </dd>
@@ -552,8 +459,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a871b6289ac1b5249024523eaae3d3e34" name="a871b6289ac1b5249024523eaae3d3e34"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a871b6289ac1b5249024523eaae3d3e34">&#9670;&nbsp;</a></span>load_prnt_lvl()</h2>
+<a id="abae02c44ae77255a8829399db3372b0b" name="abae02c44ae77255a8829399db3372b0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abae02c44ae77255a8829399db3372b0b">&#9670;&nbsp;</a></span>load_prnt_lvl()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -561,19 +468,9 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void libqqc::Loader_qmp2_from_file::load_prnt_lvl </td>
           <td>(</td>
-          <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>filename</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">int &amp;&#160;</td>
-          <td class="paramname"><em>prnt_lvl</em>&#160;</td>
-        </tr>
-        <tr>
+          <td class="paramname"><em>prnt_lvl</em></td><td>)</td>
           <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -581,7 +478,6 @@ Public Member Functions</h2></td></tr>
 <p>loads printing level into reference </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>name of file as string </td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">prnt_lvl</td><td>reference to printing level </td></tr>
   </table>
   </dd>

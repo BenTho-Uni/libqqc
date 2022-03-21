@@ -117,76 +117,71 @@ $(document).ready(function(){initNavTree('test__vault__qmp2_8h_source.html','');
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <span class="keyword">private</span>: </div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>            <span class="keywordtype">size_t</span> mnocc = 1; </div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>            <span class="keywordtype">size_t</span> mnvirt = 2; </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>            <span class="keywordtype">size_t</span> mnnmo = mnocc + mnvirt; </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>            <span class="keywordtype">size_t</span> mnmo = mnocc + mnvirt; </div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>            <span class="keywordtype">size_t</span> mnao = 3; </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>            <span class="keywordtype">double</span> m1Dtol = 0; </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>            <span class="keywordtype">int</span> mprnt_lvl = 0; </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>            <a class="code hl_class" href="classlibqqc_1_1Grid.html">Grid</a> m1Dgrid; </div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>            <a class="code hl_class" href="classlibqqc_1_1Grid.html">Grid</a> m3Dgrid; </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>            <span class="keywordtype">double</span> mmat_fock[3 * 3] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>                7.0, 8.0, 9.0}; </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>            <span class="keywordtype">double</span> mmat_coeff[3 * 3] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>                7.0, 8.0, 9.0}; </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>            <span class="keywordtype">double</span> mmat_cgto[2 * 3] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0}; </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>            <span class="keywordtype">double</span> mcube_coul[2 * 3 * 3] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>                7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0,</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>                17.0, 18.0};</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>            <span class="keywordtype">bool</span> test_Vault_qmp2();</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>            <span class="keywordtype">bool</span> test_check_data_validity();</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>            <span class="keywordtype">bool</span> test_get_mnocc();</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>            <span class="keywordtype">bool</span> test_get_mnvirt();</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>            <span class="keywordtype">bool</span> test_get_mnnmo();</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>            <span class="keywordtype">bool</span> test_get_mnao();</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>            <span class="keywordtype">bool</span> test_get_m1Dtol();</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>            <span class="keywordtype">bool</span> test_get_mprnt_lvl();</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>            <span class="keywordtype">bool</span> test_get_m1Dgrid();</div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span> </div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>            <span class="keywordtype">bool</span> test_get_m3Dgrid();</div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span> </div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>            <span class="keywordtype">bool</span> test_get_mmat_fock();</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span> </div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>            <span class="keywordtype">bool</span> test_get_mmat_coeff();</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span> </div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>            <span class="keywordtype">bool</span> test_get_mmat_cgto();</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span> </div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>            <span class="keywordtype">bool</span> test_get_mcube_coul();</div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span> </div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>        <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span> </div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno"><a class="line" href="classlibqqc_1_1Test__Vault__qmp2.html#a42f7e85ffddae07db8548619d24d3d14">  187</a></span>            <a class="code hl_function" href="classlibqqc_1_1Test__Vault__qmp2.html#a42f7e85ffddae07db8548619d24d3d14">Test_Vault_qmp2</a>() {</div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>                <span class="keywordtype">size_t</span> npts = 2;</div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>                <span class="keywordtype">size_t</span> ndim = 2;</div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>                <span class="keywordtype">double</span> pts[2 * 2] = {1.0, 1.5, 2.0, 2.5};</div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>                <span class="keywordtype">double</span> wts[2 * 2] = {1.0, 2.0};</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span> </div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>                m1Dgrid.<a class="code hl_function" href="classlibqqc_1_1Grid.html#a46e271dff1b377d81500f800a8f11371">set_grid</a>(npts, ndim, pts, wts);</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>                m3Dgrid.<a class="code hl_function" href="classlibqqc_1_1Grid.html#a46e271dff1b377d81500f800a8f11371">set_grid</a>(npts, ndim, pts, wts);</div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span> </div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>            };</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>            <span class="keywordtype">int</span> mprnt_lvl = 0; </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>            <a class="code hl_class" href="classlibqqc_1_1Grid.html">Grid</a> m1Dgrid; </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>            <a class="code hl_class" href="classlibqqc_1_1Grid.html">Grid</a> m3Dgrid; </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>            <span class="keywordtype">double</span> mmat_fock[3 * 3] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>                7.0, 8.0, 9.0}; </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>            <span class="keywordtype">double</span> mmat_coeff[3 * 3] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>                7.0, 8.0, 9.0}; </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>            <span class="keywordtype">double</span> mmat_cgto[2 * 3] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0}; </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>            <span class="keywordtype">double</span> mcube_coul[2 * 1  * 2] = {1.0, 2.0, 3.0, 4.0}; </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>            <span class="keywordtype">bool</span> test_Vault_qmp2();</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>            <span class="keywordtype">bool</span> test_check_data_validity();</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>            <span class="keywordtype">bool</span> test_get_mnocc();</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>            <span class="keywordtype">bool</span> test_get_mnvirt();</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>            <span class="keywordtype">bool</span> test_get_mnmo();</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>            <span class="keywordtype">bool</span> test_get_mnao();</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>            <span class="keywordtype">bool</span> test_get_m1Dtol();</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>            <span class="keywordtype">bool</span> test_get_mprnt_lvl();</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span> </div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>            <span class="keywordtype">bool</span> test_get_m1Dgrid();</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>            <span class="keywordtype">bool</span> test_get_m3Dgrid();</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span> </div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>            <span class="keywordtype">bool</span> test_get_mmat_fock();</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>            <span class="keywordtype">bool</span> test_get_mmat_cgto();</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span> </div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>            <span class="keywordtype">bool</span> test_get_mcube_coul();</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span> </div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>        <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno"><a class="line" href="classlibqqc_1_1Test__Vault__qmp2.html#a42f7e85ffddae07db8548619d24d3d14">  174</a></span>            <a class="code hl_function" href="classlibqqc_1_1Test__Vault__qmp2.html#a42f7e85ffddae07db8548619d24d3d14">Test_Vault_qmp2</a>() {</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>                <span class="keywordtype">size_t</span> npts = 2;</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>                <span class="keywordtype">size_t</span> ndim = 2;</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>                <span class="keywordtype">double</span> pts[2 * 2] = {1.0, 1.5, 2.0, 2.5};</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>                <span class="keywordtype">double</span> wts[2 * 2] = {1.0, 2.0};</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span> </div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>                m1Dgrid.<a class="code hl_function" href="classlibqqc_1_1Grid.html#a46e271dff1b377d81500f800a8f11371">set_grid</a>(npts, ndim, pts, wts);</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>                m3Dgrid.<a class="code hl_function" href="classlibqqc_1_1Grid.html#a46e271dff1b377d81500f800a8f11371">set_grid</a>(npts, ndim, pts, wts);</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>            };</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span> </div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>            <span class="keywordtype">bool</span> <a class="code hl_function" href="classlibqqc_1_1Test__Vault__qmp2.html#aad243f771ee3c18ab846c1748a86516a">run_all_tests</a>(ostringstream &amp;out);</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>    };</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span> </div>
 <div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span> </div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>            <span class="keywordtype">bool</span> <a class="code hl_function" href="classlibqqc_1_1Test__Vault__qmp2.html#aad243f771ee3c18ab846c1748a86516a">run_all_tests</a>(ostringstream &amp;out);</div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>    };</div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span> </div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span> </div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>} <span class="comment">// namespace</span></div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span> </div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span><span class="preprocessor">#endif </span><span class="comment">//LIBQQC_TEST_VAULT_MP2_H</span></div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>} <span class="comment">// namespace</span></div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span> </div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span><span class="preprocessor">#endif </span><span class="comment">//LIBQQC_TEST_VAULT_MP2_H</span></div>
 <div class="ttc" id="aclasslibqqc_1_1Grid_html"><div class="ttname"><a href="classlibqqc_1_1Grid.html">libqqc::Grid</a></div><div class="ttdoc">Holder class for information regarding a quadrature grid.</div><div class="ttdef"><b>Definition:</b> grid.h:17</div></div>
 <div class="ttc" id="aclasslibqqc_1_1Grid_html_a46e271dff1b377d81500f800a8f11371"><div class="ttname"><a href="classlibqqc_1_1Grid.html#a46e271dff1b377d81500f800a8f11371">libqqc::Grid::set_grid</a></div><div class="ttdeci">void set_grid(size_t npts, size_t ndim, double *pts, double *wts)</div><div class="ttdoc">Sets number, value and weights of points.</div><div class="ttdef"><b>Definition:</b> grid.cpp:26</div></div>
 <div class="ttc" id="aclasslibqqc_1_1Test__Vault__qmp2_html"><div class="ttname"><a href="classlibqqc_1_1Test__Vault__qmp2.html">libqqc::Test_Vault_qmp2</a></div><div class="ttdoc">Holding class for testing Vault_mp2 functions.</div><div class="ttdef"><b>Definition:</b> test_vault_qmp2.h:21</div></div>
-<div class="ttc" id="aclasslibqqc_1_1Test__Vault__qmp2_html_a42f7e85ffddae07db8548619d24d3d14"><div class="ttname"><a href="classlibqqc_1_1Test__Vault__qmp2.html#a42f7e85ffddae07db8548619d24d3d14">libqqc::Test_Vault_qmp2::Test_Vault_qmp2</a></div><div class="ttdeci">Test_Vault_qmp2()</div><div class="ttdoc">constructor of the testing class</div><div class="ttdef"><b>Definition:</b> test_vault_qmp2.h:187</div></div>
-<div class="ttc" id="aclasslibqqc_1_1Test__Vault__qmp2_html_aad243f771ee3c18ab846c1748a86516a"><div class="ttname"><a href="classlibqqc_1_1Test__Vault__qmp2.html#aad243f771ee3c18ab846c1748a86516a">libqqc::Test_Vault_qmp2::run_all_tests</a></div><div class="ttdeci">bool run_all_tests(ostringstream &amp;out)</div><div class="ttdoc">method for running all tests</div><div class="ttdef"><b>Definition:</b> test_vault_qmp2.cpp:229</div></div>
+<div class="ttc" id="aclasslibqqc_1_1Test__Vault__qmp2_html_a42f7e85ffddae07db8548619d24d3d14"><div class="ttname"><a href="classlibqqc_1_1Test__Vault__qmp2.html#a42f7e85ffddae07db8548619d24d3d14">libqqc::Test_Vault_qmp2::Test_Vault_qmp2</a></div><div class="ttdeci">Test_Vault_qmp2()</div><div class="ttdoc">constructor of the testing class</div><div class="ttdef"><b>Definition:</b> test_vault_qmp2.h:174</div></div>
+<div class="ttc" id="aclasslibqqc_1_1Test__Vault__qmp2_html_aad243f771ee3c18ab846c1748a86516a"><div class="ttname"><a href="classlibqqc_1_1Test__Vault__qmp2.html#aad243f771ee3c18ab846c1748a86516a">libqqc::Test_Vault_qmp2::run_all_tests</a></div><div class="ttdeci">bool run_all_tests(ostringstream &amp;out)</div><div class="ttdoc">method for running all tests</div><div class="ttdef"><b>Definition:</b> test_vault_qmp2.cpp:172</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

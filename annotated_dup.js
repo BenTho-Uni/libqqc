@@ -5,6 +5,7 @@ var annotated_dup =
       [ "Grid", "classlibqqc_1_1Grid.html", "classlibqqc_1_1Grid" ],
       [ "Loader_qmp2", "classlibqqc_1_1Loader__qmp2.html", "classlibqqc_1_1Loader__qmp2" ],
       [ "Loader_qmp2_from_file", "classlibqqc_1_1Loader__qmp2__from__file.html", "classlibqqc_1_1Loader__qmp2__from__file" ],
+      [ "Printer_qmp2", "classlibqqc_1_1Printer__qmp2.html", "classlibqqc_1_1Printer__qmp2" ],
       [ "Qmp2_energy", "classlibqqc_1_1Qmp2__energy.html", "classlibqqc_1_1Qmp2__energy" ],
       [ "Rename", "classlibqqc_1_1Rename.html", "classlibqqc_1_1Rename" ],
       [ "Tclock", "classlibqqc_1_1Tclock.html", "classlibqqc_1_1Tclock" ],
