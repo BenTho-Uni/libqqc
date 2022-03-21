@@ -64,7 +64,7 @@ namespace libqqc {
             /// @return [return]
             ///
             Printer_qmp2 (Vault_qmp2 &vault, Ttimer &timings) 
-                : mnao(vault.get_mnao()), mnmo(vault.get_mnnmo()), 
+                : mnao(vault.get_mnao()), mnmo(vault.get_mnmo()), 
                 mnocc(vault.get_mnocc()), mnvirt(vault.get_mnvirt()),
                 m3Dnpts(vault.get_m3Dgrid().get_mnpts()),
                 m1Dnpts(vault.get_m1Dgrid().get_mnpts()),

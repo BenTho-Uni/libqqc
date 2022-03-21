@@ -48,13 +48,6 @@ namespace libqqc {
             void load_nao(size_t &nao);
 
             ///
-            /// @brief loads tolerance of 1D grid into reference
-            ///
-            /// @param[in,out] p1Dtol reference to tolerance
-            ///
-            void load_1Dtol(double &p1Dtol);
-
-            ///
             /// @brief loads printing level into reference
             ///
             /// @param[in,out] prnt_lvl reference to printing level
@@ -81,13 +74,6 @@ namespace libqqc {
             /// @param[in,out] mat_fock pointer to Fock matrix
             ///
             void load_mat_fock(double* mat_fock);
-
-            ///
-            /// @brief loads values into the coefficient matrix
-            ///
-            /// @param[in,out] mat_coeff pointer to coefficient matrix
-            ///
-            void load_mat_coeff(double* mat_coeff);
 
             ///
             /// @brief loads values into the CGTO matrix

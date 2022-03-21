@@ -50,18 +50,6 @@ namespace libqqc {
     
     }
 
-    void Loader_qmp2_from_file :: load_1Dtol(double &p1Dtol) {
-
-        vector<size_t> dim = {16, 1, 1};
-
-        double array[dim.at(0) * dim.at(1) * dim.at(2)];
-
-        load_array_from_file(msrc_folder+mfname_inputs, dim, array, ' ', 1);
-
-        p1Dtol = array[9];
-
-    
-    }
 
     void Loader_qmp2_from_file :: load_prnt_lvl(int &prnt_lvl) {
 

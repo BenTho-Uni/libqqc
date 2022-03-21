@@ -27,11 +27,10 @@ namespace libqqc {
             // Meta information
             size_t mnocc = 0; ///< Number of occupied orbitals
             size_t mnvirt = 0; ///< Number of virtual orbitals
-            size_t mnnmo = 0; ///< Number of molecular orbitals
+            size_t mnmo = 0; ///< Number of molecular orbitals
             size_t mnao = 0; ///< Number of atomic orbitals
 
             // Input informations
-            double m1Dtol = 0; ///< Tolerance of 1D grid
             int mprnt_lvl = 0; ///< Selected print level
 
             // Grid objects
@@ -58,7 +57,7 @@ namespace libqqc {
 
                 if (mnocc == 0) throw invalid_argument(
                         "Number of occupied orbitals shouldn't be 0.");
-                if (mnnmo == 0) throw invalid_argument(
+                if (mnmo == 0) throw invalid_argument(
                         "Number of molecular orbitals shouldn't be 0.");
                 if (mnao == 0) throw invalid_argument(
                         "Number of atomic orbitals shouldn't be 0.");
@@ -88,16 +87,13 @@ namespace libqqc {
             Vault_qmp2(Loader_qmp2 loader) {
 
                 // check if loader is empty
-                //TODO: do this if loader is done
-
                 // loading meta information
                 loader.load_nocc (mnocc);
                 loader.load_nvirt (mnvirt);
-                mnnmo = mnocc + mnvirt;
+                mnmo = mnocc + mnvirt;
                 loader.load_nao (mnao);
 
                 // loading input information
-                loader.load_1Dtol (m1Dtol);
                 loader.load_prnt_lvl (mprnt_lvl);
 
                 // load grid object
@@ -107,9 +103,9 @@ namespace libqqc {
                 // loading in matrices
                 size_t nao2 = mnao * mnao;
                 size_t npts = m3Dgrid.get_mnpts();
-                mmat_fock = new double[mnnmo * mnnmo];
+                mmat_fock = new double[mnmo * mnmo];
                 loader.load_mat_fock (mmat_fock);
-                mmat_cgto = new double[npts * mnnmo];
+                mmat_cgto = new double[npts * mnmo];
                 loader.load_mat_cgto (mmat_cgto);
                 mcube_coul = new double[npts * mnocc * mnvirt];
                 loader.load_cube_coul (mcube_coul);
@@ -133,11 +129,10 @@ namespace libqqc {
                 // loading meta information
                 loader.load_nocc (mnocc);
                 loader.load_nvirt (mnvirt);
-                mnnmo = mnocc + mnvirt;
+                mnmo = mnocc + mnvirt;
                 loader.load_nao (mnao);
 
                 // loading input information
-                loader.load_1Dtol (m1Dtol);
                 loader.load_prnt_lvl (mprnt_lvl);
 
                 // load grid object
@@ -147,9 +142,9 @@ namespace libqqc {
                 // loading in matrices
                 size_t nao2 = mnao * mnao;
                 size_t npts = m3Dgrid.get_mnpts();
-                mmat_fock = new double[mnnmo * mnnmo];
+                mmat_fock = new double[mnmo * mnmo];
                 loader.load_mat_fock (mmat_fock);
-                mmat_cgto = new double[npts * mnnmo];
+                mmat_cgto = new double[npts * mnmo];
                 loader.load_mat_cgto (mmat_cgto);
                 mcube_coul = new double[npts * mnocc * mnvirt];
                 loader.load_cube_coul (mcube_coul);
@@ -191,12 +186,12 @@ namespace libqqc {
             ///
             /// @brief Get the number of molecular orbitals 
             ///
-            /// @return mnnmo number of molecular orbitals
+            /// @return mnmo number of molecular orbitals
             ///
-            size_t get_mnnmo() {
-                if (mnnmo == 0) throw invalid_argument(
+            size_t get_mnmo() {
+                if (mnmo == 0) throw invalid_argument(
                         "Number of molecular orbitals shouldn't be 0.");
-                return mnnmo;
+                return mnmo;
             };
 
             ///
@@ -208,15 +203,6 @@ namespace libqqc {
                 if (mnao == 0) throw invalid_argument(
                         "Number of atomic orbitals shouldn't be 0.");
                 return mnao;
-            };
-
-            ///
-            /// @brief Get the tolerance of the 1D grid 
-            ///
-            /// @return m1Dtol tolerance of 1D grid
-            ///
-            size_t get_m1Dtol() {
-                return m1Dtol;
             };
 
             ///

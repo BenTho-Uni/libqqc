@@ -22,9 +22,8 @@ namespace libqqc {
         private: 
             size_t mnocc = 1; ///< Number of occupied orbitals
             size_t mnvirt = 2; ///< Number of virtual orbitals
-            size_t mnnmo = mnocc + mnvirt; ///< Number of molecular orbitals
+            size_t mnmo = mnocc + mnvirt; ///< Number of molecular orbitals
             size_t mnao = 3; ///< Number of atomic orbitals
-            double m1Dtol = 0; ///< Tolerance of 1D quadrature
             int mprnt_lvl = 0; ///< Print level of the program
 
             Grid m1Dgrid; ///< one dimensional quadrature grid points and weights
@@ -78,14 +77,14 @@ namespace libqqc {
             bool test_get_mnvirt();
 
             ///
-            /// @brief method for testing get_mnnmo
+            /// @brief method for testing get_mnmo
             ///
             /// @details This method tests the function and returns TRUE or 
             /// false depending on correct behaviour
             ///
             /// @return bool result of comparison to reference
             ///
-            bool test_get_mnnmo();
+            bool test_get_mnmo();
 
             ///
             /// @brief method for testing get_mnao
@@ -146,16 +145,6 @@ namespace libqqc {
             /// @return bool result of comparison to reference
             ///
             bool test_get_mmat_fock();
-
-            ///
-            /// @brief method for testing get_mmat_coeff
-            ///
-            /// @details This method tests the function and returns TRUE or 
-            /// false depending on correct behaviour
-            ///
-            /// @return bool result of comparison to reference
-            ///
-            bool test_get_mmat_coeff();
 
             ///
             /// @brief method for testing get_mmat_cgto

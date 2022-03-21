@@ -74,13 +74,6 @@ namespace libqqc {
             void load_nao(size_t &nao);
 
             ///
-            /// @brief loads tolerance of 1D grid into reference
-            ///
-            /// @param[in,out] p1Dtol reference to tolerance
-            ///
-            void load_1Dtol(double &p1Dtol);
-
-            ///
             /// @brief loads printing level into reference
             ///
             /// @param[in,out] prnt_lvl reference to printing level

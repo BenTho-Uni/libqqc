@@ -33,25 +33,19 @@ namespace libqqc {
 
     void Loader_qmp2 :: load_nocc (size_t &nocc){
 
-        nocc = 4; //
+        nocc = 1; //
 
     } //Loader_qmp2::load_nocc
 
     void Loader_qmp2 :: load_nvirt(size_t &nvirt) {
 
-        nvirt = 5;
+        nvirt = 2;
     
     }
 
     void Loader_qmp2 :: load_nao(size_t &nao) {
 
-        nao = 9;
-    
-    }
-
-    void Loader_qmp2 :: load_1Dtol(double &p1Dtol) {
-
-        p1Dtol = 10e-4;
+        nao = 3;
     
     }
 
@@ -63,7 +57,7 @@ namespace libqqc {
 
     void Loader_qmp2 :: load_1Dgrid(Grid &grid) {
 
-        size_t npts = 3;
+        size_t npts = 2;
         size_t ndim = 1;
         double pts[npts * ndim];
         double wts[npts];
@@ -77,7 +71,7 @@ namespace libqqc {
 
     void Loader_qmp2 :: load_3Dgrid(Grid &grid) {
 
-        size_t npts = 10;
+        size_t npts = 2;
         size_t ndim = 3;
         double pts[npts * ndim];
         double wts[npts];
@@ -91,36 +85,28 @@ namespace libqqc {
 
     void Loader_qmp2 :: load_mat_fock(double* mat_fock) {
 
-        size_t nao = 9;
+        size_t nao = 3;
 
         fill_array (nao * nao, mat_fock); 
 
     }
 
-    void Loader_qmp2 :: load_mat_coeff(double* mat_coeff) {
-
-        size_t nao = 9;
-        size_t nmo = 9;
-
-        fill_array (nao * nmo, mat_coeff); 
-    
-    }
-
     void Loader_qmp2 :: load_mat_cgto(double* mat_cgto) {
 
-        size_t npts = 10;
-        size_t nao = 9;
+        size_t npts = 2;
+        size_t nmo = 3;
 
-        fill_array (npts * nao, mat_cgto); 
+        fill_array (npts * nmo, mat_cgto); 
     
     }
 
     void Loader_qmp2 :: load_cube_coul(double* cube_coul) {
 
-        size_t npts = 10;
-        size_t nao = 9;
+        size_t npts = 2;
+        size_t nocc = 1;
+        size_t nvirt = 2;
 
-        fill_array (npts * nao * nao, cube_coul);
+        fill_array (npts * nocc * nvirt, cube_coul);
     
     }
 

@@ -16,7 +16,7 @@ namespace libqqc {
         bool result = false;
 
         size_t nocc = 0;
-        size_t nocc_ref = 4;
+        size_t nocc_ref = 1;
 
         Loader_qmp2 loader;
         loader.load_nocc(nocc);
@@ -30,7 +30,7 @@ namespace libqqc {
         bool result = false;
 
         size_t nvirt = 0;
-        size_t nvirt_ref = 5;
+        size_t nvirt_ref = 2;
 
         Loader_qmp2 loader;
         loader.load_nvirt(nvirt);
@@ -44,25 +44,12 @@ namespace libqqc {
         bool result = false;
 
         size_t nao = 0;
-        size_t nao_ref = 9;
+        size_t nao_ref = 3;
 
         Loader_qmp2 loader;
         loader.load_nao(nao);
 
         if (nao == nao_ref) result = true;
-        return result;
-    }
-
-    bool Test_Loader_qmp2 :: test_load_1Dtol() {
-        bool result = false;
-
-        double p1Dtol = 0;
-        double p1Dtol_ref = 10e-4;
-
-        Loader_qmp2 loader;
-        loader.load_1Dtol(p1Dtol);
-
-        if (p1Dtol == p1Dtol_ref) result = true;
         return result;
     }
 
@@ -87,7 +74,7 @@ namespace libqqc {
         Loader_qmp2 loader;
         loader.load_1Dgrid(grid);
 
-        size_t npts_ref = 3;
+        size_t npts_ref = 2;
         size_t ndim_ref = 1;
 
         if ((npts_ref == grid.get_mnpts()) && (ndim_ref == grid.get_mndim()))
@@ -103,8 +90,8 @@ namespace libqqc {
                 res_wts += grid.get_mwts()[p];
         }
 
-        double res_pts_ref = 3.0;
-        double res_wts_ref = 3.0;
+        double res_pts_ref = 2.0;
+        double res_wts_ref = 2.0;
 
         double tol = 1e-8;
 
@@ -122,7 +109,7 @@ namespace libqqc {
         Loader_qmp2 loader;
         loader.load_3Dgrid(grid);
 
-        size_t npts_ref = 10;
+        size_t npts_ref = 2;
         size_t ndim_ref = 3;
 
         if ((npts_ref == grid.get_mnpts()) && (ndim_ref == grid.get_mndim()))
@@ -138,8 +125,8 @@ namespace libqqc {
                 res_wts += grid.get_mwts()[p];
         }
 
-        double res_pts_ref = 30.0;
-        double res_wts_ref = 30.0;
+        double res_pts_ref = 6.0;
+        double res_wts_ref = 6.0;
 
         double tol = 1e-8;
 
@@ -152,48 +139,22 @@ namespace libqqc {
     bool Test_Loader_qmp2 :: test_load_mat_fock() {
         bool result = false;
 
-        size_t nao = 9;
+        size_t nmo = 3;
 
-        double mat[nao * nao];
+        double mat[nmo * nmo];
         
         Loader_qmp2 loader;
         loader.load_mat_fock(mat);
 
         double res = 0;
 
-        for (size_t k = 0; k < nao; k++){
-            for (size_t l = 0; l < nao; l++){
-                res += mat[k * nao + l];
-            }
-        }
-
-        double res_ref = 81.0;
-        double tol = 10e-8;
-
-        if (abs(res_ref - res) < tol) result = true;
-        return result;
-    }
-
-    bool Test_Loader_qmp2 :: test_load_mat_coeff() {
-        bool result = false;
-
-        size_t nao = 9;
-        size_t nmo = 9;
-
-        double mat[nao * nmo];
-        
-        Loader_qmp2 loader;
-        loader.load_mat_coeff(mat);
-
-        double res = 0;
-
-        for (size_t k = 0; k < nao; k++){
+        for (size_t k = 0; k < nmo; k++){
             for (size_t l = 0; l < nmo; l++){
                 res += mat[k * nmo + l];
             }
         }
 
-        double res_ref = 81.0;
+        double res_ref = 9.0;
         double tol = 10e-8;
 
         if (abs(res_ref - res) < tol) result = true;
@@ -203,10 +164,10 @@ namespace libqqc {
     bool Test_Loader_qmp2 :: test_load_mat_cgto() {
         bool result = false;
 
-        size_t nao = 9;
-        size_t npts = 10;
+        size_t nmo = 3;
+        size_t npts = 2;
 
-        double mat[npts * nao];
+        double mat[npts * nmo];
         
         Loader_qmp2 loader;
         loader.load_mat_cgto(mat);
@@ -214,12 +175,12 @@ namespace libqqc {
         double res = 0;
 
         for (size_t p = 0; p < npts; p++){
-            for (size_t l = 0; l < nao; l++){
-                res += mat[p * nao + l];
+            for (size_t l = 0; l < nmo; l++){
+                res += mat[p * nmo + l];
             }
         }
 
-        double res_ref = 90.0;
+        double res_ref = 6.0;
         double tol = 10e-8;
 
         if (abs(res_ref - res) < tol) result = true;
@@ -229,10 +190,11 @@ namespace libqqc {
     bool Test_Loader_qmp2 :: test_load_cube_coul() {
         bool result = false;
 
-        size_t nao = 9;
-        size_t npts = 10;
+        size_t nocc = 1;
+        size_t nvirt = 2;
+        size_t npts = 2;
 
-        double cube[npts * nao * nao];
+        double cube[npts * nocc * nvirt];
         
         Loader_qmp2 loader;
         loader.load_cube_coul(cube);
@@ -240,14 +202,14 @@ namespace libqqc {
         double res = 0;
 
         for (size_t p = 0; p < npts; p++){
-            for (size_t k = 0; k < nao; k++){
-                for (size_t l = 0; l < nao; l++){
-                    res += cube[p * nao * nao + k * nao + l];
+            for (size_t k = 0; k < nocc; k++){
+                for (size_t l = 0; l < nvirt; l++){
+                    res += cube[p * nocc * nvirt + k * nvirt + l];
                 }
             }
         }
 
-        double res_ref = 810.0;
+        double res_ref = 4.0;
         double tol = 10e-8;
 
         if (abs(res_ref - res) < tol) result = true;
@@ -270,10 +232,6 @@ namespace libqqc {
         out << "    Testing loader_qmp2::load_nao()          ... " << flush
             << (b_load_nao ? "passed" : "failed") << endl;
 
-        bool b_load_1Dtol = test_load_1Dtol();
-        out << "    Testing loader_qmp2::load_1Dtol()        ... " << flush
-            << (b_load_1Dtol ? "passed" : "failed") << endl;
-
         bool b_load_prnt_lvl = test_load_prnt_lvl();
         out << "    Testing loader_qmp2::load_prnt_lvl()     ... " << flush
             << (b_load_prnt_lvl ? "passed" : "failed") << endl;
@@ -290,10 +248,6 @@ namespace libqqc {
         out << "    Testing loader_qmp2::load_mat_fock()     ... " << flush
             << (b_load_mat_fock ? "passed" : "failed") << endl;
 
-        bool b_load_mat_coeff = test_load_mat_coeff();
-        out << "    Testing loader_qmp2::load_mat_coeff()    ... " << flush
-            << (b_load_mat_coeff ? "passed" : "failed") << endl;
-
         bool b_load_mat_cgto = test_load_mat_cgto();
         out << "    Testing loader_qmp2::load_mat_cgto()     ... " << flush
             << (b_load_mat_cgto ? "passed" : "failed") << endl;
@@ -302,9 +256,9 @@ namespace libqqc {
         out << "    Testing loader_qmp2::load_cube_coul()    ... " << flush
             << (b_load_cube_coul ? "passed" : "failed") << endl;
 
-        result = b_load_nocc && b_load_nvirt && b_load_nao && b_load_1Dtol
+        result = b_load_nocc && b_load_nvirt && b_load_nao
             && b_load_prnt_lvl && b_load_1Dgrid && b_load_3Dgrid
-            && b_load_mat_fock && b_load_mat_coeff & b_load_mat_cgto
+            && b_load_mat_fock && b_load_mat_cgto
             && b_load_cube_coul;
         return result;
 

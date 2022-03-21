@@ -84,28 +84,6 @@ namespace libqqc {
         nao = array[15];
     }
 
-    void Loader_qmp2_from_file :: load_1Dtol(double &p1Dtol) {
-
-        vector<size_t> dim = {16, 1, 1};
-
-        double array[dim.at(0) * dim.at(1) * dim.at(2)];
-
-        int pid, max_id; //pid is id of current node, max_id number of max. nodes
-        MPI_Comm_rank(MPI_COMM_WORLD, &pid); //Grab the current node id
-        MPI_Comm_size(MPI_COMM_WORLD, &max_id); //Grab the max number of nodes
-        MPI_Status status; 
-
-        if (pid == 0){
-            // On the master node with pid 0 load in the input file
-            load_array_from_file(msrc_folder+mfname_inputs, dim, array, ' ', 1);
-        }
-        // Now distribute the data to all nodes
-        MPI_Bcast(array, dim.at(0) * dim.at(1) * dim.at(2),
-                MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
-        p1Dtol = array[9];
-    }
-
     void Loader_qmp2_from_file :: load_prnt_lvl(int &prnt_lvl) {
 
         vector<size_t> dim = {16, 1, 1};
@@ -256,12 +234,11 @@ namespace libqqc {
         size_t nmo = nocc + nvirt;
 
         //Then load the coeff C matrix in on master
+        vector<size_t> dim_coeff = {nao, nmo, 1};
         if (pid == 0){
             // read in the coefficient C matrix
-            vector<size_t> dim_coeff = {nao, nmo, 1};
-            double coeff[nao * nmo];
             load_array_from_file(msrc_folder+mfname_coeff, dim_coeff, 
-                    coeff, ' ', 1);
+                    mat_coeff, ' ', 1);
         }
 
         // Now distribute the data to all nodes

@@ -101,16 +101,6 @@ namespace libqqc {
             bool test_load_mat_fock();
 
             ///
-            /// @brief method for testing load_mat_coeff
-            ///
-            /// @details This method tests the function and returns TRUE or 
-            /// false depending on correct behaviour
-            ///
-            /// @return bool result of comparison to reference
-            ///
-            bool test_load_mat_coeff();
-
-            ///
             /// @brief method for testing load_mat_cgto
             ///
             /// @details This method tests the function and returns TRUE or 
