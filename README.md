@@ -106,6 +106,7 @@ make install
 - [x] partitioning scheme for remaining elements in MPI
 - [x] remove unneded balast from qmp2 calc, loader, vault
 - [x] write printer
+- [x] write/rewrite test for printer, vault, loader, do_qmp2
 
 </details>
 
@@ -118,7 +119,7 @@ make install
 - [ ] update Readme with scalings and results from Justus 2.0
 - [ ] write better maintainable variant code
 - [ ] OpenMP GPU variant implementation
-- [ ] write/rewrite test for printer, vault, loader, do_qmp2
+
 
 # Credits
 
