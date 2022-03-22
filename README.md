@@ -112,6 +112,9 @@ make install
 - [ ] add missing badges
 - [ ] add input/output of host programm which was used to export to testdata
 - [ ] recheck performance on Justus 2.0
+    - [ ] time resolved average cpu utilization on 4 nodes
+    - [ ] core scaling 1-960 for Hybrid for do_mp2 and coulomb trafo
+    - [ ] core scaling 1-960 for MPI only for do_mp2 and coulomb trafo
 - [ ] update Readme with scalings and results from Justus 2.0
 - [ ] write better maintainable variant code
 - [ ] OpenMP GPU variant implementation
