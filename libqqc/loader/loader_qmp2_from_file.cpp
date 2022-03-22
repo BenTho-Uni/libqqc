@@ -9,6 +9,7 @@
 
 #include "loader_qmp2_from_file.h"
 #include "../utils/load_from_file.h"
+#include "../utils/ttimer.h"
 
 using namespace std;
 
@@ -142,6 +143,9 @@ namespace libqqc {
     }
 
     void Loader_qmp2_from_file :: load_mat_cgto(double* mat_cgto) {
+        Ttimer timings(0);
+        timings.start_new_clock("Timings AoToMo CGTO: ", 0, 0);
+
         size_t nao = 0;
         load_nao(nao);
 
@@ -165,8 +169,11 @@ namespace libqqc {
         load_array_from_file(msrc_folder+mfname_coeff, dim_coeff, coeff, ' ', 1);
 
         double* cgto_ao = new double[npts * nao];
+        timings.start_new_clock("    -- Loading in: ", 1, 0);
         load_array_from_file(msrc_folder+mfname_cgto, dim_ao, cgto_ao, ' ', 1);
+        timings.stop_clock(1);
 
+        timings.start_new_clock("    -- Transformation: ", 2, 0);
         // Orbitals O $O_{MO} = O * C$
         //
         size_t pos = 0; // Position on virtual orbital space
@@ -183,11 +190,17 @@ namespace libqqc {
                 }
             }
         }
+        timings.stop_clock(2);
     
         delete[] cgto_ao;
+        timings.stop_clock(0);
+        cout << timings.print_all_clocks() << endl;
     }
 
     void Loader_qmp2_from_file :: load_cube_coul(double* cube_coul) {
+        Ttimer  timings(0);
+        timings.start_new_clock("Timings AoToMo Coulomb Integral: ", 0, 0);
+
         size_t nao = 0;
         load_nao(nao);
 
@@ -212,8 +225,11 @@ namespace libqqc {
 
         double* coul_ao = new double[npts * nao * nao];
 
+        timings.start_new_clock("    -- Loading in: ", 1, 0);
         load_array_from_file(msrc_folder+mfname_coul, dim_ao, coul_ao, ' ', 1);
+        timings.stop_clock(1);
 
+        timings.start_new_clock("    -- Transformation: ", 2, 0);
         // Coulomb Integral U_{MO}^P: for each slice P 
         // $U_{MO} = C_{occpuid}^T * (u_{AO}^P * C_{virtuals}
         //
@@ -237,8 +253,12 @@ namespace libqqc {
                 }
             }
         }
+        timings.stop_clock(2);
 
         delete[] coul_ao; 
+
+        timings.stop_clock(0);
+        cout << timings.print_all_clocks() << endl;
     }
 
 } //namespace libqqc
