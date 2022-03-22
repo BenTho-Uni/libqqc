@@ -9,9 +9,11 @@
 
 #include "loader_qmp2_from_file.h"
 #include "../utils/load_from_file.h"
+#include "../utils/ttimer.h"
 
 #include <mpi.h>
 #include <iostream>
+
 
 
 using namespace std;
@@ -249,6 +251,9 @@ namespace libqqc {
 
     void Loader_qmp2_from_file :: load_mat_cgto(double* mat_cgto) {
 
+        Ttimer timings(0);
+        timings.start_new_clock("Timings AoToMo CGTO: ", 0, 0);
+
         int pid, max_id; //pid is id of current node, max_id number of max. nodes
         MPI_Comm_rank(MPI_COMM_WORLD, &pid); //Grab the current node id
         MPI_Comm_size(MPI_COMM_WORLD, &max_id); //Grab the max number of nodes
@@ -298,9 +303,12 @@ namespace libqqc {
         if (pid == 0) {
             //on master, read in the full cgto matrix
             double* cgto_ao_full = new double[p3Dnpts * nao];
+            timings.start_new_clock("-- Loadin in: ", 1, 0);
             load_array_from_file(msrc_folder+mfname_cgto, dim_ao, cgto_ao_full,
                     ' ', 1);
+            timings.stop_clock(1);
 
+            timings.start_new_clock("-- Distribute Batch: ", 2, 0);
             //now distribute the batch part of the AO matrix 
             //
             for (int i = 1; i < max_id; i++){
@@ -312,6 +320,7 @@ namespace libqqc {
                         (npts_to_proc_on_i * nao), 
                         MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
             }
+            timings.stop_clock(2);
             // Delete Full array from before
             for (size_t p = 0; p < npts_to_proc; p++){
                 for (size_t a = 0; a < nao; a++){
@@ -325,6 +334,8 @@ namespace libqqc {
                     MPI_COMM_WORLD, &status);
         }
 
+
+        timings.start_new_clock("-- Tranforming Batch: ", 3, 0);
         //Now we do the transformation
         // Orbitals O $O_{MO} = O * C$
         //
@@ -341,7 +352,9 @@ namespace libqqc {
                 }
             }
         }
+        timings.stop_clock(3);
 
+        timings.start_new_clock("-- Distribute Batch Results: ", 4, 0);
         //Now get all the Data that we didnt calculate on this node
         //
         for (int i = 0; i < max_id; i++){
@@ -358,11 +371,18 @@ namespace libqqc {
                         MPI_DOUBLE, i, MPI_COMM_WORLD);
             }
         }
+        timings.stop_clock(4);
 
         delete[] cgto_ao_node;
+
+        timings.stop_clock(0);
+        if (pid == 0) cout << timings.print_all_clocks() << endl;
     }
 
     void Loader_qmp2_from_file :: load_cube_coul(double* cube_coul) {
+
+        Ttimer  timings(0);
+        timings.start_new_clock("Timings AoToMo Coulomb Integral: ", 0, 0);
 
         int pid, max_id; //pid is id of current node, max_id number of max. nodes
         MPI_Comm_rank(MPI_COMM_WORLD, &pid); //Grab the current node id
@@ -414,9 +434,13 @@ namespace libqqc {
         if (pid == 0) {
             double* coul_ao_full = new double[p3Dnpts * nao * nao];
             //on master, read in the full coulomb matrix
+            //
+            timings.start_new_clock("-- Loading in: ", 1, 0);
             load_array_from_file(msrc_folder+mfname_coul, dim_ao, coul_ao_full,
                     ' ', 1);
+            timings.stop_clock(1);
 
+            timings.start_new_clock("-- Distribute Batch: ", 4, 0);
             //now distribute the batch part of the AO matrix 
             //
             for (int i = 1; i < max_id; i++){
@@ -428,6 +452,8 @@ namespace libqqc {
                         (npts_to_proc_on_i * nao * nao), 
                         MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
             }
+            timings.stop_clock(4);
+
             // Delete Full array from before
             for (size_t p = 0; p < npts_to_proc; p++){
                 for (size_t a = 0; a < nao; a++){
@@ -444,6 +470,7 @@ namespace libqqc {
                     MPI_COMM_WORLD, &status);
         }
 
+        timings.start_new_clock("-- Transforming Batch: ", 2, 0);
         // Coulomb Integral U_{MO}^P: for each slice P 
         // $U_{MO} = C_{occpuid}^T * (u_{AO}^P * C_{virtuals}
         //
@@ -469,6 +496,10 @@ namespace libqqc {
             }
         }
 
+        timings.stop_clock(2);
+
+        timings.start_new_clock("-- Distribute Batch Results: ", 3, 0);
+
         //Now get all the Data that we didnt calculate on this node
         //
         for (int i = 0; i < max_id; i++){
@@ -487,8 +518,12 @@ namespace libqqc {
                         MPI_DOUBLE, i, MPI_COMM_WORLD);
             }
         }
+        timings.stop_clock(3);
 
         delete[] coul_ao_node;    
+
+        timings.stop_clock(0);
+        if (pid == 0) cout << timings.print_all_clocks() << endl; 
     }
 
 } //namespace libqqc
