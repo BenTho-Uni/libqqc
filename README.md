@@ -119,6 +119,7 @@ make install
 - [ ] update Readme with scalings and results from Justus 2.0
 - [ ] write better maintainable variant code
 - [ ] OpenMP GPU variant implementation
+- [ ] fix max item in loader
 
 
 # Credits

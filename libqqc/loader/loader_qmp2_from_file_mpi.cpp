@@ -300,6 +300,18 @@ namespace libqqc {
         double* cgto_ao_node = new double[npts_to_proc * nao];
         vector<size_t> dim_ao = {p3Dnpts, nao, 1};
 
+        // Setting up a maximum number of items to send/receiv to identify when
+        // batching is needed
+        size_t max_items = 4294967294; //max n-1 represented in 32bit
+        size_t n_items = (npts_to_proc + ((pid != 0) ? remaining_elements : 0)) 
+            * nao; // largest number of items to send
+        if (pid == 0) cout << n_items << endl;
+        size_t n_n_items = n_items / max_items + 1; // number of send/resc batches
+        if (pid == 0) cout << n_n_items << endl;
+        size_t remaining_to_send = 0;
+        size_t npts_to_send = 0;
+        size_t offset_to_send = 0;
+
         if (pid == 0) {
             //on master, read in the full cgto matrix
             double* cgto_ao_full = new double[p3Dnpts * nao];
@@ -316,9 +328,20 @@ namespace libqqc {
                     + ((i != 0) ? 0 : remaining_elements);
                 size_t offset_on_i = i * npts_to_proc_on_i
                     + ((i != 0) ? remaining_elements : 0);
-                MPI_Send(cgto_ao_full + (offset_on_i * nao), 
-                        (npts_to_proc_on_i * nao), 
-                        MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
+            //    MPI_Send(cgto_ao_full + (offset_on_i * nao), 
+             //           (npts_to_proc_on_i * nao), 
+              //          MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
+                for (int iter = 0; iter < n_n_items; iter++){
+                    remaining_to_send = npts_to_proc_on_i % n_n_items;
+                    npts_to_send = npts_to_proc_on_i / n_n_items
+                         + ((iter == 0) ? remaining_to_send : 0);
+                    offset_to_send = iter * npts_to_send 
+                        + ((iter == 0) ? 0 : remaining_to_send); 
+                    MPI_Send(cgto_ao_full 
+                            + ((offset_to_send + offset_on_i) * nao), 
+                            (npts_to_send * nao), 
+                            MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
+                }
             }
             timings.stop_clock(2);
             // Delete Full array from before
@@ -330,8 +353,18 @@ namespace libqqc {
             delete[] cgto_ao_full;
         }
         else {
-            MPI_Recv(cgto_ao_node, (npts_to_proc * nao), MPI_DOUBLE, 0, 0, 
-                    MPI_COMM_WORLD, &status);
+           // MPI_Recv(cgto_ao_node, (npts_to_proc * nao), MPI_DOUBLE, 0, 0, 
+           //         MPI_COMM_WORLD, &status);
+            for (int iter = 0; iter < n_n_items; iter++){
+                remaining_to_send = npts_to_proc % n_n_items;
+                npts_to_send = npts_to_proc / n_n_items
+                     + ((iter == 0) ? remaining_to_send : 0);
+                offset_to_send = iter * npts_to_send 
+                    + ((iter == 0) ? 0 : remaining_to_send); 
+                MPI_Recv(cgto_ao_node + (offset_to_send * nao), 
+                        (npts_to_send * nao), MPI_DOUBLE, 0, 0, 
+                        MPI_COMM_WORLD, &status);
+            }
         }
 
 
@@ -359,16 +392,36 @@ namespace libqqc {
         //
         for (int i = 0; i < max_id; i++){
             if (i == pid){
-                MPI_Bcast(mat_cgto + (offset * nmo), (npts_to_proc * nmo), MPI_DOUBLE, 
-                        pid, MPI_COMM_WORLD);
+                /* MPI_Bcast(mat_cgto + (offset * nmo), (npts_to_proc * nmo), MPI_DOUBLE, */ 
+                /*         pid, MPI_COMM_WORLD); */
+                for (int iter = 0; iter < n_n_items; iter++){
+                    remaining_to_send = npts_to_proc % n_n_items;
+                    npts_to_send = npts_to_proc / n_n_items
+                        + ((iter == 0) ? remaining_to_send : 0);
+                    offset_to_send = iter * npts_to_send 
+                        + ((iter == 0) ? 0 : remaining_to_send); 
+                    MPI_Bcast(mat_cgto + ((offset + offset_to_send) * nmo), 
+                            (npts_to_send * nmo), MPI_DOUBLE, 
+                            pid, MPI_COMM_WORLD);
+                }
             }
             else {
                 size_t npts_to_proc_on_i = p3Dnpts / max_id 
                     + ((i != 0) ? 0 : remaining_elements);
                 size_t offset_on_i = i * npts_to_proc_on_i
                     + ((i != 0) ? remaining_elements : 0);
-                MPI_Bcast(mat_cgto + (offset_on_i * nmo), (npts_to_proc_on_i * nmo), 
-                        MPI_DOUBLE, i, MPI_COMM_WORLD);
+                /* MPI_Bcast(mat_cgto + (offset_on_i * nmo), (npts_to_proc_on_i * nmo), */ 
+                /*         MPI_DOUBLE, i, MPI_COMM_WORLD); */
+                for (int iter = 0; iter < n_n_items; iter++){
+                    remaining_to_send = npts_to_proc_on_i % n_n_items;
+                    npts_to_send = npts_to_proc_on_i / n_n_items
+                        + ((iter == 0) ? remaining_to_send : 0);
+                    offset_to_send = iter * npts_to_send 
+                        + ((iter == 0) ? 0 : remaining_to_send); 
+                    MPI_Bcast(mat_cgto + ((offset_on_i + offset_to_send) * nmo), 
+                            (npts_to_send * nmo), 
+                            MPI_DOUBLE, i, MPI_COMM_WORLD);
+                }
             }
         }
         timings.stop_clock(4);
@@ -431,6 +484,16 @@ namespace libqqc {
         double* coul_ao_node = new double[npts_to_proc * nao * nao];
         vector<size_t> dim_ao = {nao, nao, p3Dnpts};
 
+        // Setting up a maximum number of items to send/receiv to identify when
+        // batching is needed
+        size_t max_items = 4294967294; //max n-1 represented in 32bit
+        size_t n_items = (npts_to_proc + ((pid != 0) ? remaining_elements : 0)) 
+            * nao; // largest number of items to send
+        size_t n_n_items = n_items / max_items + 1; // number of send/resc batches
+        size_t remaining_to_send = 0;
+        size_t npts_to_send = 0;
+        size_t offset_to_send = 0;
+
         if (pid == 0) {
             double* coul_ao_full = new double[p3Dnpts * nao * nao];
             //on master, read in the full coulomb matrix
@@ -448,9 +511,20 @@ namespace libqqc {
                     + ((i != 0) ? 0 : remaining_elements);
                 size_t offset_on_i = i * npts_to_proc_on_i
                     + ((i != 0) ? remaining_elements : 0);
-                MPI_Send(coul_ao_full + (offset_on_i * nao * nao), 
-                        (npts_to_proc_on_i * nao * nao), 
-                        MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
+                /* MPI_Send(coul_ao_full + (offset_on_i * nao * nao), */ 
+                /*         (npts_to_proc_on_i * nao * nao), */ 
+                /*         MPI_DOUBLE, i, 0, MPI_COMM_WORLD); */
+                for (int iter = 0; iter < n_n_items; iter++){
+                    remaining_to_send = npts_to_proc_on_i % n_n_items;
+                    npts_to_send = npts_to_proc_on_i / n_n_items
+                        + ((iter == 0) ? remaining_to_send : 0);
+                    offset_to_send = iter * npts_to_send 
+                        + ((iter == 0) ? 0 : remaining_to_send); 
+                    MPI_Send(coul_ao_full 
+                            + ((offset_on_i + offset_to_send) * nao * nao), 
+                            (npts_to_send * nao * nao), 
+                            MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
+                }
             }
             timings.stop_clock(4);
 
@@ -466,8 +540,18 @@ namespace libqqc {
             delete[] coul_ao_full;
         }
         else {
-            MPI_Recv(coul_ao_node, (npts_to_proc * nao * nao), MPI_DOUBLE, 0, 0, 
-                    MPI_COMM_WORLD, &status);
+            /* MPI_Recv(coul_ao_node, (npts_to_proc * nao * nao), MPI_DOUBLE, 0, 0, */ 
+            /*         MPI_COMM_WORLD, &status); */
+            for (int iter = 0; iter < n_n_items; iter++){
+                remaining_to_send = npts_to_proc % n_n_items;
+                npts_to_send = npts_to_proc / n_n_items
+                    + ((iter == 0) ? remaining_to_send : 0);
+                offset_to_send = iter * npts_to_send 
+                    + ((iter == 0) ? 0 : remaining_to_send); 
+                MPI_Recv(coul_ao_node + (offset_to_send * nao * nao), 
+                        (npts_to_send * nao * nao), MPI_DOUBLE, 0, 0, 
+                        MPI_COMM_WORLD, &status);
+            }
         }
 
         timings.start_new_clock("    -- Transforming Batch: ", 2, 0);
@@ -504,18 +588,40 @@ namespace libqqc {
         //
         for (int i = 0; i < max_id; i++){
             if (i == pid){
-                MPI_Bcast(cube_coul + (offset * nocc * nvirt), 
-                        (npts_to_proc * nocc * nvirt), MPI_DOUBLE, 
-                        pid, MPI_COMM_WORLD);
+                /* MPI_Bcast(cube_coul + (offset * nocc * nvirt), */ 
+                /*         (npts_to_proc * nocc * nvirt), MPI_DOUBLE, */ 
+                /*         pid, MPI_COMM_WORLD); */
+                for (int iter = 0; iter < n_n_items; iter++){
+                    remaining_to_send = npts_to_proc % n_n_items;
+                    npts_to_send = npts_to_proc / n_n_items
+                        + ((iter == 0) ? remaining_to_send : 0);
+                    offset_to_send = iter * npts_to_send 
+                        + ((iter == 0) ? 0 : remaining_to_send); 
+                    MPI_Bcast(cube_coul 
+                            + ((offset +offset_to_send) * nocc * nvirt), 
+                            (npts_to_send * nocc * nvirt), MPI_DOUBLE, 
+                            pid, MPI_COMM_WORLD);
+                }
             }
             else {
                 size_t npts_to_proc_on_i = p3Dnpts / max_id 
                     + ((i != 0) ? 0 : remaining_elements);
                 size_t offset_on_i = i * npts_to_proc_on_i
                     + ((i != 0) ? remaining_elements : 0);
-                MPI_Bcast(cube_coul + (offset_on_i * nocc * nvirt), 
-                        (npts_to_proc_on_i * nocc * nvirt), 
-                        MPI_DOUBLE, i, MPI_COMM_WORLD);
+                /* MPI_Bcast(cube_coul + (offset_on_i * nocc * nvirt), */ 
+                /*         (npts_to_proc_on_i * nocc * nvirt), */ 
+                /*         MPI_DOUBLE, i, MPI_COMM_WORLD); */
+                for (int iter = 0; iter < n_n_items; iter++){
+                    remaining_to_send = npts_to_proc_on_i % n_n_items;
+                    npts_to_send = npts_to_proc_on_i / n_n_items
+                        + ((iter == 0) ? remaining_to_send : 0);
+                    offset_to_send = iter * npts_to_send 
+                        + ((iter == 0) ? 0 : remaining_to_send); 
+                    MPI_Bcast(cube_coul 
+                            + ((offset_on_i + offset_to_send) * nocc * nvirt), 
+                            (npts_to_send * nocc * nvirt), 
+                            MPI_DOUBLE, i, MPI_COMM_WORLD);
+                }
             }
         }
         timings.stop_clock(3);
