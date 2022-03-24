@@ -72,7 +72,14 @@ namespace libqqc {
                 mtimings(timings) {
 #if LIBQQC_WITH_OPENMP
                     mb_openmp = true;
-                    mnthreads = omp_get_num_threads();
+                    // The following omp construct is necessary, outside of 
+                    // a parallel readion the omp num function always
+                    // returns 1
+#pragma omp parallel
+                    {
+#pragma omp single
+                        mnthreads = omp_get_num_threads();
+                    }
 #endif
 
 #if LIBQQC_WITH_MPI
