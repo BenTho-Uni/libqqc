@@ -4,6 +4,8 @@
 # as an argument
 import matplotlib
 import matplotlib.pyplot as plot
+import matplotlib.lines as mlines
+import matplotlib.transforms as mtransforms
 import numpy as np
 import pandas as pd
 import sys
@@ -22,21 +24,34 @@ print("Sanity Check (read_cvs)")
 print(df)
 print(df.dtypes)
 
+
 # Calculate the total number of cores for the y axis, append
 # as last column
 n_columns = df.shape[1]
 df.insert(n_columns, n_columns, df[2] * df[3], True)
 
 # Now we calculate the Speedup and append it again as the last column
-df.insert(n_columns+1, n_columns+1, max(df[4]) / df[4], True)
+df.insert(n_columns+1, n_columns+1, max(df[17]) / df[17], True)
+# print(df)
+
+# plot f(x) = x
+line = np.linspace(0, 48, 100)
+x_line = np.linspace(0, 48, 100)
+
+fig, ax = plot.subplots()
 
 # Now lets scatter
-df.plot.scatter(x=n_columns, y=n_columns+1, title="Speedup vs. Number of Threads")
+df.plot(kind='scatter', x=n_columns, y=n_columns+1, 
+        title="do_qmp2::compute() speedup", grid=True, ax=ax, 
+        label='measured')
+ax.plot(line, x_line, zorder=-1, color='green', label='opt.')
 
 # Now lets set some meta data
-plot.ylabel('Speedup')
-plot.xlabel('Number of Threads')
+plot.ylabel('speedup')
+plot.xlabel('number of threads')
 
-plot.show(block=True)
+plot.legend()
+
+plot.show()
 
 
