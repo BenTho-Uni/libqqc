@@ -152,7 +152,7 @@ namespace libqqc {
 
         //now lets differentiate which node does what
         if (pid == 0){
-            timings.start_new_clock("Gather result fr. nodes : ", 3, 1);
+            timings.start_new_clock("Gather result fr. nodes : ", 4, 1);
             double tmp = 0.0;
             // Get all partial energies from servants
             for (int i = 1; i < max_id; i++){
@@ -160,7 +160,7 @@ namespace libqqc {
                         MPI_COMM_WORLD, &status);
                 energy += tmp;
             }
-            timings.stop_clock(3);
+            timings.stop_clock(4);
 
             out << "* Ground State Energy Correction (eV): " << energy;
 
