@@ -98,6 +98,7 @@ namespace libqqc {
         double energy = 0.0;
 
         timings.start_new_clock("Timing Qmp2_energy::compute : ", 0, 1);
+        timings.start_new_clock("    -- Setting up calculation: ", 1, 2);
         Qmp2_energy  qmp2_energy(
                 p1Dnpts, 
                 p3Dnpts, 
@@ -115,8 +116,11 @@ namespace libqqc {
                 v3Dwts,
                 offset,
                 npts_to_proc);
+        timings.stop_clock(1);
 
+        timings.start_new_clock("    -- qmp2_energy.compute(): ", 2, 2);
         energy = qmp2_energy.compute();
+        timings.stop_clock(2);
 
         timings.stop_clock(0);
 

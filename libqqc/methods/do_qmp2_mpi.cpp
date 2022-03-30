@@ -103,6 +103,7 @@ namespace libqqc {
         double energy = 0.0;
 
         timings.start_new_clock("Timing Qmp2_energy::compute : ", 0, 1);
+        timings.start_new_clock("    -- Setting up calculation: ", 1, 2);
 
         Qmp2_energy  qmp2_energy(
                 p1Dnpts, 
@@ -128,21 +129,22 @@ namespace libqqc {
         size_t npts_to_proc_orig = npts_to_proc;
         int x = remaining_elements % max_id;
         int y = remaining_elements / max_id;
+        timings.stop_clock(1);
 
-        timings.start_new_clock("    -- Calc. Batch 1/2: ", 1, 2);
+        timings.start_new_clock("    -- Calc. Batch 1/2: ", 2, 2);
         offset = pid * npts_to_proc + ((pid < x) ? pid : x) + ((y == 1) ? pid : 0);
         npts_to_proc += ((pid < x) ? (1 + y) : y);
         energy += qmp2_energy.compute();
 
         npts_to_proc = npts_to_proc_orig;
-        timings.stop_clock(1);
+        timings.stop_clock(2);
 
         // Second set of points 
-        timings.start_new_clock("    -- Calc. Batch 2/2: ", 2, 2);
+        timings.start_new_clock("    -- Calc. Batch 2/2: ", 3, 2);
         offset = p3Dnpts - (1 + pid) * npts_to_proc;
         energy += qmp2_energy.compute();
 
-        timings.stop_clock(2);
+        timings.stop_clock(3);
 
         timings.stop_clock(0);
 
