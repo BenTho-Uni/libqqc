@@ -120,6 +120,9 @@ make install
 - [ ] write better maintainable variant code
 - [ ] OpenMP GPU variant implementation
 - [ ] fix max item in loader
+- [ ] fix false sharing
+- [ ] fit max item sharing (bytes?), _on_i ?
+- [ ] rewrite send/recv into bcast
 
 
 # Credits

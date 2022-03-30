@@ -484,9 +484,9 @@ namespace libqqc {
 
         // Setting up a maximum number of items to send/receiv to identify when
         // batching is needed
-        size_t max_items = 4294967294; //max n-1 represented in 32bit
+        size_t max_items = 4294967294/8; //max n-1 represented in 32bit
         size_t n_items = (npts_to_proc + ((pid != 0) ? remaining_elements : 0)) 
-            * nao; // largest number of items to send
+            * nao * nao; // largest number of items to send
         size_t n_n_items = n_items / max_items + 1; // number of send/resc batches
         size_t remaining_to_send = 0;
         size_t npts_to_send = 0;

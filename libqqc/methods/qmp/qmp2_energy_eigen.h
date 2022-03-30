@@ -76,9 +76,9 @@ namespace libqqc {
             //Precalc. Scale all slices of the integral by the weight of 
             //each point
             //gg
-            #pragma omp parallel for schedule(dynamic) default(none)\
+            #pragma omp parallel for schedule(static) default(none)\
                             shared(m3Dnpts, mnocc, mnvirt, mc_c, mv3Dwts)\
-                            collapse(3)
+                            collapse(2)
             for (size_t p = 0; p < m3Dnpts; p++){
                 for (size_t i = 0; i < mnocc; i++){
                     for (size_t a = 0; a < mnvirt; a++){
