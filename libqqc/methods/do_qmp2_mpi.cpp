@@ -60,6 +60,8 @@ namespace libqqc {
 
         // Part the cgto matrix into occupied and virtual spaces
         size_t pos = 0; // Position on virtual orbital space
+#pragma omp parallel for schedule(dynamic) default(none)\
+        private(pos) shared(p3Dnpts, nmo, m_o, mcgto, nocc, nvirt, m_v)
         for (size_t p = 0; p < p3Dnpts; p++){
             for (size_t q = 0; q < nmo; q++){
                 if (q < nocc){

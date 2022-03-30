@@ -56,6 +56,8 @@ namespace libqqc {
         // Part CGTO matrix to m_o and m_v
         //
         size_t pos = 0;
+#pragma omp parallel for schedule(dynamic) default(none)\
+        private(pos) shared(p3Dnpts, nmo, m_o, mcgto, nocc, nvirt, m_v)
         for (size_t p = 0; p < p3Dnpts; p++){
             for (size_t m = 0; m < nmo; m++){
                 if (m < nocc) 
