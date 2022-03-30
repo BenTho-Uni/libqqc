@@ -146,9 +146,9 @@ $(document).ready(function(){initNavTree('qmp2__energy_8h_source.html',''); init
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>            <span class="comment">//Precalc. Scale all slices of the integral by the weight of </span></div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>            <span class="comment">//each point</span></div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>            <span class="comment">//</span></div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="preprocessor">            #pragma omp parallel for schedule(dynamic) default(none)\</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="preprocessor">            #pragma omp parallel for schedule(static) default(none)\</span></div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="preprocessor">                            shared(m3Dnpts, mnocc, mnvirt, mc_c, mv3Dwts)\</span></div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="preprocessor">                            collapse(3)</span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="preprocessor">                            collapse(2)</span></div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>            <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> p = 0; p &lt; m3Dnpts; p++){</div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>                <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; mnocc; i++){</div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>                    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> a = 0; a &lt; mnvirt; a++){</div>
