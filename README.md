@@ -107,6 +107,9 @@ make install
 - [x] remove unneded balast from qmp2 calc, loader, vault
 - [x] write printer
 - [x] write/rewrite test for printer, vault, loader, do_qmp2
+- [x] fit max item sharing (bytes?), _on_i ?
+- [x] fix max item in loader
+- [x] fix false sharing
 
 </details>
 
@@ -119,10 +122,9 @@ make install
 - [ ] update Readme with scalings and results from Justus 2.0
 - [ ] write better maintainable variant code
 - [ ] OpenMP GPU variant implementation
-- [ ] fix max item in loader
-- [ ] fix false sharing
-- [ ] fit max item sharing (bytes?), _on_i ?
 - [ ] rewrite send/recv into bcast
+- [ ] MPI distri for qmp2 constructor scaling loops
+- [ ] move to hdf5?
 
 
 # Credits
