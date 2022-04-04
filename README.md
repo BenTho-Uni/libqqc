@@ -125,6 +125,8 @@ make install
 - [ ] rewrite send/recv into bcast
 - [ ] MPI distri for qmp2 constructor scaling loops
 - [ ] move to hdf5?
+- [ ] redo interface Q-Chem
+- [ ] interface python through pybind11
 
 
 # Credits
