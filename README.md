@@ -111,7 +111,7 @@ mpic++ -fopenmp main_mpi.cpp ../lib/libqqc.a
 ## Usage
 To run a calculation you have to set up three distinct parts. 
 
-1)`Loader_*`
+1) `Loader_*`
 Loaders are method and host program specific and are used to setup the routins
 for the loading of the necessary data. MPI and no-MPI versions differ in these 
 loading methods.
