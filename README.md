@@ -109,8 +109,28 @@ mpic++ -fopenmp main_mpi.cpp ../lib/libqqc.a
 ```
 
 ## Usage
+To run a calculation you have to set up three distinct parts. 
+
+1)`Loader_*`
+Loaders are method and host program specific and are used to setup the routins
+for the loading of the necessary data. MPI and no-MPI versions differ in these 
+loading methods.
+
+2) `Vault_*`
+Vaults are method specific and hold only the necessary data for the calculation.
+They are given the `Loader_*` object through their constructor, from which they
+call the loading methods. Therefore the constructor is specific to the `Loader_*`
+object.
+
+3) `Do_*`
+These objects do the set-up for the calculation and then execute it. Results are 
+printed into a output stream. They are given the `Vault_*` data holder object
+and acces the data through them.
+
+See `/host_example/main.cpp` for an example on how to call the library. 
 
 ## FAQ
+tba
 
 ## ToDo
 
