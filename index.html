@@ -133,14 +133,31 @@ Performance</h2>
 <h2><a class="anchor" id="autotoc_md4"></a>
 Contents</h2>
 <h3><a class="anchor" id="autotoc_md5"></a>
-/data: Example Data and Runs (Justus 2.0)</h3>
+./github/workflows</h3>
+<p >Continious Integration and documentation deployment action workflows for github.</p>
 <h3><a class="anchor" id="autotoc_md6"></a>
-/docs: Doxygen Documentation</h3>
+/data: example data</h3>
+<p >We provide H2O human-readable data which can be used for testing and a script to download larger test systems (H3COH, Anthracene, Porphyrin).</p>
 <h3><a class="anchor" id="autotoc_md7"></a>
-/libqqcs: Library Location</h3>
+/docs: Doxygen documentation</h3>
+<p >Provides the doxygen documentation which is automatically build and deploys through GitHub pages to <a href="https://bentho-uni.github.io/libqqc/">!</a>.</p>
 <h3><a class="anchor" id="autotoc_md8"></a>
-/tests: Testing Suit</h3>
-<h1><a class="anchor" id="autotoc_md9"></a>
+/host_example: example host setup</h3>
+<p >MPI and no-MPI example on how to setup and run calculation.</p>
+<p >Please be aware: For Hybrid (MPI+OpenMP) usage follow the example given and setup the correct <code>MPI_Init_thread</code> call</p>
+<h3><a class="anchor" id="autotoc_md9"></a>
+/libqqcs: library files</h3>
+<p >Location of library header and body files.</p>
+<h3><a class="anchor" id="autotoc_md10"></a>
+/runs: run and data process scripts</h3>
+<p >Scripts used to run the library and process the data. Runs were done on <a href="https://wiki.bwhpc.de/e/Category:BwForCluster_JUSTUS_2">BwForCluster JUSTUS 2</a>.</p>
+<h3><a class="anchor" id="autotoc_md11"></a>
+/templates: template header and body files</h3>
+<p >Template files to speed up development.</p>
+<h3><a class="anchor" id="autotoc_md12"></a>
+/tests: testing suit</h3>
+<p >Testing suit set-up per module for both OpenMP, MPI and MPI+OpenMP versions.</p>
+<h1><a class="anchor" id="autotoc_md13"></a>
 Installation</h1>
 <p >Packages needed</p><ul>
 <li>for building <code>cmake, gcc</code></li>
@@ -158,15 +175,17 @@ Installation</h1>
 </div><!-- fragment --></li>
 <li><code>wGPU</code> : enables GPU versions of calculations, NOT SUPPORTED YET</li>
 </ul>
-<p >after <code>cofigure</code>, change to build directory, and compile with <code>make</code> </p><div class="fragment"><div class="line">cd build</div>
+<p >after <code>configure</code>, change to build directory, and compile with <code>make</code> </p><div class="fragment"><div class="line">cd build</div>
 <div class="line">make</div>
 <div class="line">make install</div>
 </div><!-- fragment --><p ><code>make install</code> installs library and exe into upper <code>/lib</code> and <code>/exe</code> folder.</p>
-<h1><a class="anchor" id="autotoc_md10"></a>
+<p >You then can compile the host program, for example with <code>/host_example/</code> </p><div class="fragment"><div class="line">gcc -fopenmp main.cpp ../lib/libqqc.a</div>
+</div><!-- fragment --><p> or </p><div class="fragment"><div class="line">mpic++ -fopenmp main_mpi.cpp ../lib/libqqc.a</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md14"></a>
 Usage</h1>
-<h1><a class="anchor" id="autotoc_md11"></a>
+<h1><a class="anchor" id="autotoc_md15"></a>
 FAQ</h1>
-<h1><a class="anchor" id="autotoc_md12"></a>
+<h1><a class="anchor" id="autotoc_md16"></a>
 ToDo</h1>
 <p ><details>
  <summary> finished ToDos</summary></details>
@@ -203,7 +222,7 @@ ToDo</h1>
 <p ><details>
 </details>
 </p>
-<h2><a class="anchor" id="autotoc_md13"></a>
+<h2><a class="anchor" id="autotoc_md17"></a>
 Notes from MPI+Hybrid course</h2>
 <p ><details>
 </p><ul>
@@ -230,7 +249,7 @@ Notes from MPI+Hybrid course</h2>
 <p ><details>
 </details>
 </p>
-<h1><a class="anchor" id="autotoc_md14"></a>
+<h1><a class="anchor" id="autotoc_md18"></a>
 Credits</h1>
 <p ><details>
  The <a href="https://www.doxygen.nl/index.html">Doxygen</a> documentation uses the <a href="https://jothepro.github.io/doxygen-awesome-css/index.html">doxygen-awesome</a> theme.</details>

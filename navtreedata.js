@@ -29,19 +29,23 @@ var NAVTREE =
     [ "Overview", "index.html#autotoc_md2", [
       [ "Performance", "index.html#autotoc_md3", null ],
       [ "Contents", "index.html#autotoc_md4", [
-        [ "/data: Example Data and Runs (Justus 2.0)", "index.html#autotoc_md5", null ],
-        [ "/docs: Doxygen Documentation", "index.html#autotoc_md6", null ],
-        [ "/libqqcs: Library Location", "index.html#autotoc_md7", null ],
-        [ "/tests: Testing Suit", "index.html#autotoc_md8", null ]
+        [ "./github/workflows", "index.html#autotoc_md5", null ],
+        [ "/data: example data", "index.html#autotoc_md6", null ],
+        [ "/docs: Doxygen documentation", "index.html#autotoc_md7", null ],
+        [ "/host_example: example host setup", "index.html#autotoc_md8", null ],
+        [ "/libqqcs: library files", "index.html#autotoc_md9", null ],
+        [ "/runs: run and data process scripts", "index.html#autotoc_md10", null ],
+        [ "/templates: template header and body files", "index.html#autotoc_md11", null ],
+        [ "/tests: testing suit", "index.html#autotoc_md12", null ]
       ] ]
     ] ],
-    [ "Installation", "index.html#autotoc_md9", null ],
-    [ "Usage", "index.html#autotoc_md10", null ],
-    [ "FAQ", "index.html#autotoc_md11", null ],
-    [ "ToDo", "index.html#autotoc_md12", [
-      [ "Notes from MPI+Hybrid course", "index.html#autotoc_md13", null ]
+    [ "Installation", "index.html#autotoc_md13", null ],
+    [ "Usage", "index.html#autotoc_md14", null ],
+    [ "FAQ", "index.html#autotoc_md15", null ],
+    [ "ToDo", "index.html#autotoc_md16", [
+      [ "Notes from MPI+Hybrid course", "index.html#autotoc_md17", null ]
     ] ],
-    [ "Credits", "index.html#autotoc_md14", null ],
+    [ "Credits", "index.html#autotoc_md18", null ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
