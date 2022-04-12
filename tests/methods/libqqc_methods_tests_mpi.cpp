@@ -22,10 +22,24 @@
 using namespace libqqc;
 using namespace std;
 
-int main (){
-
-    MPI_Init (NULL, NULL);
+int main (int argc, char *argv[]){
     ostringstream out; //Stringstream for testing outputs
+
+#ifdef _OPENMP
+    // To savely use MPI with OpenMP we need to check if the supported
+    // threading is provided by the system
+    // MPI_THREAD_FUNNELD allows multithreaded MPI if only the master calls
+    // MPI function which works for us
+    int provided = 0; // check threading
+    MPI_Init_thread(&argc, &argv, MPI_THREAD_FUNNELED, &provided);
+    if (provided < MPI_THREAD_FUNNELED){
+        printf("The supported threading is not sufficient.\
+                (less than MPI_THREAD_FUNNELED)\n");
+        MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
+    }
+#else
+    MPI_Init(&argc, &argv);
+#endif
 
     cout << "Performing tests for libqqc/methods ..." << endl;
 

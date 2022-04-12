@@ -46,3 +46,6 @@ exe/*
 lib/*
 
 *.swp
+
+# runs
+run*

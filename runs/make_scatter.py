@@ -31,26 +31,48 @@ n_columns = df.shape[1]
 df.insert(n_columns, n_columns, df[2] * df[3], True)
 
 # Now we calculate the Speedup and append it again as the last column
-df.insert(n_columns+1, n_columns+1, max(df[17]) / df[17], True)
-# print(df)
+df.insert(n_columns+1, n_columns+1, max(df[18]+df[19]) / (df[18]+df[19]), True)
+#print(df)
 
 # plot f(x) = x
-line = np.linspace(0, 48, 100)
-x_line = np.linspace(0, 48, 100)
+line = np.linspace(0, 1000, 100)
+x_line = np.linspace(0, 1000, 100)
 
 fig, ax = plot.subplots()
+
+def thr2node(x):
+    x = x / 48
+    return x
+
+def node2thr(x):
+    x = x * 48
+    return x
+
+sec_ax = ax.secondary_xaxis('top', functions=(thr2node, node2thr))
+sec_ax.set_xlabel('number of nodes')
 
 # Now lets scatter
 df.plot(kind='scatter', x=n_columns, y=n_columns+1, 
         title="do_qmp2::compute() speedup", grid=True, ax=ax, 
         label='measured')
 ax.plot(line, x_line, zorder=-1, color='green', label='opt.')
-
-# Now lets set some meta data
 plot.ylabel('speedup')
 plot.xlabel('number of threads')
-
 plot.legend()
+
+X_detail = np.linspace(0,48,100)
+Y_detail = np.linspace(0,48,100)
+sub_axes = plot.axes([.6,.2,.25,.25])
+sub_axes.set_xlim([0,50])
+sub_axes.set_ylim([0,50])
+sub_axes.plot(X_detail, Y_detail, c='green')
+df.plot(kind='scatter', x=n_columns, y=n_columns+1, title="one node scaling", grid=True, ax=sub_axes)
+plot.ylabel('')
+plot.xlabel('')
+
+
+# Now lets set some meta data
+
 
 plot.show()
 

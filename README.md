@@ -111,6 +111,8 @@ make install
 - [x] fix max item in loader
 - [x] fix false sharing
 
+### Notes from MPI+Hybrid course
+- [ ] set MPI_init to MPI_init_thread with MPI_THREAD_FUNNELED and argcs
 </details>
 
 - [ ] add missing badges
@@ -127,7 +129,6 @@ make install
 - [ ] move to hdf5?
 - [ ] redo interface Q-Chem
 - [ ] interface python through pybind11
-
 
 # Credits
 
