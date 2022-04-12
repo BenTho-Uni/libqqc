@@ -38,8 +38,10 @@ var NAVTREE =
     [ "Installation", "index.html#autotoc_md9", null ],
     [ "Usage", "index.html#autotoc_md10", null ],
     [ "FAQ", "index.html#autotoc_md11", null ],
-    [ "ToDo", "index.html#autotoc_md12", null ],
-    [ "Credits", "index.html#autotoc_md13", null ],
+    [ "ToDo", "index.html#autotoc_md12", [
+      [ "Notes from MPI+Hybrid course", "index.html#autotoc_md13", null ]
+    ] ],
+    [ "Credits", "index.html#autotoc_md14", null ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
