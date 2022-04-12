@@ -35,13 +35,35 @@ libqqc is a library for high performance evaluation of quantum chemistry methods
 
 ### Contents
 
-#### /data: Example Data and Runs (Justus 2.0)
+#### ./github/workflows
+Continious Integration and documentation deployment action workflows for github.
 
-#### /docs: Doxygen Documentation
+#### /data: example data
+We provide H2O human-readable data which can be used for testing and a script 
+to download larger test systems (H3COH, Anthracene, Porphyrin).
 
-#### /libqqcs: Library Location
+#### /docs: Doxygen documentation
+Provides the doxygen documentation which is automatically build and deploys
+through GitHub pages to [!](https://bentho-uni.github.io/libqqc/).
 
-#### /tests: Testing Suit 
+#### /host_example: example host setup
+MPI and no-MPI example on how to setup and run calculation. 
+
+Please be aware: For Hybrid (MPI+OpenMP) usage follow the example given and 
+setup the correct `MPI_Init_thread` call
+
+#### /libqqcs: library files
+Location of library header and body files. 
+
+#### /runs: run and data process scripts
+Scripts used to run the library and process the data. Runs were done on 
+[BwForCluster JUSTUS 2](https://wiki.bwhpc.de/e/Category:BwForCluster_JUSTUS_2).
+
+#### /templates: template header and body files
+Template files to speed up development.
+
+#### /tests: testing suit
+Testing suit set-up per module for both OpenMP, MPI and MPI+OpenMP versions.
 
 ## Installation
 
@@ -68,7 +90,7 @@ EIGEN3_INCLUDE_DIR=~/bin/eigen-3.4.0/Eigen/
 ```
 - `wGPU` : enables GPU versions of calculations, NOT SUPPORTED YET
 
-after `cofigure`, change to build directory, and compile with `make`
+after `configure`, change to build directory, and compile with `make`
 ```
 cd build
 make
@@ -76,6 +98,15 @@ make install
 ```
 
 `make install` installs library and exe into upper `/lib` and `/exe` folder.
+
+You then can compile the host program, for example with `/host_example/`
+```
+gcc -fopenmp main.cpp ../lib/libqqc.a
+```
+or 
+```
+mpic++ -fopenmp main_mpi.cpp ../lib/libqqc.a
+```
 
 ## Usage
 
