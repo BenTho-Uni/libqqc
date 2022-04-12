@@ -183,8 +183,14 @@ Installation</h1>
 </div><!-- fragment --><p> or </p><div class="fragment"><div class="line">mpic++ -fopenmp main_mpi.cpp ../lib/libqqc.a</div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md14"></a>
 Usage</h1>
+<p >To run a calculation you have to set up three distinct parts.</p>
+<p >1)<code>Loader_*</code> Loaders are method and host program specific and are used to setup the routins for the loading of the necessary data. MPI and no-MPI versions differ in these loading methods.</p>
+<p >2) <code>Vault_*</code> Vaults are method specific and hold only the necessary data for the calculation. They are given the <code>Loader_*</code> object through their constructor, from which they call the loading methods. Therefore the constructor is specific to the <code>Loader_*</code> object.</p>
+<p >3) <code>Do_*</code> These objects do the set-up for the calculation and then execute it. Results are printed into a output stream. They are given the <code>Vault_*</code> data holder object and acces the data through them.</p>
+<p >See <code>/host_example/main.cpp</code> for an example on how to call the library.</p>
 <h1><a class="anchor" id="autotoc_md15"></a>
 FAQ</h1>
+<p >tba</p>
 <h1><a class="anchor" id="autotoc_md16"></a>
 ToDo</h1>
 <p ><details>
