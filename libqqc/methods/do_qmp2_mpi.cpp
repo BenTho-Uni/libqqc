@@ -58,6 +58,31 @@ namespace libqqc {
                 vf[p] = mf[p * nmo + p];
         }
 
+        // Simple sparsity check
+        /* size_t nzero_I = 0; */
+        /* size_t ntotal_I = 0; */
+        /* size_t nzero_O = 0; */
+        /* size_t ntotal_O = 0; */
+        /* for (size_t p = 0; p < p3Dnpts; p++){ */
+        /*     for (int i = 0; i < nocc; i++){ */
+        /*         for (int a = 0; a < nvirt; a++){ */
+        /*             if (abs(c_c[p * nocc * nvirt + i * nvirt + a]) <= 10e-14) nzero_I++; */
+        /*             ntotal_I++; */
+        /*         } */
+        /*     } */
+        /*     for (int q = 0; q < nmo; q++){ */
+        /*         if (abs(mcgto[p * nmo + q]) <= 10e-14) nzero_O++; */
+        /*         ntotal_O++; */
+        /*     } */
+        /* } */
+        /* if (pid == 0) { */
+        /*     cout << "Integral total: " << ntotal_I << " zeros: " << nzero_I */ 
+        /*         << " equals " << (double)(nzero_I)/ntotal_I*100 << "%" << endl; */ 
+        /*     cout << "Orbital total: " << ntotal_O << " zeros: " << nzero_O */ 
+        /*         << " equals " << (double)(nzero_O)/ntotal_O*100 << "%" << endl; */ 
+        /* } */
+
+
         // Part the cgto matrix into occupied and virtual spaces
         size_t pos = 0; // Position on virtual orbital space
 #pragma omp parallel for schedule(dynamic) default(none)\

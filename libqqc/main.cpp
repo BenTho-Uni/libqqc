@@ -11,7 +11,7 @@ using namespace std;
 namespace libqqc {
     int main (int argc, char **argv[]){
 
-        cout << "Main reporting in" << endl;
+        cout << "Libqqc Main reporting in" << endl;
 
         ostringstream out;
         out.str("");

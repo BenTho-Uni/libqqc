@@ -28,7 +28,8 @@
 
 # Executables
 *.exe
-*.out
+#*.out
+host_example/*.out
 *.err
 *.app
 
@@ -48,4 +49,4 @@ lib/*
 *.swp
 
 # runs
-run*
+runs/run*
