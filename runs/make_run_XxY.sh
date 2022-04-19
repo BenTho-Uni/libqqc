@@ -20,7 +20,7 @@ fi
 echo '#!/bin/bash'
 echo '#SBATCH -J libqqc_hybrid_'$NNODES'x'$NCORES
 echo '#SBATCH -n'$NNODES' --cpus-per-task='$NCORES '-t12:00:00'
-echo '#SBATCH --mem=100G'
+echo '#SBATCH --mem=200G'
 echo '#SBATCH --job-name=libqqc_hybrid_'$NNODES'x'$NCORES
 echo '#SBATCH --output=libqqc_hybrid_'$NNODES'x'$NCORES'_por-%j.out'
 echo '#SBATCH --error=libqqc_hybrid_'$NNODES'x'$NCORES'_por-%j.err'

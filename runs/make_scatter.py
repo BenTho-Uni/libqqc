@@ -1,44 +1,54 @@
-# This script makes scatter plots from a cvs
-# Please use python3, and either pipe in 
-# stdin or save the csv and supply the filename
-# as an argument
 import matplotlib
-import matplotlib.pyplot as plot
-import matplotlib.lines as mlines
-import matplotlib.transforms as mtransforms
-import numpy as np
+import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
+import seaborn as sns
 import sys
 
-# Lets check if an argument is given, if not, assume
-# that we are piping an stdin into the script
-if len(sys.argv) == 1:
-    f_input = sys.stdin
-else:
-    f_input = sys.argv[1]
+# First we create an empty list for the dataframes
+df_list = []
 
-# Read in the data as a pandas dataframe
-df = pd.read_csv(f_input, sep=',', header=None)
-# sanity check
-print("Sanity Check (read_cvs)")
-print(df)
-print(df.dtypes)
+# Then we loop over all system arguments
+for x in range(0, len(sys.argv)):
+    f_input = sys.argv[x] # set file input name
+    print(f_input)
+    # on first iteration (no input files)
+    if x == 0:
+        # take sys stdin as input if no input given
+        if len(sys.argv) == 1:
+            f_input = sys.stdin
+        # otherwise skip first iteration
+        else:
+            continue
+    # read in csv input file 
+    df = pd.read_csv(f_input, sep=',', header=None)
+    # Calculate the total number of cores for the y axis, append
+    # as last column
+    n_columns = df.shape[1]
+    df.insert(n_columns, n_columns, df[2] * df[3], True)
 
+    # Now we calculate the Speedup and append it again as the last column
+    df.insert(n_columns+1, n_columns+1, max(df[19]+df[20]) / (df[19]+df[20]), True)
+    # Make another column with the file input name
+    df[n_columns + 2] = f_input
+    # Then append a dataframe consisting of number of cores, speedup and filename 
+    # to the dataframe list
+    df_list.append(df[[n_columns, n_columns + 1, n_columns + 2]])
 
-# Calculate the total number of cores for the y axis, append
-# as last column
-n_columns = df.shape[1]
-df.insert(n_columns, n_columns, df[2] * df[3], True)
-
-# Now we calculate the Speedup and append it again as the last column
-df.insert(n_columns+1, n_columns+1, max(df[18]+df[19]) / (df[18]+df[19]), True)
-#print(df)
+# Concat the dataframe list and reset the index
+df_all = pd.concat(df_list).reset_index()
+# We now have a dataframe of all points
+# Let's clean it up. We replace inf and -inf with NaN
+df_all.replace([np.inf, -np.inf], np.nan, inplace=True)
+# end drop all rows with NA
+df_all = df_all.dropna()
 
 # plot f(x) = x
 line = np.linspace(0, 1000, 100)
 x_line = np.linspace(0, 1000, 100)
 
-fig, ax = plot.subplots()
+# Setting up plots and subplots
+fig, ax = plt.subplots(figsize = (12,8))
 
 def thr2node(x):
     x = x / 48
@@ -48,32 +58,37 @@ def node2thr(x):
     x = x * 48
     return x
 
+# Secondary upper axes depixting the number of nodes
 sec_ax = ax.secondary_xaxis('top', functions=(thr2node, node2thr))
 sec_ax.set_xlabel('number of nodes')
 
-# Now lets scatter
-df.plot(kind='scatter', x=n_columns, y=n_columns+1, 
-        title="do_qmp2::compute() speedup", grid=True, ax=ax, 
-        label='measured')
-ax.plot(line, x_line, zorder=-1, color='green', label='opt.')
-plot.ylabel('speedup')
-plot.xlabel('number of threads')
-plot.legend()
+# Using sns to scatterplot the data grouped by one column with the names
+sns.scatterplot(x = 23, y = 24, hue = 25, data = df_all)
+# Plotting the linear function
+ax.plot(line, x_line, zorder=-1, color='green', label='optimal')
 
+# Adding some labeling
+plt.title('Parallel Scaling of XYZ')
+plt.ylabel('speedup')
+plt.xlabel('number of threads')
+#plt.grid()
+plt.legend()
+
+# Linear line for the smaller plot
 X_detail = np.linspace(0,48,100)
 Y_detail = np.linspace(0,48,100)
-sub_axes = plot.axes([.6,.2,.25,.25])
+
+# Setting up the smaller plot
+sub_axes = plt.axes([.17,.45,.23,.23])
 sub_axes.set_xlim([0,50])
 sub_axes.set_ylim([0,50])
+# Plotting linear 
 sub_axes.plot(X_detail, Y_detail, c='green')
-df.plot(kind='scatter', x=n_columns, y=n_columns+1, title="one node scaling", grid=True, ax=sub_axes)
-plot.ylabel('')
-plot.xlabel('')
+# Plotting data again
+sns.scatterplot(x = 23, y = 24, hue = 25, data = df_all, legend=None)
+# Disabling labels
+plt.ylabel(None)
+plt.xlabel(None)
 
-
-# Now lets set some meta data
-
-
-plot.show()
-
+plt.show()
 
