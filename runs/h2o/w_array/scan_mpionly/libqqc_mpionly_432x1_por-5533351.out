@@ -1,0 +1,79 @@
+/home/hd/hd_hd/hd_tb381/workspace/libqqc/runs/scan_mpionly
+n1420
+Fr 15. Apr 15:09:29 CEST 2022
+#!/bin/bash
+#SBATCH -J libqqc_mpionly_432x1
+#SBATCH -n432 --cpus-per-task=1 -t12:00:00
+#SBATCH --mem=200G
+#SBATCH --job-name=libqqc_mpionly_432x1
+#SBATCH --output=libqqc_mpionly_432x1_por-%j.out
+#SBATCH --error=libqqc_mpionly_432x1_por-%j.err
+pwd; hostname; date
+cat run_432x1.sh
+module load compiler/gnu
+module load mpi/openmpi
+cd ../../host_example/.
+mpic++ -fopenmp -O3 -ffast-math -march=native main_mpi.cpp ../lib/libqqc.a -o 432x1.out
+OMP_NUM_THREADS=1 srun --cpus-per-task=$OMP_NUM_THREADS ./432x1.out
+rm 432x1.out
+Timing Loader_qmp2_from_file:: loader :CPU: 0 ms ; Wall: 0 ms
+Timings AoToMo CGTO: CPU: 144 ms ; Wall: 200 ms
+    -- Loading in: CPU: 11 ms ; Wall: 11 ms
+    -- Distribute Batch: CPU: 58 ms ; Wall: 112 ms
+    -- Tranforming Batch: CPU: 0 ms ; Wall: 0 ms
+    -- Distribute Batch Results: CPU: 70 ms ; Wall: 70 ms
+
+Timings AoToMo Coulomb Integral: CPU: 162 ms ; Wall: 164 ms
+    -- Loading in: CPU: 144 ms ; Wall: 144 ms
+    -- Distribute Batch: CPU: 1 ms ; Wall: 1 ms
+    -- Transforming Batch: CPU: 1 ms ; Wall: 1 ms
+    -- Distribute Batch Results: CPU: 11 ms ; Wall: 11 ms
+
+Timing Vault_qmp2:: vault : CPU: 315 ms ; Wall: 399 ms
+Timing Do_qmp2:: qmp2 : CPU: 9 ms ; Wall: 9 ms
+ ______________________________________________________________________________ 
+|                                                                              |
+|                  ** Quadrature Calculation through libqqc **                 |
+|                                                                              |
+|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|
+| * Author(s): Benjamin Thomitzni                                              |
+|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|
+|                               Programm Details                               |
+|------------------------------------------------------------------------------|
+| * library vers.      v0.1                                                    |
+|     -- Loader vers.  v0.1                                                    |
+|     -- Vault vers.   v0.1                                                    |
+|     -- Do_qmp2 vers. v0.1                                                    |
+|------------------------------------------------------------------------------|
+| * OpenMP enabled                                                             |
+|     -- threads:   1                                                          |
+| * MPI enabled                                                                |
+|     -- processes: 432                                                        |
+|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|
+|                              Calculation Details                             |
+|------------------------------------------------------------------------------|
+| * Method:             Q-MP(2)                                                |
+|------------------------------------------------------------------------------|
+| * grid points (3D):   2280                                                   |
+| * grid points (1D):   4                                                      |
+|------------------------------------------------------------------------------|
+| * atomic orbitals:    13                                                     |
+| * molecular orbitals: 13                                                     |
+|     -- occupied:      5                                                      |
+|     -- virtual:       8                                                      |
+|------------------------------------------------------------------------------|
+|                                    Results                                   |
+|------------------------------------------------------------------------------|
+| * Ground State Energy Correction (eV): -0.124222                             |
+|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|
+|                              Calculation Timings                             |
+|------------------------------------------------------------------------------|
+| Timing Qmp2_energy::compute : CPU: 2 ms ; Wall: 2 ms                         |
+|     -- Setting up calculation: CPU: 0 ms ; Wall: 0 ms                        |
+|     -- Calc. Batch 1/2: CPU: 0 ms ; Wall: 0 ms                               |
+|     -- Calc. Batch 2/2: CPU: 2 ms ; Wall: 1 ms                               |
+| Gather result fr. nodes : CPU: 7 ms ; Wall: 7 ms                             |
+|------------------------------------------------------------------------------|
+|             if no timings are printed, choose higher print level             |
+|______________________________________________________________________________|
+

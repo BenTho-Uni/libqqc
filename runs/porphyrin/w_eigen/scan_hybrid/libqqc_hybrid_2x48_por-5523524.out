@@ -1,0 +1,64 @@
+/home/hd/hd_hd/hd_tb381/workspace/libqqc/runs/w_eigen/scan_hybrid
+n1620
+Do 7. Apr 10:47:55 CEST 2022
+Timing Loader_qmp2_from_file:: loader :CPU: 0 ms ; Wall: 0 ms
+Timings AoToMo CGTO: CPU: 22866 ms ; Wall: 2748 ms
+    -- Loading in: CPU: 2140 ms ; Wall: 2238 ms
+    -- Distribute Batch: CPU: 6 ms ; Wall: 6 ms
+    -- Tranforming Batch: CPU: 20135 ms ; Wall: 421 ms
+    -- Distribute Batch Results: CPU: 275 ms ; Wall: 21 ms
+
+Timings AoToMo Coulomb Integral: CPU: 9124046 ms ; Wall: 665525 ms
+    -- Loading in: CPU: 478775 ms ; Wall: 479530 ms
+    -- Distribute Batch: CPU: 1386 ms ; Wall: 1389 ms
+    -- Transforming Batch: CPU: 8639937 ms ; Wall: 180916 ms
+    -- Distribute Batch Results: CPU: 1802 ms ; Wall: 1534 ms
+
+Timing Vault_qmp2:: vault : CPU: 9149963 ms ; Wall: 668618 ms
+Timing Do_qmp2:: qmp2 : CPU: 22626447 ms ; Wall: 475810 ms
+ ______________________________________________________________________________ 
+|                                                                              |
+|                  ** Quadrature Calculation through libqqc **                 |
+|                                                                              |
+|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|
+| * Author(s): Benjamin Thomitzni                                              |
+|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|
+|                               Programm Details                               |
+|------------------------------------------------------------------------------|
+| * library vers.      v0.1                                                    |
+|     -- Loader vers.  v0.1                                                    |
+|     -- Vault vers.   v0.1                                                    |
+|     -- Do_qmp2 vers. v0.1                                                    |
+|------------------------------------------------------------------------------|
+| * OpenMP enabled                                                             |
+|     -- threads:   48                                                         |
+| * MPI enabled                                                                |
+|     -- processes: 2                                                          |
+|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|
+|                              Calculation Details                             |
+|------------------------------------------------------------------------------|
+| * Method:             Q-MP(2)                                                |
+|------------------------------------------------------------------------------|
+| * grid points (3D):   28880                                                  |
+| * grid points (1D):   4                                                      |
+|------------------------------------------------------------------------------|
+| * atomic orbitals:    244                                                    |
+| * molecular orbitals: 244                                                    |
+|     -- occupied:      81                                                     |
+|     -- virtual:       163                                                    |
+|------------------------------------------------------------------------------|
+|                                    Results                                   |
+|------------------------------------------------------------------------------|
+| * Ground State Energy Correction (eV): -2.27356                              |
+|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|
+|                              Calculation Timings                             |
+|------------------------------------------------------------------------------|
+| Timing Qmp2_energy::compute : CPU: 22623680 ms ; Wall: 473759 ms             |
+|     -- Setting up calculation: CPU: 3825 ms ; Wall: 84 ms                    |
+|     -- Calc. Batch 1/2: CPU: 2827089 ms ; Wall: 59232 ms                     |
+|     -- Calc. Batch 2/2: CPU: 19792766 ms ; Wall: 414442 ms                   |
+| Gather result fr. nodes : CPU: 2273 ms ; Wall: 2023 ms                       |
+|------------------------------------------------------------------------------|
+|             if no timings are printed, choose higher print level             |
+|______________________________________________________________________________|
+

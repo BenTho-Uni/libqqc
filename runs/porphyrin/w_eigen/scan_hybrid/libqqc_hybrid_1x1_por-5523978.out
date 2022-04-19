@@ -1,0 +1,31 @@
+/home/hd/hd_hd/hd_tb381/workspace/libqqc/runs/w_eigen/scan_hybrid
+n1813
+Do 7. Apr 11:15:55 CEST 2022
+#!/bin/bash
+#SBATCH -J libqqc_hybrid_1x1
+#SBATCH -n1 --cpus-per-task=1 -t12:00:00
+#SBATCH --mem=200G
+#SBATCH --job-name=libqqc_hybrid_1x1
+#SBATCH --output=libqqc_hybrid_1x1_por-%j.out
+#SBATCH --error=libqqc_hybrid_1x1_por-%j.err
+pwd; hostname; date
+cat run_1x1.sh
+module load compiler/gnu
+module load mpi/openmpi
+cd ../../../host_example/.
+mpic++ -fopenmp -O3 -ffast-math -march=native main_mpi.cpp ../lib/libqqc.a -o 1x1.out
+OMP_NUM_THREADS=1 srun --cpus-per-task=$OMP_NUM_THREADS ./1x1.out
+rm 1x1.out
+Timing Loader_qmp2_from_file:: loader :CPU: 0 ms ; Wall: 0 ms
+Timings AoToMo CGTO: CPU: 4194 ms ; Wall: 4275 ms
+    -- Loading in: CPU: 2104 ms ; Wall: 2181 ms
+    -- Distribute Batch: CPU: 0 ms ; Wall: 0 ms
+    -- Tranforming Batch: CPU: 2026 ms ; Wall: 2028 ms
+    -- Distribute Batch Results: CPU: 0 ms ; Wall: 0 ms
+
+Timings AoToMo Coulomb Integral: CPU: 12176147 ms ; Wall: 12191997 ms
+    -- Loading in: CPU: 479759 ms ; Wall: 480574 ms
+    -- Distribute Batch: CPU: 0 ms ; Wall: 0 ms
+    -- Transforming Batch: CPU: 11692210 ms ; Wall: 11707215 ms
+    -- Distribute Batch Results: CPU: 0 ms ; Wall: 16 ms
+
