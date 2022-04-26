@@ -108,6 +108,8 @@ or
 mpic++ -fopenmp main_mpi.cpp ../lib/libqqc.a
 ```
 
+The library has been tested with GNU gcc/g++ 10.1.0
+
 ## Usage
 To run a calculation you have to set up three distinct parts. 
 

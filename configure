@@ -13,7 +13,7 @@ Help()
     #Display Help
     echo "Configuration script for cmake of libqqc."
     echo " "
-    echo "Syntax: complete [-h] [gcc|g++|mpic++] [debug|release] [wGPU|wEigen]"
+    echo "Syntax: complete [-h] [gcc|g++] [debug|release] [wGPU|wEigen]"
     echo ""
     echo "options:"
     echo "h         print help"
@@ -113,7 +113,7 @@ fi
 mkdir build
 cd build
 
-CC="$CC0" CXX="$CCX0" cmake -D CMAKE_BUILD_TYPE="$BUILD_TYPE" \
+CC="$CC0" CXX="$CXX0" cmake -D CMAKE_BUILD_TYPE="$BUILD_TYPE" \
     -D LIBQQC_OPENMP=$WITH_OPENMP \
     -D LIBQQC_EIGEN=$WITH_EIGEN \
     -D LIBQQC_GPU=$WITH_GPU \
