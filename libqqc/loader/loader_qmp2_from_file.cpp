@@ -64,8 +64,8 @@ namespace libqqc {
     
     }
 
-    void Loader_qmp2_from_file :: load_grid(string filename_pts, 
-            string filename_wts, Grid &grid) {
+    void Loader_qmp2_from_file :: load_grid_1D(string filename_pts, 
+            string filename_wts, Grid_1D<vector<double>, size_t> &grid) {
 
         // Loading in the points
         vector<size_t> dim_pts = load_dim_from_file(msrc_folder+filename_pts, ' ', 1);
@@ -82,8 +82,30 @@ namespace libqqc {
         double wts[dim_wts.at(0) * dim_wts.at(1) * dim_wts.at(2)];
         load_array_from_file(msrc_folder+filename_wts, dim_wts, wts, ' ', 1);
 
-        grid.set_grid(dim_pts.at(1), dim_pts.at(0), pts, wts);
+        grid.set_grid(pts, dim_pts.at(0), );
     
+    }
+
+    void Loader_qmp2_from_file::load_grid_3D(string filename_pts,
+        string filename_wts, Grid_3D<vector<double>, size_t>& grid) {
+
+        // Loading in the points
+        vector<size_t> dim_pts = load_dim_from_file(msrc_folder + filename_pts, ' ', 1);
+        double pts[dim_pts.at(0) * dim_pts.at(1) * dim_pts.at(2)];
+        load_array_from_file(msrc_folder + filename_pts, dim_pts, pts, ' ', 1);
+
+        // Loading in the weights
+        vector<size_t> dim_wts = load_dim_from_file(msrc_folder + filename_wts, ' ', 1);
+
+        // Check if number of points are the same
+        if (dim_pts.at(1) != dim_wts.at(1))
+            throw invalid_argument("Number of points of pts and wts differ.");
+
+        double wts[dim_wts.at(0) * dim_wts.at(1) * dim_wts.at(2)];
+        load_array_from_file(msrc_folder + filename_wts, dim_wts, wts, ' ', 1);
+
+        grid.set_grid(pts, dim_pts.at(0), andandreasdim_pts.at(1));
+
     }
 
     void Loader_qmp2_from_file :: load_mat_fock(double* mat_fock) {
@@ -157,7 +179,7 @@ namespace libqqc {
 
         size_t nmo = nocc + nvirt;
 
-        Grid p3Dgrid;
+        Grid_3D<vector<double>, size_t> p3Dgrid;
         load_3Dgrid(p3Dgrid);
         size_t npts = p3Dgrid.get_mnpts();
 
@@ -212,7 +234,7 @@ namespace libqqc {
 
         size_t nmo = nocc + nvirt;
 
-        Grid p3Dgrid;
+        Grid_3D<vector<double>, size_t> p3Dgrid;
         load_3Dgrid(p3Dgrid);
         size_t npts = p3Dgrid.get_mnpts();
 

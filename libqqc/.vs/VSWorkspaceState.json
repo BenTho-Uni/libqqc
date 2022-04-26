@@ -3,9 +3,9 @@
     "",
     "\\grids",
     "\\loader",
-    "\\out\\build",
+    "\\utils",
     "\\vaults"
   ],
-  "SelectedNode": "\\vaults\\vault_qmp2.h",
+  "SelectedNode": "\\utils\\load_from_file.cpp",
   "PreviewInSolutionExplorer": false
 }

@@ -220,7 +220,7 @@ namespace libqqc {
             ///
             /// @return pass the 1D grid as a reference
             ///
-            Grid_1D& get_m1Dgrid() {
+            Grid_1D<vector<double>, size_t>& get_m1Dgrid() {
                 if (!m1Dgrid.check_data_validity()) throw invalid_argument(
                         "1D Grid data not valid.");
                 return m1Dgrid;

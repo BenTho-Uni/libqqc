@@ -12,9 +12,7 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
-#include <cmath>
-//#include <math.h> 
-#include <numbers>
+#include <cmath> 
 
 using namespace std;
 

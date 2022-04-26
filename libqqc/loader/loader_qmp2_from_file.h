@@ -1,11 +1,11 @@
 #ifndef LIBQQC_LOADER_QMP2_FROM_FILE_H
 #define LIBQQC_LOADER_QMP2_FROM_FILE_H
 
-#include "../grids/grid.h"
+#include "../grids/unigrid.h"
 
 //Additional libraries
 #include <stdexcept>
-
+#include<vector>
 using namespace std;
 
 namespace libqqc {
@@ -81,22 +81,33 @@ namespace libqqc {
             void load_prnt_lvl(int &prnt_lvl);
 
             ///
-            /// @brief loads points and weights and sets a grid
+            /// @brief loads points and weights and sets a 1D grid
             ///
             /// @param[in] filename_pts name of point file as string
             /// @param[in] filename_wts name of weight file as string
             /// @param[in,out] grid grid reference
             ///
-            void load_grid(string filename_pts, string filename_wts,
-                Grid &grid);
+            void load_grid_1D(string filename_pts, string filename_wts,
+                Grid_1D<vector<double>, size_t> &grid);
+
+            ///
+            /// @brief loads points and weights and sets a 1D grid
+            ///
+            /// @param[in] filename_pts name of point file as string
+            /// @param[in] filename_wts name of weight file as string
+            /// @param[in,out] grid grid reference
+            ///
+            void load_grid_3D(string filename_pts, string filename_wts,
+                Grid_3D<vector<double>, size_t> & grid);
+
 
             ///
             /// @brief loads points and weights and sets a 1D grid
             ///
             /// @param[in,out] grid grid reference
             ///
-            void load_1Dgrid(Grid &grid){
-                load_grid(mfname_1Dpts, mfname_1Dwts, grid);
+            void load_1Dgrid(Grid_1D<vector<double>, size_t>& grid) {
+                load_grid_1D(mfname_1Dpts, mfname_1Dwts, grid);
             };
 
             ///
@@ -104,8 +115,8 @@ namespace libqqc {
             ///
             /// @param[in,out] grid grid reference
             ///
-            void load_3Dgrid(Grid &grid){
-                load_grid(mfname_3Dpts, mfname_3Dwts, grid);
+            void load_3Dgrid(Grid_3D<vector<double>, size_t>& grid) {
+                load_grid_3D(mfname_3Dpts, mfname_3Dwts, grid);
             };
 
             ///
