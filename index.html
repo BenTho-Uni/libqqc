@@ -181,7 +181,8 @@ Installation</h1>
 </div><!-- fragment --><p ><code>make install</code> installs library and exe into upper <code>/lib</code> and <code>/exe</code> folder.</p>
 <p >You then can compile the host program, for example with <code>/host_example/</code> </p><div class="fragment"><div class="line">gcc -fopenmp main.cpp ../lib/libqqc.a</div>
 </div><!-- fragment --><p> or </p><div class="fragment"><div class="line">mpic++ -fopenmp main_mpi.cpp ../lib/libqqc.a</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md14"></a>
+</div><!-- fragment --><p >The library has been tested with GNU gcc/g++ 10.1.0</p>
+<h1><a class="anchor" id="autotoc_md14"></a>
 Usage</h1>
 <p >To run a calculation you have to set up three distinct parts.</p>
 <p >1) <code>Loader_*</code> Loaders are method and host program specific and are used to setup the routins for the loading of the necessary data. MPI and no-MPI versions differ in these loading methods.</p>
