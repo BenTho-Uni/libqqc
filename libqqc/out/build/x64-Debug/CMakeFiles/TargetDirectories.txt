@@ -1,0 +1,6 @@
+C:/Users/isabe/Documents/HeidelbergUni/Master_Thesis/Github/libqqc/libqqc/out/build/x64-Debug/CMakeFiles/qqc.dir
+C:/Users/isabe/Documents/HeidelbergUni/Master_Thesis/Github/libqqc/libqqc/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/isabe/Documents/HeidelbergUni/Master_Thesis/Github/libqqc/libqqc/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
+C:/Users/isabe/Documents/HeidelbergUni/Master_Thesis/Github/libqqc/libqqc/out/build/x64-Debug/CMakeFiles/list_install_components.dir
+C:/Users/isabe/Documents/HeidelbergUni/Master_Thesis/Github/libqqc/libqqc/out/build/x64-Debug/CMakeFiles/install.dir
+C:/Users/isabe/Documents/HeidelbergUni/Master_Thesis/Github/libqqc/libqqc/out/build/x64-Debug/CMakeFiles/install/local.dir

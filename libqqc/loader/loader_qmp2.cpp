@@ -8,6 +8,7 @@
 //
 
 #include "loader_qmp2.h"
+#include <vector>
 
 using namespace std;
 
@@ -55,31 +56,33 @@ namespace libqqc {
     
     }
 
-    void Loader_qmp2 :: load_1Dgrid(Grid &grid) {
+    void Loader_qmp2 :: load_1Dgrid(Grid_1D<vector<double>, size_t> &grid) {
 
         size_t npts = 2;
         size_t ndim = 1;
-        double pts[npts * ndim];
-        double wts[npts];
+        vector<double> pts(npts,1);
+        vector<double> wts(npts, 1);
+       
+        //fill_array (npts * ndim, pts);
+        //fill_array (npts, wts);
 
-        fill_array (npts * ndim, pts);
-        fill_array (npts, wts);
-
-        grid.set_grid(npts, ndim, pts, wts);
+        grid.set_grid(pts, ndim, npts);
+        grid.set_weights(pts, ndim, npts);
     
     }
 
-    void Loader_qmp2 :: load_3Dgrid(Grid &grid) {
+    void Loader_qmp2 :: load_3Dgrid(Grid_3D<vector<double>, size_t> &grid) {
 
         size_t npts = 2;
         size_t ndim = 3;
-        double pts[npts * ndim];
-        double wts[npts];
+        vector<double> pts(npts, 1);
+        vector<double> wts(npts, 1);
 
-        fill_array (npts * ndim, pts);
-        fill_array (npts, wts);
+        //fill_array (npts * ndim, pts);
+        //fill_array (npts, wts);
 
-        grid.set_grid(npts, ndim, pts, wts);
+        grid.set_grid(pts,pts,pts, ndim, ndim, ndim, npts);
+        grid.set_weights(pts, pts, pts, ndim, ndim, ndim, npts);
 
     }
 

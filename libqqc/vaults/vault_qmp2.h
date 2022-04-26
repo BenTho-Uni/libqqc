@@ -1,11 +1,12 @@
 #ifndef LIBQQC_VAULT_QMP2_H
 #define LIBQQC_VAULT_QMP2_H
 
-#include "../grids/grid.h"
+#include "../grids/unigrid.h"
 
 //Additional libraries
 #include <stdexcept>
 #include <iostream>
+#include <vector>
 
 #include "../loader/loader_qmp2.h"
 #include "../loader/loader_qmp2_from_file.h"
@@ -34,8 +35,8 @@ namespace libqqc {
             int mprnt_lvl = 0; ///< Selected print level
 
             // Grid objects
-            Grid m1Dgrid; ///< 1D grid object holding the points and weights
-            Grid m3Dgrid; ///< 3D grid object holding the points and weights
+            Grid_1D<vector<double>, size_t> m1Dgrid; ///< 1D grid object holding the points and weights
+            Grid_3D<vector<double>, size_t> m3Dgrid; ///< 3D grid object holding the points and weights
 
             // Matrices 
             double* mmat_fock = NULL; ///< Fock matrix in AO $F_{\nu \mu}$
@@ -219,7 +220,7 @@ namespace libqqc {
             ///
             /// @return pass the 1D grid as a reference
             ///
-            Grid& get_m1Dgrid() {
+            Grid_1D& get_m1Dgrid() {
                 if (!m1Dgrid.check_data_validity()) throw invalid_argument(
                         "1D Grid data not valid.");
                 return m1Dgrid;

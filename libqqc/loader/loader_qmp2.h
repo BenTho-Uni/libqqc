@@ -1,10 +1,11 @@
 #ifndef LIBQQC_LOADER_QMP2_H
 #define LIBQQC_LOADER_QMP2_H
 
-#include "../grids/grid.h"
+#include "../grids/unigrid.h"
 
 //Additional libraries
 #include <stdexcept>
+#include <vector>
 
 using namespace std;
 
@@ -59,14 +60,14 @@ namespace libqqc {
             ///
             /// @param[in,out] grid grid reference
             ///
-            void load_1Dgrid(Grid &grid);
+            void load_1Dgrid(Grid_1D<vector<double>, size_t> &grid);
 
             ///
             /// @brief loads points and weights and sets a grid
             ///
             /// @param[in,out] grid grid reference
             ///
-            void load_3Dgrid(Grid &grid);
+            void load_3Dgrid(Grid_3D<vector<double>, size_t> &grid);
 
             ///
             /// @brief loads values into the Fock matrix

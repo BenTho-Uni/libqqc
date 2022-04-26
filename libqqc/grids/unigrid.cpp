@@ -146,7 +146,6 @@ namespace libqqc {
         return true;
     } //Grid_3D::check_data_validity
 
-
     template<typename vec_type, typename n_dim> // vec_type: vector type, n_dim: dimension of molecule list
     auto Grid_3D<vec_type, n_dim> ::set_grid(vec_type& coords_x, vec_type& coords_y, vec_type& coords_z, n_dim& x_dim, n_dim& y_dim, n_dim& z_dim, int n_points) {
         Grid_1D<vec_type, n_dim> class_obj;
