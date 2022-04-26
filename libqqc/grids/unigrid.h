@@ -1,7 +1,7 @@
-//#ifndef LIBQQC_UNIGRID_H
-//#define LIBQQC_UNIGRID_H
+#ifndef LIBQQC_UNIGRID_H
+#define LIBQQC_UNIGRID_H
 
-//namespace libqqc {
+namespace libqqc {
 
     ///
     /// @brief A Uniform grid class
@@ -16,6 +16,16 @@
         n_dim x_dim;      ///< dimension of coords_x vector
 
     public:
+        ///
+        /// @brief Function checks data validity of grid
+        ///
+        /// @details This function checks if the data in the grid is valid
+        /// and returns TRUE if it is
+        ///
+        /// @return TRUE if data is valid
+        ///
+        bool check_data_validity();
+
        ///
        /// @brief Initialisation of grid points for 1D grid
        ///
@@ -49,6 +59,17 @@
         n_dim x_dim; ///< dimension or coords_x vector
         n_dim y_dim; ///< dimension or coords_y vector
     public:
+        ///
+        /// @brief Function checks data validity of grid
+        ///
+        /// @details This function checks if the data in the grid is valid
+        /// and returns TRUE if it is
+        ///
+        /// @return TRUE if data is valid
+        ///
+        bool check_data_validity();
+
+
        ///
        /// @brief Initialisation of grid points for 2D grid
        ///
@@ -80,6 +101,17 @@
         n_dim y_dim; ///< dimension or coords_y vector
         n_dim z_dim; ///< dimension or coords_z vector
     public:
+        ///
+        /// @brief Function checks data validity of grid
+        ///
+        /// @details This function checks if the data in the grid is valid
+        /// and returns TRUE if it is
+        ///
+        /// @return TRUE if data is valid
+        ///
+        bool check_data_validity();
+
+
        ///
        /// @brief Initialisation of grid points for 3D grid
        ///
@@ -102,6 +134,6 @@
     }; // class Grid_3D
 
 
-//} // namespace libqqc
+} // namespace libqqc
 
-//#endif //LIBQQC_UNIGRID_H
+#endif //LIBQQC_UNIGRID_H

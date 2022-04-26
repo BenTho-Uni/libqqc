@@ -18,9 +18,20 @@
 
 using namespace std;
 
-//namespace libqqc {
+namespace libqqc {
 
     // 1D Grid
+    template<typename vec_type, typename n_dim> // vec_type: vector type, n_dim: dimension of molecule list
+    bool Grid_1D<vec_type, ndim> ::check_data_validity() {
+
+        if (x_dim == 0) throw invalid_argument(
+            "Dimensionality must not be 0.");
+        if (coords_x == 0) throw invalid_argument(
+            "You need at least one point for the grid");
+        //if (!mpts || !mwts) throw invalid_argument(
+          //  "Your pts or wts pointer is NULL.");
+        return true;
+    } // Grid_1D::check_data_validity
 
     template<typename vec_type, typename n_dim> // vec_type: vector type, n_dim: dimension of molecule list
     auto Grid_1D<vec_type, n_dim> ::set_grid(vec_type& coords, n_dim& x_dim, int n_points) {
@@ -66,7 +77,7 @@ using namespace std;
         vec.push_back(x_grid);
         vec.push_back(x_weight);
         return vec;
-    }
+    } //Grid_1D::gauss_cheb
 
    // template<typename vec_type, typename n_dim> // vec_type: vector type, n_dim: dimension of molecule list
     //void Grid_1D<vec_type, n_dim> ::print_func() {
@@ -76,6 +87,21 @@ using namespace std;
     //}
     
     // 2D Grid
+    template<typename vec_type, typename n_dim> // vec_type: vector type, n_dim: dimension of molecule list
+    bool Grid_2D<vec_type, ndim> ::check_data_validity() {
+
+        if (x_dim == 0) throw invalid_argument(
+            "Dimensionality must not be 0.");
+        if (coords_x.size() == 0) throw invalid_argument(
+            "You need at least one point for the grid");
+        if (y_dim == 0) throw invalid_argument(
+            "Dimensionality must not be 0.");
+        if (coords_y.size() == 0) throw invalid_argument(
+            "You need at least one point for the grid");
+        //if (!mpts || !mwts) throw invalid_argument(
+          //  "Your pts or wts pointer is NULL.");
+        return true;
+    } //Grid_2D::check_data_validity
 
     template<typename vec_type, typename n_dim> // vec_type: vector type, n_dim: dimension of molecule list
     auto Grid_2D<vec_type, n_dim> ::set_grid(vec_type& coords_x, vec_type& coords_y, n_dim& x_dim, n_dim& y_dim, int n_points) {
@@ -100,6 +126,26 @@ using namespace std;
     } //Grid_2D::set_weights
 
     // 3D Grid
+    template<typename vec_type, typename n_dim> // vec_type: vector type, n_dim: dimension of molecule list
+    bool Grid_3D<vec_type, ndim> ::check_data_validity() {
+
+        if (x_dim == 0) throw invalid_argument(
+            "Dimensionality must not be 0.");
+        if (coords_x.size() == 0) throw invalid_argument(
+            "You need at least one point for the grid");
+        if (y_dim == 0) throw invalid_argument(
+            "Dimensionality must not be 0.");
+        if (coords_y.size() == 0) throw invalid_argument(
+            "You need at least one point for the grid");
+        if (z_dim == 0) throw invalid_argument(
+            "Dimensionality must not be 0.");
+        if (coords_z.size() == 0) throw invalid_argument(
+            "You need at least one point for the grid");
+        //if (!mpts || !mwts) throw invalid_argument(
+        //  "Your pts or wts pointer is NULL.");
+        return true;
+    } //Grid_3D::check_data_validity
+
 
     template<typename vec_type, typename n_dim> // vec_type: vector type, n_dim: dimension of molecule list
     auto Grid_3D<vec_type, n_dim> ::set_grid(vec_type& coords_x, vec_type& coords_y, vec_type& coords_z, n_dim& x_dim, n_dim& y_dim, n_dim& z_dim, int n_points) {
@@ -129,46 +175,4 @@ using namespace std;
 
    
 
-//} //namespace libqqc
-
-    int main() {
-        
-        class Grid_1D<vector<double>, int> Grid_obj;
-        
-        int dim = 10;
-        vector<double> vec_x;
-        int points = 20;
-        for (int i = 0; i < dim; i++) {
-            int b = rand() % 10 + 1;
-            vec_x.push_back(b);
-            cout << vec_x[i] << endl;
-        }
-        auto grid_x = Grid_obj.set_grid(vec_x, dim, points);
-        vector<double> weights_x = Grid_obj.set_weights(vec_x, dim, points);
-
-        cout << " Results for Grid 1D Gauss-Chebyshev\n";
-
-        auto vec = Grid_obj.gauss_cheb(vec_x, dim, points);
-        size_t length = vec[0].size();
-        double sum = 0.0;
-        for (int i = 0; i < length; i++) {
-            cout << "point:" << vec[0][i] << " weight:" << vec[1][i] <<"\n" << endl;
-            double F = pow((1 - pow(vec[0][i],2)) , 1 / 2) * vec[0][i];
-            sum = sum + F * vec[1][i];
-        }
-        cout << sum; 
-
-        class Grid_3D<vector<double>, int> Grid_obj_3D;
-
-        int x_dim = 10;
-        int y_dim = 10;
-        int z_dim = 10;
-        //vector<double> vec_x(x_dim, 1);
-        vector<double> vec_y(y_dim, 1);
-        vector<double> vec_z(z_dim, 1);
-
-        auto grid_3D = Grid_obj_3D.set_grid(vec_x, vec_y, vec_z, x_dim, y_dim, z_dim, points);
-        auto weights_3D = Grid_obj_3D.set_weights(vec_x, vec_y, vec_z, x_dim, y_dim, z_dim, points);
-
-        return 0;
-    }
+} //namespace libqqc
