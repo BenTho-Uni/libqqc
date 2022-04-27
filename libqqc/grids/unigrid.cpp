@@ -106,7 +106,7 @@ namespace libqqc {
         Grid_1D<vec_type, n_dim> class_obj;
         auto grid_x = class_obj.set_grid(coords_x, x_dim, n_points);
         auto grid_y = class_obj.set_grid(coords_y, y_dim, n_points);
-        vector<vector<double>> return_vec;
+        vector<vec_type> return_vec;
         return_vec.push_back(grid_x);
         return_vec.push_back(grid_y);
         return return_vec;
@@ -117,7 +117,7 @@ namespace libqqc {
         Grid_1D<vec_type, n_dim> class_obj;
         vector<double> w_x = class_obj.set_weights(coords_x, x_dim, n_points);
         vector<double> w_y = class_obj.set_weights(coords_y, y_dim, n_points);
-        vector<vector<double>> return_vec;
+        vector<vec_type> return_vec;
         return_vec.push_back(w_x);
         return_vec.push_back(w_y);
         return return_vec;
@@ -150,7 +150,7 @@ namespace libqqc {
         auto grid_x = class_obj.set_grid(coords_x, x_dim, n_points);
         auto grid_y = class_obj.set_grid(coords_y, y_dim, n_points);
         auto grid_z = class_obj.set_grid(coords_z, z_dim, n_points);
-        vector<vector<double>> return_vec;
+        vector<vec_type> return_vec;
         return_vec.push_back(grid_x);
         return_vec.push_back(grid_y);
         return_vec.push_back(grid_z);
@@ -163,13 +163,18 @@ namespace libqqc {
         vector<double> w_x = class_obj.set_weights(coords_x, x_dim, n_points);
         vector<double> w_y = class_obj.set_weights(coords_y, y_dim, n_points);
         vector<double> w_z = class_obj.set_weights(coords_z, z_dim, n_points);
-        vector<vector<double>> return_vec;
+        vector<vec_type> return_vec;
         return_vec.push_back(w_x);
         return_vec.push_back(w_y);
         return_vec.push_back(w_z);
         return return_vec;
     } //Grid_3D::set_weights
 
-   
+    template<typename vec_type, typename n_dim> // vec_type: vector type, n_dim: dimension of molecule list
+    auto Grid_3D<vec_type, n_dim> ::get_npts() {
+        
+        return n_points
+    } //Grid_3D::get_npts
+
 
 } //namespace libqqc

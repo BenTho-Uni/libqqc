@@ -102,7 +102,7 @@ namespace libqqc {
         vec_type coords_y;///< Vector with y-values for molecule centers
         n_dim x_dim; ///< dimension or coords_x vector
         n_dim y_dim; ///< dimension or coords_y vector
-        int n_points; 
+        int n_points= 100; 
 
     public:
         ///
@@ -260,6 +260,10 @@ namespace libqqc {
             //delete[] mpts;
             //delete[] mwts;
         };
+
+
+
+        get_npts();
 
     }; // class Grid_3D
 

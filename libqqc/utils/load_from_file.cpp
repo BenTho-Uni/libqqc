@@ -7,8 +7,8 @@ using namespace std;
 
 namespace libqqc {
 
-    vector<size_t> load_dim_from_file (string src, char delim, 
-            size_t n_skp_hdr) {
+    vector<size_t> load_dim_from_file(string src, char delim,
+        size_t n_skp_hdr) {
 
         vector<size_t> dim;
 
@@ -32,7 +32,7 @@ namespace libqqc {
         string cell;
 
         // Loop through the lineStream with the deliminator set to space
-        while (getline(lineStream, cell, delim)){
+        while (getline(lineStream, cell, delim)) {
             // If string empty, skip
             if (cell == "") continue;
             // If not, push back the string part as an integer
@@ -44,8 +44,8 @@ namespace libqqc {
         return dim;
     };
 
-    bool load_array_from_file (string src, vector<size_t> &dim_ref, double* arr, 
-            char delim, size_t n_skp_hdr){
+    bool load_array_from_file(string src, vector<size_t>& dim_ref, double* arr,
+        char delim, size_t n_skp_hdr) {
 
         // Setup data file stream object and line
         ifstream data(src);
@@ -68,7 +68,7 @@ namespace libqqc {
         getline(data, line);
         stringstream lineStream(line);
         string cell;
-        while (getline(lineStream, cell, delim)){
+        while (getline(lineStream, cell, delim)) {
             if (cell == "") continue;
             dim.push_back(stoi(cell));
         }
@@ -76,24 +76,25 @@ namespace libqqc {
 
         // Check dimensions
         //
-        if ((dim.at(0) != dim_ref.at(0)) || 
-                (dim.at(1) != dim_ref.at(1)) || 
-                (dim.at(2) != dim_ref.at(2))) {
+        if ((dim.at(0) != dim_ref.at(0)) ||
+            (dim.at(1) != dim_ref.at(1)) ||
+            (dim.at(2) != dim_ref.at(2))) {
             //Throw erorr
-        throw invalid_argument("Dimensions are not equal to that of the file header"); 
+            throw invalid_argument("Dimensions are not equal to that of the file header");
             return false;
 
         }
 
-        for (size_t i = 0; getline(data, line); i++){
+        for (size_t i = 0; getline(data, line); i++) {
             stringstream lineStream(line);
             string cell;
-            for (size_t j = 0; getline(lineStream, cell, delim); 
-                    j = ((cell == "") || (cell == " ")) ? j : j+1){
+            for (size_t j = 0; getline(lineStream, cell, delim);
+                j = ((cell == "") || (cell == " ")) ? j : j + 1) {
                 if (!((cell == "") || (cell == " "))) {
                     try {
-                        arr[i * dim.at(1) + j] =  stod(cell);
-                    } catch (const out_of_range& e){
+                        arr[i * dim.at(1) + j] = stod(cell);
+                    }
+                    catch (const out_of_range& e) {
                         // sometimes these value underflow the minimum of double
                         // e.g. 1.2313e-319, we catch this and just parse zero
                         // this breaks with overflow, which is not physical

@@ -3,9 +3,8 @@
     "",
     "\\grids",
     "\\loader",
-    "\\utils",
     "\\vaults"
   ],
-  "SelectedNode": "\\utils\\load_from_file.cpp",
+  "SelectedNode": "\\grids\\grid.cpp",
   "PreviewInSolutionExplorer": false
 }

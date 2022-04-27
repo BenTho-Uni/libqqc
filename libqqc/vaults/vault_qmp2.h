@@ -100,10 +100,10 @@ namespace libqqc {
                 // load grid object
                 loader.load_1Dgrid (m1Dgrid);
                 loader.load_3Dgrid (m3Dgrid);
-
+              
                 // loading in matrices
                 size_t nao2 = mnao * mnao;
-                size_t npts = m3Dgrid.get_mnpts();
+                size_t npts = m3Dgrid.get_npts();
                 mmat_fock = new double[mnmo * mnmo];
                 loader.load_mat_fock (mmat_fock);
                 mmat_cgto = new double[npts * mnmo];
@@ -122,36 +122,36 @@ namespace libqqc {
             ///
             /// @param[in] loader template for Loader for the qmp2 calculation
             ///
-            Vault_qmp2(Loader_qmp2_from_file loader) {
+            //Vault_qmp2(Loader_qmp2_from_file loader) {
 
-                // check if loader is empty
-                //TODO: do this if loader is done
+            //    // check if loader is empty
+            //    //TODO: do this if loader is done
 
-                // loading meta information
-                loader.load_nocc (mnocc);
-                loader.load_nvirt (mnvirt);
-                mnmo = mnocc + mnvirt;
-                loader.load_nao (mnao);
+            //    // loading meta information
+            //    loader.load_nocc (mnocc);
+            //    loader.load_nvirt (mnvirt);
+            //    mnmo = mnocc + mnvirt;
+            //    loader.load_nao (mnao);
 
-                // loading input information
-                loader.load_prnt_lvl (mprnt_lvl);
+            //    // loading input information
+            //    loader.load_prnt_lvl (mprnt_lvl);
 
-                // load grid object
-                loader.load_1Dgrid (m1Dgrid);
-                loader.load_3Dgrid (m3Dgrid);
+            //    // load grid object
+            //    loader.load_1Dgrid (m1Dgrid);
+            //    loader.load_3Dgrid (m3Dgrid);
 
-                // loading in matrices
-                size_t nao2 = mnao * mnao;
-                size_t npts = m3Dgrid.get_mnpts();
-                mmat_fock = new double[mnmo * mnmo];
-                loader.load_mat_fock (mmat_fock);
-                mmat_cgto = new double[npts * mnmo];
-                loader.load_mat_cgto (mmat_cgto);
-                mcube_coul = new double[npts * mnocc * mnvirt];
-                loader.load_cube_coul (mcube_coul);
+            //    // loading in matrices
+            //    size_t nao2 = mnao * mnao;
+            //    size_t npts = m3Dgrid.get_mnpts();
+            //    mmat_fock = new double[mnmo * mnmo];
+            //    loader.load_mat_fock (mmat_fock);
+            //    mmat_cgto = new double[npts * mnmo];
+            //    loader.load_mat_cgto (mmat_cgto);
+            //    mcube_coul = new double[npts * mnocc * mnvirt];
+            //    loader.load_cube_coul (mcube_coul);
 
-                check_data_validity();
-            }; 
+            //    check_data_validity();
+            //}; 
 
             ///
             /// @brief Destructor of vault class
@@ -231,7 +231,7 @@ namespace libqqc {
             ///
             /// @return pass the 3D grid as a reference
             ///
-            Grid& get_m3Dgrid() {
+            Grid_3D<vector<double> , size_t>& get_m3Dgrid() {
                 if (!m3Dgrid.check_data_validity()) throw invalid_argument(
                         "3D Grid data not valid.");
                 return m3Dgrid;
