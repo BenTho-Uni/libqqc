@@ -156,6 +156,7 @@ endif()
 
 #Adding QCHEM files if compiled with qchem
 if (QCHEM_SOURCE_DIR)
+    message("+++ libqqc interfaced with qchem +++")
     set(SRC
         ${SRC}
         ${SRC_QCHEM}
