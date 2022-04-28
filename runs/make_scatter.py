@@ -30,7 +30,17 @@ for x in range(0, len(sys.argv)):
     # Now we calculate the Speedup and append it again as the last column
     df.insert(n_columns+1, n_columns+1, max(df[19]+df[20]) / (df[19]+df[20]), True)
     # Make another column with the file input name
-    df[n_columns + 2] = f_input
+    if "anthracene" in f_input:
+        df[n_columns + 2] = "anthracene"
+    elif "h2o" in f_input:
+        df[n_columns + 2] = "water"
+    elif "h3coh" in f_input:
+        df[n_columns + 2] = "methanol"
+    elif "porphyin" in f_input:
+        df[n_columns + 2] = "porphyrin"
+    else:
+        df[n_columns + 2] = f_input
+
     # Then append a dataframe consisting of number of cores, speedup and filename 
     # to the dataframe list
     df_list.append(df[[n_columns, n_columns + 1, n_columns + 2]])
@@ -48,7 +58,7 @@ line = np.linspace(0, 1000, 100)
 x_line = np.linspace(0, 1000, 100)
 
 # Setting up plots and subplots
-fig, ax = plt.subplots(figsize = (12,8))
+fig, ax = plt.subplots(figsize = (6.5,6.5))
 
 def thr2node(x):
     x = x / 48
@@ -62,13 +72,13 @@ def node2thr(x):
 sec_ax = ax.secondary_xaxis('top', functions=(thr2node, node2thr))
 sec_ax.set_xlabel('number of nodes')
 
-# Using sns to scatterplot the data grouped by one column with the names
-sns.scatterplot(x = 23, y = 24, hue = 25, data = df_all)
 # Plotting the linear function
-ax.plot(line, x_line, zorder=-1, color='green', label='optimal')
+ax.plot(line, x_line, zorder=-1, color='grey', label='optimal', linestyle='dashed')
+# Using sns to scatterplot the data grouped by one column with the names
+sns.scatterplot(x = 23, y = 24, hue = 25, data = df_all, palette='muted')
 
 # Adding some labeling
-plt.title('Parallel Scaling of XYZ')
+#plt.title('Parallel Scaling of Hybrid Variant')
 plt.ylabel('speedup')
 plt.xlabel('number of threads')
 #plt.grid()
@@ -79,16 +89,17 @@ X_detail = np.linspace(0,48,100)
 Y_detail = np.linspace(0,48,100)
 
 # Setting up the smaller plot
-sub_axes = plt.axes([.17,.45,.23,.23])
+sub_axes = plt.axes([.2,.45,.23,.23])
 sub_axes.set_xlim([0,50])
 sub_axes.set_ylim([0,50])
 # Plotting linear 
-sub_axes.plot(X_detail, Y_detail, c='green')
+sub_axes.plot(X_detail, Y_detail, c='grey', linestyle='dashed')
 # Plotting data again
-sns.scatterplot(x = 23, y = 24, hue = 25, data = df_all, legend=None)
+sns.scatterplot(x = 23, y = 24, hue = 25, data = df_all, legend=None, palette='muted')
 # Disabling labels
 plt.ylabel(None)
 plt.xlabel(None)
 
+#plt.savefig("scaling_mpionly_eigen.png")
 plt.show()
 
