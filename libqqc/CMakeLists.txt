@@ -84,6 +84,14 @@ set(SRC_MPI
 set(HDR_MPI
 )
 
+# files for interfacing with qchem
+set(SRC_QCHEM
+    qchem/qqc_main.cpp
+)
+
+set(HDR_QCHEM
+)
+
 #SRC_ is a variable name
 set(SRC
     ${SRC_ADDITIONAL}
@@ -144,6 +152,18 @@ else()
         ${HDR}
         ${HDR_COMMON}
         )
+endif()
+
+#Adding QCHEM files if compiled with qchem
+if (QCHEM_SOURCE_DIR)
+    set(SRC
+        ${SRC}
+        ${SRC_QCHEM}
+    )
+    set(HDR
+        ${HDR}
+        ${HDR_QCHEM}
+    )
 endif()
 
 add_library(qqc ${SRC} ${HDR})
