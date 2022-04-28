@@ -27,7 +27,7 @@ int qqc_main(){
     try {
         std::cout << "QQC reporting in!";
     }
-    catch (stc::exception &e) {
+    catch (std::exception &e) {
         QCrashLoc(e.what(), __FILE__, __LINE__);
     }
     catch (...) {

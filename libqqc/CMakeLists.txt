@@ -164,7 +164,7 @@ if (QCHEM_SOURCE_DIR)
         ${HDR}
         ${HDR_QCHEM}
     )
-endif()
+else()
 
 add_library(qqc ${SRC} ${HDR})
 target_include_directories(qqc PUBLIC "${LIBQQC_SOURCE_DIR}")
