@@ -16,6 +16,8 @@
 
 //Extra headers
 #include <stdio.h>
+#include <iostream>
+#include <sstream>
 
     ///
     /// @file
@@ -24,6 +26,8 @@
     /// @details This function is called by qchem and prepares and executes 
     /// the Q-QC calculation
     ///
+using namespace libqqc;
+using namespace std;
 
 int qqc_main(){
     try {
