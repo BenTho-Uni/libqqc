@@ -41,9 +41,48 @@ public:
     /// @return Return Delaunay triangle grid
     ///
     auto watsons_alg(vector< vector<double> >& sorted, vector< vector<double> >& super_triangle);
-      
+    ///
+    /// @brief Function constructs dual graph
+    ///
+    /// @details This function constructs the dual graph which then gives the voronoi cells
+    ///
+    /// @return Return voronoi cells 
+    ///  
+    auto getting_dual_graph(vector<vector<vector<double>>>& triangles);
     
-
+    ///
+    /// @brief Function sorting the 3D points 
+    ///
+    /// @details Function sorting the 3D points of increaseing x values
+    ///
+    /// @return sorted x, y and z points
+    ///
+    auto sorting_3D(vec_type& x_pts, vec_type& y_pts);
+    ///
+    /// @brief Function constructing the super 3D triangle
+    ///
+    /// @details With the points give a 3D super triangle is constructed which is bigger and includes all the points
+    ///
+    /// @return Return vertixes of 3D super triangle
+    ///
+    auto def_supertriangle_3D(vector<vector<double>>& sorted);
+    ///
+    /// @brief Function performs watsons algorithm for 3D case
+    ///
+    /// @details This function executes watsons algorithm for 3D case and created the Delaunay triangles
+    ///
+    /// @return Return Delaunay triangle grid 3D
+    ///
+    auto watsons_alg_3D(vector< vector<double> >& sorted, vector< vector<double> >& super_triangle);
+    ///
+    /// @brief Function constructs dual graph 3D
+    ///
+    /// @details This function constructs the dual graph 3D which then gives the voronoi cells
+    ///
+    /// @return Return voronoi cells 3D
+    ///  
+    auto getting_dual_graph_3D(vector<vector<vector<double>>>& triangles);
+    
 }; // Class Voronoi
 
 } // namespace libqqc
