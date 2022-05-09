@@ -38,9 +38,9 @@ int qqc_main(){
         Ttimer timings(0);
 
         // The Loader provides method and host_program specific loading function
-        // here we load from files on disk for the Q-MP2 method
+        // here we load from Q-Chem for the Q-MP2 method
         timings.start_new_clock("Timing Loader_qmp2_from_file:: loader :", 0, 0);
-        Loader_qmp2 loader;
+        Loader_qmp2_from_qchem loader;
         timings.stop_clock(0);
         cout << timings.print_clocks(0);
 

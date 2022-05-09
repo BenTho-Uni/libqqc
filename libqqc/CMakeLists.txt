@@ -87,9 +87,11 @@ set(HDR_MPI
 # files for interfacing with qchem
 set(SRC_QCHEM
     qchem/qqc_main.cpp
+    loader/loader_qmp2_from_qchem.cpp
 )
 
 set(HDR_QCHEM
+    loader/loader_qmp2_from_qchem.h
 )
 
 #SRC_ is a variable name

@@ -10,6 +10,10 @@
 #include "../loader/loader_qmp2.h"
 #include "../loader/loader_qmp2_from_file.h"
 
+#if QCHEM
+#include "../loader/loader_qmp2_from_qchem.h"
+#endif
+
 using namespace std; 
 
 namespace libqqc {
@@ -150,7 +154,48 @@ namespace libqqc {
                 loader.load_cube_coul (mcube_coul);
 
                 check_data_validity();
+            }
+            ; 
+#if QCHEM
+            ///
+            /// @brief Constructor of vault class with loader object
+            ///
+            /// @details Constructor of vault class, setting the variables
+            /// through the loader given in its argument, uses in qchem
+            ///
+            /// @param[in] loader template for Loader for the qmp2 calculation
+            ///
+            Vault_qmp2(Loader_qmp2_from_qchem loader) {
+
+                // check if loader is empty
+                //TODO: do this if loader is done
+
+                // loading meta information
+                loader.load_nocc (mnocc);
+                loader.load_nvirt (mnvirt);
+                mnmo = mnocc + mnvirt;
+                loader.load_nao (mnao);
+
+                // loading input information
+                loader.load_prnt_lvl (mprnt_lvl);
+
+                // load grid object
+                loader.load_1Dgrid (m1Dgrid);
+                loader.load_3Dgrid (m3Dgrid);
+
+                // loading in matrices
+                size_t nao2 = mnao * mnao;
+                size_t npts = m3Dgrid.get_mnpts();
+                mmat_fock = new double[mnmo * mnmo];
+                loader.load_mat_fock (mmat_fock);
+                mmat_cgto = new double[npts * mnmo];
+                loader.load_mat_cgto (mmat_cgto);
+                mcube_coul = new double[npts * mnocc * mnvirt];
+                loader.load_cube_coul (mcube_coul);
+
+                check_data_validity();
             }; 
+#endif
 
             ///
             /// @brief Destructor of vault class
