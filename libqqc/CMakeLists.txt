@@ -157,7 +157,7 @@ else()
 endif()
 
 #Adding QCHEM files if compiled with qchem
-if (QCHEM_SOURCE_DIR)
+if(QCHEM_SOURCE_DIR)
     #message("+++ libqqc interfaced with qchem +++")
     set(SRC
         ${SRC}
@@ -167,16 +167,21 @@ if (QCHEM_SOURCE_DIR)
         ${HDR}
         ${HDR_QCHEM}
     )
-endif()
+endif(QCHEM_SOURCE_DIR)
 
 add_library(qqc ${SRC} ${HDR})
 target_include_directories(qqc PUBLIC "${LIBQQC_SOURCE_DIR}")
 if(LIBQQC_OPENMP) 
-    target_link_libraries(qqc PUBLIC OpenMP::OpenMP_CXX)
+        target_link_libraries(qqc PUBLIC OpenMP::OpenMP_CXX)
 endif(LIBQQC_OPENMP)
 if(LIBQQC_MPI)
-    target_link_libraries(qqc PUBLIC MPI::MPI_CXX)
+        target_link_libraries(qqc PUBLIC MPI::MPI_CXX)
 endif(LIBQQC_MPI)
+
+if(QCHEM_SOURCE_DIR)
+        target_link_libraries(qqc libdftn qints grid)
+endif(QCHEM_SOURCE_DIR)
+
 install(TARGETS qqc DESTINATION "${CMAKE_SOURCE_DIR}/lib")
 
 
