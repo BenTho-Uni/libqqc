@@ -17,6 +17,8 @@
 
 #include <libdftn/xcclass.h>
 #include <libgrid/libgrid/eval_cgto.h>
+#include <libqints/arrays/array_view.h>
+#include <libqints/exec/dev_omp.h>
 
 #include <iostream>
 
@@ -45,7 +47,7 @@ namespace libqqc {
     void Loader_qmp2_from_qchem :: load_nocc (size_t &nocc){
 
         //nocc = 1; //
-        occ = rem_read(REM_NALPHA);
+        nocc = rem_read(REM_NALPHA);
 
     } //Loader_qmp2_from_qchem::load_nocc
 
@@ -87,17 +89,7 @@ namespace libqqc {
     }
 
     void Loader_qmp2_from_qchem :: load_3Dgrid(Grid &grid) {
-
-//        size_t npts = 2;
-//        size_t ndim = 3;
-//        double pts[npts * ndim];
-//        double wts[npts];
-
-//        fill_array (npts * ndim, pts);
-//        fill_array (npts, wts);
-
-//        grid.set_grid(npts, ndim, pts, wts);
-        
+#if 1
         XCAtoms xcatom; 
         int jobID0 = 0; 
         XCFunctional Func(0,0); 
@@ -119,7 +111,7 @@ namespace libqqc {
         int npts=mgrid.getNPts();
         int nbatch=mgrid.getNBatch();
 
-        double pts[npts];
+        double pts[npts * 3];
         double wts[npts];
 
         mgrid.getMolGrid(pts, wts, iPtBat, npts, nbatch); 
@@ -127,11 +119,11 @@ namespace libqqc {
         grid.set_grid(npts, 3, pts, wts);
 
         delete[] iPtBat; 
-
+#endif
     }
 
     void Loader_qmp2_from_qchem :: load_mat_fock(double* mat_fock) {
-        size_t nsbf = 0;
+        size_t nbsf = 0;
         load_nao(nbsf);
 
         FileMan(FM_READ, FILE_FOCK_MATRIX, FM_DP, nbsf * nbsf, 0, FM_BEG, mat_fock); 
@@ -139,22 +131,61 @@ namespace libqqc {
     }
 
     void Loader_qmp2_from_qchem :: load_mat_cgto(double* mat_cgto) {
+#if 1
+        Grid grid;
+        load_3Dgrid(grid);
 
-        size_t npts = 2;
-        size_t nmo = 3;
+        size_t nao = 0;
+        load_nao(nao);
 
-        fill_array (npts * nmo, mat_cgto); 
-    
+        size_t npts = grid.get_mnpts();
+
+        libqints::array_view<double> av_pts(grid.get_mpts(), npts * 3);
+        libqints::basis_1e1c_cgto<double> basis = libqints::qchem::aobasis.b1;
+        libqints::basis_1e1c_delta bg(npts, av_pts);
+        cout << "Step 1" << endl;
+        libqints::dev_omp dev;
+        cout << "Step 2" << endl;
+        dev.init(32 * 1024UL * 1024);
+        cout << "Step 3" << endl;
+        libqints::array_view<double> av_cgto(mat_cgto, npts * nao);
+        int error = libgrid::eval_cgto(basis, bg, dev, av_cgto);
+        cout << "Step 4" << endl;
+#endif
     }
 
     void Loader_qmp2_from_qchem :: load_cube_coul(double* cube_coul) {
+#if 1
+        Grid grid;
+        load_3Dgrid(grid);
 
-        size_t npts = 2;
-        size_t nocc = 1;
-        size_t nvirt = 2;
+        size_t nbsf = 0;
+        load_nao(nbsf);
 
-        fill_array (npts * nocc * nvirt, cube_coul);
-    
+        size_t npts = grid.get_mnpts();
+        std::vector< libqints::ftype_multipole > v_pts;
+
+        for (int i = 0; i < npts; i++){
+            libqints::ftype_multipole f_mult;
+            f_mult.x = grid.get_mpts()[i + 0];
+            f_mult.y = grid.get_mpts()[i + 1];
+            f_mult.z = grid.get_mpts()[i + 2];
+            f_mult.k = 0;
+            v_pts.push_back(f_mult);
+        }//for i
+        libqints::basis_1e1c_multipole bm (v_pts);
+
+        double mom[npts];
+        for (int i = 0; i < npts; i++) mom[i] = 1;
+        libqints::array_view<double> av_mom((double*) &mom[0], npts);
+        libqints::dev_omp dev;
+
+        arma::cube coulomb(nbsf, nbsf, npts);
+        libqints::array_view<double> av_vmul(cube_coul, npts*nbsf*nbsf);
+        dev.init(256UL * 1024 * 1024);
+
+
+#endif
     }
 
 } //namespace libqqc

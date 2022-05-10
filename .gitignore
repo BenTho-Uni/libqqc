@@ -48,5 +48,9 @@ lib/*
 
 *.swp
 
+# Remove Q-Chem integrals and digestors
+libqqc/qchem/integrals/*
+libqqc/qchem/digesters/*
+
 # runs
 #runs/run*

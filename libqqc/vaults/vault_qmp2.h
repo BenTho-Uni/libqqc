@@ -167,9 +167,6 @@ namespace libqqc {
             ///
             Vault_qmp2(Loader_qmp2_from_qchem loader) {
 
-                // check if loader is empty
-                //TODO: do this if loader is done
-
                 // loading meta information
                 loader.load_nocc (mnocc);
                 loader.load_nvirt (mnvirt);
