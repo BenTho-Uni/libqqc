@@ -88,10 +88,14 @@ set(HDR_MPI
 set(SRC_QCHEM
     qchem/qqc_main.cpp
     loader/loader_qmp2_from_qchem.cpp
+    qchem/digesters/dig_qqc_vmul_cgto_multipole.C
+    qchem/integrals/qqc_vmul.C
 )
 
 set(HDR_QCHEM
     loader/loader_qmp2_from_qchem.h
+    qchem/digesters/dig_qqc_vmul_cgto_multipole.h
+    qchem/integrals/qqc_vmul.h
 )
 
 #SRC_ is a variable name
@@ -180,6 +184,7 @@ endif(LIBQQC_MPI)
 
 if(QCHEM_SOURCE_DIR)
         target_link_libraries(qqc libdftn qints grid)
+        target_link_libraries(qqc armadillo)
 endif(QCHEM_SOURCE_DIR)
 
 install(TARGETS qqc DESTINATION "${CMAKE_SOURCE_DIR}/lib")

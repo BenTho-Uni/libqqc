@@ -167,6 +167,10 @@ namespace libqqc {
             /// @return string
             string make_line(string in, char align){
                 size_t length_in = in.length();
+
+                //if string is already too long just return it
+                if (length_in >= mwidth) return in;
+
                 string out = "";
 
                 // Calculating overal space 

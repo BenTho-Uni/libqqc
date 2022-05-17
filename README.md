@@ -163,6 +163,10 @@ tba
 - [x] fit max item sharing (bytes?), _on_i ?
 - [x] fix max item in loader
 - [x] fix false sharing
+- [x] recheck performance on Justus 2.0
+    - [x] time resolved average cpu utilization on 4 nodes
+    - [x] core scaling 1-960 for Hybrid for do_mp2 and coulomb trafo
+    - [x] core scaling 1-960 for MPI only for do_mp2 and coulomb trafo
 
 ### Notes from MPI+Hybrid course
 - [ ] set MPI_init to MPI_init_thread with MPI_THREAD_FUNNELED and argcs
@@ -170,10 +174,6 @@ tba
 
 - [ ] add missing badges
 - [ ] add input/output of host programm which was used to export to testdata
-- [ ] recheck performance on Justus 2.0
-    - [ ] time resolved average cpu utilization on 4 nodes
-    - [ ] core scaling 1-960 for Hybrid for do_mp2 and coulomb trafo
-    - [ ] core scaling 1-960 for MPI only for do_mp2 and coulomb trafo
 - [ ] update Readme with scalings and results from Justus 2.0
 - [ ] write better maintainable variant code
 - [ ] OpenMP GPU variant implementation
@@ -182,6 +182,7 @@ tba
 - [ ] move to hdf5?
 - [ ] redo interface Q-Chem
 - [ ] interface python through pybind11
+- [ ] decide how digesters and integrals license
 
 # Credits
 

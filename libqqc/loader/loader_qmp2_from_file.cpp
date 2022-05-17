@@ -1,7 +1,6 @@
 ///
 /// member functions of the loader class which loads values and returns them to
 /// a reference
-/// @TODO this is just a dummy implementation, needs to be fully implemented
 /// @file loader_qmp2_from_file.cpp
 /// @author Benjamin Thomitzni
 /// @version 0.1 03-02-2022
@@ -122,6 +121,7 @@ namespace libqqc {
                 }
             }
         } 
+
     }
 
     void Loader_qmp2_from_file :: load_mat_coeff(double* mat_coeff) {
@@ -230,6 +230,7 @@ namespace libqqc {
         timings.stop_clock(1);
 
         timings.start_new_clock("    -- Transformation: ", 2, 0);
+
         // Coulomb Integral U_{MO}^P: for each slice P 
         // $U_{MO} = C_{occpuid}^T * (u_{AO}^P * C_{virtuals}
         //

@@ -187,7 +187,7 @@ namespace libqqc {
             }
             timings.stop_clock(4);
 
-            out << "* Ground State Energy Correction (eV): " << energy;
+            out << "* Ground State Energy Correction: " << energy;
 
             Printer_qmp2 printer(mvault, timings);
             printer.print_final(out);
