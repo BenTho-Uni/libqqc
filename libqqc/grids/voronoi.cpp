@@ -496,6 +496,7 @@ namespace libqqc {
 		// checking that the circumcenters for all triangles were calculated
 		if (vertex.size() != triangles.size()) throw invalid_argument(
 			"Must be same dimensionality of vertex and triangles.");
+			
 		vector <vector <vector<double>> > voronoi_edges; // initialising vector with edges for voronoi cells
             
 		// adding edges
@@ -512,7 +513,9 @@ namespace libqqc {
                                 sort(edge_found.begin(), edge_found.end());
 				voronoi_edges.push_back(edge_found); // save edge as part of voronoi cells
 				}}}
+			//check if the vertex has any outer edges, when yes -> create 'outer vertexes' and construct the outer edges 
 			if( faces.size() <4 ){
+			// find how many outer edges the vertex should have- max is 3
 			vector<vector<vector<double>>> outer_edges;
 			vector<vector<vector<double>>> triangle_faces {{triangles[ver][0], triangles[ver][1], triangles[ver][2]}, {triangles[ver][1], triangles[ver][2], triangles[ver][3] }, {triangles[ver][2], triangles[ver][3], triangles[ver][0]},{ triangles[ver][3], triangles[ver][0], triangles[ver][1]}};
 			set_symmetric_difference(triangle_faces.begin(), triangle_faces.end(), faces.begin(), faces.end(), back_inserter(outer_edges));
@@ -527,13 +530,13 @@ namespace libqqc {
 				vector< vector <double>>  edge_found{{ vertex[ver][0],vertex[ver][1],vertex[ver][2]},{ new_vertex[0], new_vertex[1], new_vertex[2]}}; // creating new edge between the vertex and new_vertex
 				cout << "new edge" << vertex[ver][0]<<","<< vertex[ver][1] <<"," << vertex[ver][2] <<","<< new_vertex[0] <<","<< new_vertex[1]<<","<< new_vertex[2]<< "\n";
 				sort(edge_found.begin(), edge_found.end());
+				//adding an outer edge
 				voronoi_edges.push_back(edge_found);
 			}			
 			}
 			
 		}
 		
-
 		for (int i = 0; i < voronoi_edges.size(); i++) {
 			if (voronoi_edges[i][0] == voronoi_edges[i][1]) { // checking if voronoi edge is just between same point, erase it
 				voronoi_edges.erase(voronoi_edges.begin() + i);
