@@ -2,6 +2,8 @@
 #define LIBQQC_LOADER_QMP2_FROM_QCHEM_H
 
 #include "../grids/grid.h"
+#include "../grids/isabel-grids.h"
+
 
 //Additional libraries
 #include <stdexcept>
@@ -66,7 +68,7 @@ namespace libqqc {
             ///
             /// @param[in,out] grid grid reference
             ///
-            void load_3Dgrid(Grid &grid);
+            void load_3Dgrid(Grid &grid, Grid3D<vector<double>, size_t>  &grid3D);
 
             ///
             /// @brief loads values into the Fock matrix

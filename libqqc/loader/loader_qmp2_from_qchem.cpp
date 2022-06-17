@@ -6,6 +6,8 @@
 /// @version 0.1 11-01-2022
 //
 
+//#include "../grids/isabel-grids.h"
+//#include "../grids/voronoi.h"
 #include "loader_qmp2_from_qchem.h"
 #include "../qchem/integrals/qqc_vmul.h"
 #include "../utils/ttimer.h"
@@ -68,7 +70,9 @@ namespace libqqc {
 
         //for now we have hardcoded the 1D grid until 
         //we have a full implementation
-        size_t npts = 4;
+        //bool Grid = rem_read(REM_QQC_GRID);
+	//if (Grid ) cout<< "recognized \n";
+	size_t npts = 4;
         size_t ndim = 1;
         double pts[npts * ndim];
         double wts[npts];
@@ -87,15 +91,34 @@ namespace libqqc {
     
     }
 
-    void Loader_qmp2_from_qchem :: load_3Dgrid(Grid &grid) {
-        //here we use the grid from libdftn, which is a becke
+    void Loader_qmp2_from_qchem :: load_3Dgrid(Grid &grid, Grid3D<vector<double>, size_t> &grid3D) {
+       	bool Becke = rem_read(REM_QQC_GRID);
+        // when bool is True - use coded Becke grid
+	//Grid3D<vector<double>, size_t> grid3D;
+	if (Becke==true ){
+	cout<< "My Becke grid used\n";
+	//values to test code 
+	vector<double> x { -1.04056,(-1.04056+0.07267)/2, -0.07267,(-0.07267+1.31941)/2 ,-1.31941};
+      	vector<double> y { 2.23373,(2.23373-2.19278)/2 ,2.19278,(2.19278-1.41547)/2 ,1.41547};
+      	vector<double> z { -0.00942, (-0.00942-0.01248)/2,0.01248, (0.01248-0.43837)/2 ,0.43837};
+      	int n_points= 10;
+      	size_t dim =3.0;
+	cout <<"values set for grid wrapper\n";
+	grid3D.set_grid_wrapper(x, y, z, n_points, dim);
+	cout<< "wrapper done\n";
+	}
+	
+	//when bool False - use grid from qchem
+	if(Becke==false){    
+	//here we use the grid from libdftn, which is a becke
         //weighted grid. This will also be replaced by our own 
         //implementation
 
         // This is setup for the molecular grid class,
         // from where we will get our 3D grid points. 
         // Most names are self explanatory, the rest ist 
-        // QChem magic. 
+        // QChem magic.
+	 
         XCAtoms xcatom; 
         int jobID0 = 0; 
         XCFunctional Func(0,0); 
@@ -134,7 +157,8 @@ namespace libqqc {
 
         grid.set_grid(npts, 3, pts, wts);
 
-        delete[] iPtBat; 
+        delete[] iPtBat;
+	}	
     }
 
     void Loader_qmp2_from_qchem :: load_mat_fock(double* mat_fock) {
@@ -183,10 +207,17 @@ namespace libqqc {
     void Loader_qmp2_from_qchem :: load_mat_cgto(double* mat_cgto) {
         Ttimer timings(0);
         timings.start_new_clock("Timings AoToMo CGTO: ", 0, 0);
-        Grid grid;
-        load_3Dgrid(grid);
-        size_t npts = grid.get_mnpts();
-
+        
+	bool Becke = rem_read(REM_QQC_GRID);
+	Grid3D<vector<double>, size_t> grid3D;
+	Grid grid;
+	load_3Dgrid(grid, grid3D); // should load my grid when Bool is true
+	// when bool is True - use coded Becke grid
+	size_t npts;
+	if (Becke==true) npts = grid3D.get_mnpts() ; // Grid3D.get_mnpts();
+	// when bool False - use grid from Qchem
+	if(Becke==false) npts = grid.get_mnpts();
+	
         size_t nao = 0;
         load_nao(nao);
 
@@ -208,7 +239,12 @@ namespace libqqc {
 
 
         //first we set what is basically vector fiew of our grid points
-        libqints::array_view<double> av_pts(grid.get_mpts(), npts * 3);
+        double* mpts;
+	if(Becke==true) mpts = grid3D.get_mpts();
+	if(Becke==false) mpts = grid.get_mpts();
+	
+	libqints::array_view<double> av_pts(mpts, npts * 3);
+
         //we need both the cgto basis and the delta matrix
         libqints::basis_1e1c_cgto<double> basis = libqints::qchem::aobasis.b1;
         libqints::basis_1e1c_delta bg(npts, av_pts);
@@ -262,8 +298,10 @@ namespace libqqc {
     void Loader_qmp2_from_qchem :: load_cube_coul(double* cube_coul) {
         Ttimer  timings(0);
         timings.start_new_clock("Timings AoToMo Coulomb Integral: ", 0, 0);
-        Grid grid;
-        load_3Dgrid(grid);
+        bool Becke = rem_read(REM_QQC_GRID);
+	Grid grid;
+        Grid3D<vector<double>, size_t> grid3D;
+	load_3Dgrid(grid, grid3D);
         libqints::basis_1e1c_cgto<double> basis = libqints::qchem::aobasis.b1;
 
         size_t nao = 0;
@@ -282,12 +320,26 @@ namespace libqqc {
         //some file, so we need to set the right integer to read in the 
         //matrix, here it is the fock MO coefficient and fock matrix
         FileMan(FM_READ, FILE_MO_COEFS, FM_DP, nao * nmo, 0, FM_BEG, coeff);
-
-        size_t npts = grid.get_mnpts();
-        //First we need to set up the multipole object for each point which we
+	
+	size_t npts;
+        if (Becke==true) npts = grid3D.get_mnpts() ; // Grid3D.get_mnpts();
+        // when bool False - use grid from Qchem
+        if(Becke==false) npts = grid.get_mnpts();
+        cout << "loaded npts of coulomb\n";	
+	//First we need to set up the multipole object for each point which we
         //will pass to the digester for the integral
         std::vector< libqints::ftype_multipole > v_pts;
-
+	if(Becke==true){
+	 for (int i = 0; i < npts; i++){
+            libqints::ftype_multipole f_mult;
+            f_mult.x = grid3D.get_mpts()[i * 3 + 0];
+            f_mult.y = grid3D.get_mpts()[i * 3 + 1];
+            f_mult.z = grid3D.get_mpts()[i * 3 + 2];
+            f_mult.k = 0;
+            v_pts.push_back(f_mult);
+        }//for i
+	}
+	if(Becke==false){
         for (int i = 0; i < npts; i++){
             libqints::ftype_multipole f_mult;
             f_mult.x = grid.get_mpts()[i * 3 + 0];
@@ -296,7 +348,8 @@ namespace libqqc {
             f_mult.k = 0;
             v_pts.push_back(f_mult);
         }//for i
-        libqints::basis_1e1c_multipole bm (v_pts);
+	}
+	libqints::basis_1e1c_multipole bm (v_pts);
 
         double mom[npts];
         for (int i = 0; i < npts; i++) mom[i] = 1;
@@ -347,4 +400,4 @@ namespace libqqc {
         delete[] coul_ao;
     }
 
-} //namespace libqqc
+} //namespace libqq

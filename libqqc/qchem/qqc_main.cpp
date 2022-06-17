@@ -47,7 +47,8 @@ int qqc_main(){
         // The vault calls the loader functions and saves all the necessary data
         // for this method
         timings.start_new_clock("Timing Vault_qmp2:: vault : ", 1, 0);
-        Vault_qmp2 vault(loader);
+        cout <<"vault class is called\n";
+	Vault_qmp2 vault(loader); 
         timings.stop_clock(1);
         cout << timings.print_clocks(1);
 

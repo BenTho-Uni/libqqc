@@ -81,7 +81,7 @@ namespace libqqc {
                 for (size_t i = 0; i < mnocc; i++){
                     for (size_t a = 0; a < mnvirt; a++){
                         mc_c [p * mnvirt * mnocc + i * mnvirt + a] *=
-                            mv3Dwts[p];
+                            mv3Dwts[p]; //for becke does every coordinate in point have an own weight, so each point three weights..
                     }
                 }
             }

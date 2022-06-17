@@ -13,9 +13,13 @@ set(HDR_ADDITIONAL
 
 set(SRC_GRIDS
     grids/grid.cpp
+    grids/becke-grid.cpp
 )
 
 set(HDR_GRIDS
+    grids/vectorfuncs.h
+    grids/voronoi.h
+    grids/isabel-grids.h
     grids/grid.h
 )
 

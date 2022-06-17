@@ -63,10 +63,11 @@ namespace libqqc {
             /// @param[in,out] param [param]
             /// @return [return]
             ///
-            Printer_qmp2 (Vault_qmp2 &vault, Ttimer &timings) 
-                : mnao(vault.get_mnao()), mnmo(vault.get_mnmo()), 
+	    //
+               Printer_qmp2 (Vault_qmp2 &vault, Ttimer &timings) 
+		 : mnao(vault.get_mnao()), mnmo(vault.get_mnmo()), 
                 mnocc(vault.get_mnocc()), mnvirt(vault.get_mnvirt()),
-                m3Dnpts(vault.get_m3Dgrid().get_mnpts()),
+                m3Dnpts(vault.get_becke3Dgrid().get_mnpts()),
                 m1Dnpts(vault.get_m1Dgrid().get_mnpts()),
                 mprnt_lvl(vault.get_mprnt_lvl()),
                 mtimings(timings) {
@@ -89,7 +90,7 @@ namespace libqqc {
                     mnprocs = max_id;
 #endif
             };
-            ///
+	    ///
             /// @brief [briefdescription]
             ///
             /// @details [longdescription]

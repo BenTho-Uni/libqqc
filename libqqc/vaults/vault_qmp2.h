@@ -1,14 +1,28 @@
 #ifndef LIBQQC_VAULT_QMP2_H
 #define LIBQQC_VAULT_QMP2_H
 
-#include "../grids/grid.h"
-
 //Additional libraries
 #include <stdexcept>
 #include <iostream>
+#include <vector>
 
 #include "../loader/loader_qmp2.h"
 #include "../loader/loader_qmp2_from_file.h"
+#include "../grids/isabel-grids.h"
+#include "../grids/grid.h"
+
+
+// Q-Chem libraries - including to test if they add the rem-list
+#include <qchem.h>
+#include <libqints/basis/basis_1e1c_cgto.h>
+#include <libqints/qchem/aobasis.h>
+#include <libqints/types.h>
+#include <libqints/ftype/ftype_cgto.h>
+
+#include <libdftn/xcclass.h>
+#include <libgrid/libgrid/eval_cgto.h>
+#include <libqints/arrays/array_view.h>
+#include <libqints/exec/dev_omp.h>
 
 #if QCHEM
 #include "../loader/loader_qmp2_from_qchem.h"
@@ -40,6 +54,7 @@ namespace libqqc {
             // Grid objects
             Grid m1Dgrid; ///< 1D grid object holding the points and weights
             Grid m3Dgrid; ///< 3D grid object holding the points and weights
+	    Grid3D<vector<double>, size_t> becke3Dgrid; /// < 3D grid object for coded becke grid
 
             // Matrices 
             double* mmat_fock = NULL; ///< Fock matrix in AO $F_{\nu \mu}$
@@ -58,7 +73,7 @@ namespace libqqc {
             /// @return [return]
             ///
             bool check_data_validity() {
-
+		bool Becke = rem_read(REM_QQC_GRID);
                 if (mnocc == 0) throw invalid_argument(
                         "Number of occupied orbitals shouldn't be 0.");
                 if (mnmo == 0) throw invalid_argument(
@@ -67,8 +82,12 @@ namespace libqqc {
                         "Number of atomic orbitals shouldn't be 0.");
                 if (!m1Dgrid.check_data_validity()) throw invalid_argument(
                         "1D Grid data not valid.");
-                if (!m3Dgrid.check_data_validity()) throw invalid_argument(
-                        "3D Grid data not valid.");
+                if(Becke == false){
+		if (!m3Dgrid.check_data_validity()) throw invalid_argument(
+                        "3D Grid data not valid.");}
+		if(Becke == true){
+		if (!becke3Dgrid.check_data_validity()) throw invalid_argument(
+			"3D Grid data not valid.");}
                 if (!mmat_fock) throw invalid_argument(
                         "Fock matrix pointer cannot be NULL.");
                 if (!mmat_cgto) throw invalid_argument(
@@ -106,8 +125,8 @@ namespace libqqc {
 
                 // loading in matrices
                 size_t nao2 = mnao * mnao;
-                size_t npts = m3Dgrid.get_mnpts();
-                mmat_fock = new double[mnmo * mnmo];
+                size_t npts = m3Dgrid.get_mnpts();   
+		mmat_fock = new double[mnmo * mnmo];
                 loader.load_mat_fock (mmat_fock);
                 mmat_cgto = new double[npts * mnmo];
                 loader.load_mat_cgto (mmat_cgto);
@@ -145,7 +164,7 @@ namespace libqqc {
 
                 // loading in matrices
                 size_t nao2 = mnao * mnao;
-                size_t npts = m3Dgrid.get_mnpts();
+		size_t npts = m3Dgrid.get_mnpts();
                 mmat_fock = new double[mnmo * mnmo];
                 loader.load_mat_fock (mmat_fock);
                 mmat_cgto = new double[npts * mnmo];
@@ -166,24 +185,36 @@ namespace libqqc {
             /// @param[in] loader template for Loader for the qmp2 calculation
             ///
             Vault_qmp2(Loader_qmp2_from_qchem loader) {
-
-                // loading meta information
+		bool Becke = rem_read(REM_QQC_GRID);
+                cout << "Qchem loader used\n";
+		// loading meta information
                 loader.load_nocc (mnocc);
                 loader.load_nvirt (mnvirt);
                 mnmo = mnocc + mnvirt;
                 loader.load_nao (mnao);
-
+		cout <<"values loaded\n";
                 // loading input information
                 loader.load_prnt_lvl (mprnt_lvl);
 
                 // load grid object
-                loader.load_1Dgrid (m1Dgrid);
-                loader.load_3Dgrid (m3Dgrid);
-
+                loader.load_1Dgrid(m1Dgrid);
+                cout << "1D grid loaded\n";
+	       	loader.load_3Dgrid(m3Dgrid, becke3Dgrid); // when bool is True - should load coded Becke Grid
+		cout << "loaded both grids\n";
                 // loading in matrices
                 size_t nao2 = mnao * mnao;
-                size_t npts = m3Dgrid.get_mnpts();
-                mmat_fock = new double[mnmo * mnmo];
+		
+		size_t npts;
+		// if bool is True - use coded Becke grid
+		if(Becke== true){ npts = becke3Dgrid.get_mnpts();
+		cout <<"in if statement:" << npts;
+		}	
+		// if bool is False - use grid from qchem
+                if(Becke==false) npts = m3Dgrid.get_mnpts();
+                cout <<"loaded npts\n";
+		cout << npts;
+		//cout << *npts;
+		mmat_fock = new double[mnmo * mnmo];
                 loader.load_mat_fock (mmat_fock);
                 mmat_cgto = new double[npts * mnmo];
                 loader.load_mat_cgto (mmat_cgto);
@@ -191,6 +222,8 @@ namespace libqqc {
                 loader.load_cube_coul (mcube_coul);
 
                 check_data_validity();
+		cout << "vault func worked";
+
             }; 
 #endif
 
@@ -275,7 +308,18 @@ namespace libqqc {
             Grid& get_m3Dgrid() {
                 if (!m3Dgrid.check_data_validity()) throw invalid_argument(
                         "3D Grid data not valid.");
-                return m3Dgrid;
+		return m3Dgrid; 
+            };
+
+	    ///
+            /// @brief Get the 3D coded becke grid as a reference
+            ///
+            /// @return pass the 3D coded becke grid as a reference
+            ///
+            Grid3D<vector<double>, size_t>& get_becke3Dgrid() {
+                //if (!becke3Dgrid.check_data_validity()) throw invalid_argument(
+                //        "3D Grid data not valid.");
+                return becke3Dgrid;
             };
 
             ///
