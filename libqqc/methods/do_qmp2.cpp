@@ -1,8 +1,8 @@
 ///
 /// Methods for the setup of qmp2
 /// @file do_mp2.cpp
-/// @author Benjamin Thomitzni
-/// @version 0.1 01-01-2020
+/// @author Benjamin Thomitzni and Isabel Vinterbladh
+/// @version 0.2 12-09-2022
 //
 
 
@@ -28,14 +28,12 @@ namespace libqqc {
         // Grabbing the calculation data we need
         size_t p1Dnpts = mvault.get_m1Dgrid().get_mnpts();
         size_t p3Dnpts;
-	cout << "method func started\n";
 	if(Becke == false) p3Dnpts = mvault.get_m3Dgrid().get_mnpts();
         if(Becke==true) p3Dnpts = mvault.get_becke3Dgrid().get_mnpts(); // use coded becke grid
 	size_t nocc = mvault.get_mnocc();
         size_t nvirt = mvault.get_mnvirt();
         size_t nmo = nocc + nvirt;
         size_t nao = mvault.get_mnao(); 
-	cout << "First Becke call worked\n";
         double* mcgto = mvault.get_mmat_cgto();
         double* mf = mvault.get_mmat_fock();
         double* c_c = mvault.get_mcube_coul();
@@ -43,18 +41,15 @@ namespace libqqc {
         double* v1Dwts = mvault.get_m1Dgrid().get_mwts();
         double* v3Dwts; 
 	if(Becke==false) v3Dwts= mvault.get_m3Dgrid().get_mwts();
-	if(Becke== true) v3Dwts = mvault.get_becke3Dgrid().get_mwts(); // use coded becke grid
-	cout << "Second Becke call worked\n";
-
-        // setting up the MO quantaties and calculating them
-
-        double* m1Deps_o = new double[p1Dnpts * nocc]();
-        double* m1Deps_v = new double[p1Dnpts * nvirt]();
+	if(Becke==true) v3Dwts = mvault.get_becke3Dgrid().get_mwts(); // use coded becke grid
+        
+	// Setting up the MO quantities and calculating them
+	double* m1Deps_o = new double[p1Dnpts * nocc]();
+	double* m1Deps_v = new double[p1Dnpts * nvirt]();
         double* c1Deps_ov = new double[p1Dnpts * nocc * nvirt]();
         double* m_o = new double[p3Dnpts * nocc]();
         double* m_v = new double[p3Dnpts * nvirt]();
         double vf[nmo] = {};
-	cout << "First setup worked\n";
 
         // Reading in the Diagonal of the MO Fock matrix
         for (size_t p = 0; p < nmo; p++){
@@ -77,7 +72,7 @@ namespace libqqc {
             }
         }
 
-         cout << "second setup worked\n";
+         
 
         // Precalculating the exponential factors
 #pragma omp parallel for schedule(dynamic) default(none)\
@@ -85,29 +80,28 @@ namespace libqqc {
                 v1Dpts, vf)
         for (size_t k = 0; k < p1Dnpts; k++){
             for (size_t i = 0; i < nocc; i++){
-                m1Deps_o[k * nocc+ i] = 
+                 m1Deps_o[k * nocc+ i] = 
                     pow((double) v1Dpts[k], (double) (- vf[i]));
-            }//for i
+	    }//for i
 
             for (size_t a = 0; a < nvirt; a++){
                 size_t pos_f = a + nocc;
                 m1Deps_v[k * nvirt + a] = 
                     pow((double) v1Dpts[k], (double) ( vf[pos_f]));
-            }//for a
+	    }//for a
 
             double inv_t = 1.0 / (double) v1Dpts[k];
             for (size_t i = 0; i < nocc; i++){
                 for (size_t a = 0; a < nvirt; a++){
                     c1Deps_ov[k * nocc * nvirt + i * nvirt + a] = 
-                        m1Deps_o[k * nocc + i] * m1Deps_v[k * nvirt + a] * inv_t;
-                }//for a     
+                	    m1Deps_o[k * nocc + i] * m1Deps_v[k * nvirt + a] * inv_t;
+		}//for a     
             }//for i
         }//for k 
 
         size_t offset = 0;
         size_t npts_to_proc = p3Dnpts;
         double energy = 0.0;
-	cout << "third setup worked\n";
 
         timings.start_new_clock("Timing Qmp2_energy::compute : ", 0, 1);
         timings.start_new_clock("    -- Setting up calculation: ", 1, 2);
@@ -129,18 +123,15 @@ namespace libqqc {
                 offset,
                 npts_to_proc);
         timings.stop_clock(1);
-	cout << "init of qmp2 energy worked\n";
         timings.start_new_clock("    -- qmp2_energy.compute(): ", 2, 2);
         energy = qmp2_energy.compute();
-        cout<<"QMP@ energy; " <<  energy<< "\n";
+ 
 	timings.stop_clock(2);
 
         timings.stop_clock(0);
-	cout << "energy calc worked\n";
+	
         out << "* Ground State Energy Correction: " << energy;
 	Printer_qmp2 printer(mvault, timings);
-	//if(Becke==true) printer.Becke_printer_qmp2(mvault, timings);
-        //if(Becke==false) printer.Ben_printer_qmp2(mvault, timings);
         printer.print_final(out);
 
         delete[] m_v;
@@ -148,7 +139,6 @@ namespace libqqc {
         delete[] c1Deps_ov;
         delete[] m1Deps_v;
         delete[] m1Deps_o;
-	cout << "all in method worked\n";
 
     } //Do_qmp2::member_fn
 

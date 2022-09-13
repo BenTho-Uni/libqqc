@@ -49,7 +49,8 @@ namespace libqqc {
             size_t mnocc = 0; ///< number of occupied orbitals
             size_t mnvirt = 0; ///< number of virtual orbitals
             size_t m3Dnpts = 0; ///< number of 3D grid points
-            size_t m1Dnpts = 0; ///< number of 1D grid points
+	    size_t mBecke3Dnpts = 0; ///< number of 3D Becke grid points
+	    size_t m1Dnpts = 0; ///< number of 1D grid points
             int mprnt_lvl = 0; ///< requested print level
             
             Ttimer &mtimings; ///< timing of method
@@ -67,8 +68,9 @@ namespace libqqc {
                Printer_qmp2 (Vault_qmp2 &vault, Ttimer &timings) 
 		 : mnao(vault.get_mnao()), mnmo(vault.get_mnmo()), 
                 mnocc(vault.get_mnocc()), mnvirt(vault.get_mnvirt()),
-                m3Dnpts(vault.get_becke3Dgrid().get_mnpts()),
-                m1Dnpts(vault.get_m1Dgrid().get_mnpts()),
+                mBecke3Dnpts(vault.get_becke3Dgrid().get_mnpts()),
+                m3Dnpts(vault.get_m3Dgrid().get_mnpts()),
+		m1Dnpts(vault.get_m1Dgrid().get_mnpts()),
                 mprnt_lvl(vault.get_mprnt_lvl()),
                 mtimings(timings) {
 #if LIBQQC_WITH_OPENMP
@@ -137,10 +139,11 @@ namespace libqqc {
             /// @param[in,out] ostringstream Output string to modify
             ///
             void print_method_qmp2(ostringstream &out){
-                // Calculation Details
-                out << make_line("Calculation Details", 'm') << endl
+                 bool Becke = rem_read(REM_QQC_GRID);
+	    if(Becke == false){
+	      out << make_line("Calculation Details", 'm') << endl
                     << make_full_line('-') << endl
-                    << make_line("* Method:             " + mmethod_name, 'l') 
+                    << make_line("* Method:             " + mmethod_name, 'l')
                     << endl
                     << make_full_line('-') << endl
                     << make_line("* grid points (3D):   " + to_string(m3Dnpts)
@@ -150,16 +153,41 @@ namespace libqqc {
                     //<< make_line("* Print level:        " + to_string(mprnt_lvl)
                     //        , 'l') << endl
                     << make_full_line('-') << endl
-                    << make_line("* atomic orbitals:    " + to_string(mnao), 
+                    << make_line("* atomic orbitals:    " + to_string(mnao),
                             'l') << endl
-                    << make_line("* molecular orbitals: " + to_string(mnmo), 
+                    << make_line("* molecular orbitals: " + to_string(mnmo),
                             'l') << endl
                     << make_line("    -- occupied:      " + to_string(mnocc)
                             , 'l') << endl
                     << make_line("    -- virtual:       " + to_string(mnvirt)
                             , 'l') << endl
                     << make_full_line('-') << endl;
-            };
+	    }
+	    if(Becke==true){ //if coded Becke grid used
+	    // Calculation Details
+                out << make_line("Calculation Details", 'm') << endl
+                    << make_full_line('-') << endl
+                    << make_line("* Method:             " + mmethod_name, 'l')
+                    << endl
+                    << make_full_line('-') << endl
+                    << make_line("* grid points (3D):   " + to_string(mBecke3Dnpts)
+                            , 'l') << endl
+                    << make_line("* grid points (1D):   " + to_string(m1Dnpts)
+                            , 'l') << endl
+                    //<< make_line("* Print level:        " + to_string(mprnt_lvl)
+                    //        , 'l') << endl
+                    << make_full_line('-') << endl
+                    << make_line("* atomic orbitals:    " + to_string(mnao),
+                            'l') << endl
+                    << make_line("* molecular orbitals: " + to_string(mnmo),
+                            'l') << endl
+                    << make_line("    -- occupied:      " + to_string(mnocc)
+                            , 'l') << endl
+                    << make_line("    -- virtual:       " + to_string(mnvirt)
+                            , 'l') << endl
+                    << make_full_line('-') << endl;
+	    }
+		};
             ///
             /// @brief Finishes a given string into final line
             ///

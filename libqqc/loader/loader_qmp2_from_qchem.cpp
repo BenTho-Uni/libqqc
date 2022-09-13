@@ -2,12 +2,10 @@
 /// member functions of the loader class which loads values and returns them to
 /// a reference
 /// @file loader_qmp2_from_qchem.cpp
-/// @author Benjamin Thomitzni
-/// @version 0.1 11-01-2022
-//
+/// @author Benjamin Thomitzni and Isabel Vinterbladh
+/// @version 0.2 12-09-2022
+///
 
-//#include "../grids/isabel-grids.h"
-//#include "../grids/voronoi.h"
 #include "loader_qmp2_from_qchem.h"
 #include "../qchem/integrals/qqc_vmul.h"
 #include "../utils/ttimer.h"
@@ -25,6 +23,9 @@
 #include <libqints/exec/dev_omp.h>
 
 #include <iostream>
+#include <typeinfo>
+#include <numeric>
+#include <vector>
 
 using namespace std;
 
@@ -94,20 +95,51 @@ namespace libqqc {
     void Loader_qmp2_from_qchem :: load_3Dgrid(Grid &grid, Grid3D<vector<double>, size_t> &grid3D) {
        	bool Becke = rem_read(REM_QQC_GRID);
         // when bool is True - use coded Becke grid
-	//Grid3D<vector<double>, size_t> grid3D;
 	if (Becke==true ){
-	cout<< "My Becke grid used\n";
-	//values to test code 
-	vector<double> x { -1.04056,(-1.04056+0.07267)/2, -0.07267,(-0.07267+1.31941)/2 ,-1.31941};
-      	vector<double> y { 2.23373,(2.23373-2.19278)/2 ,2.19278,(2.19278-1.41547)/2 ,1.41547};
-      	vector<double> z { -0.00942, (-0.00942-0.01248)/2,0.01248, (0.01248-0.43837)/2 ,0.43837};
-      	int n_points= 10;
-      	size_t dim =3.0;
-	cout <<"values set for grid wrapper\n";
-	grid3D.set_grid_wrapper(x, y, z, n_points, dim);
-	cout<< "wrapper done\n";
+	XCAtoms xcatom;
+	int n_points=1000; // give number of points
+        size_t dim =3.0; // give dimension
+	int nAtoms = xcatom.getNAtoms(); // getting atom coordinates
+	double bohr_to_ang = 0.529177249; // unit transform factor for bohr to Angstrom 
+	int nr_bonds = 2; //number of bonds for molecule, 2 for H2O
+	vector<double> x;
+	vector<double> y;
+	vector<double> z;
+	for( int a = 0; a < nAtoms ; a++){ // getting coordinates and saving in respective vector
+		double* xyz= new double[dim];
+        	xcatom.getXYZ(a, xyz);
+		x.insert(x.end(), xyz[0]);
+                y.insert(y.end(), xyz[1]);
+                z.insert(z.end(), xyz[2]);
+		delete[] xyz;
 	}
+	//adding the midpoints of bonds - for H2O five center method
+        //x.insert(x.end(), {(x[0]+x[1])/2,(x[1]+x[2])/2});
+        //y.insert(y.end(), {(y[0]+y[1])/2,(y[1]+y[2])/2});
+        //z.insert(z.end(), {-0.5, 0.5});
+	//z.insert(z.end(), {(z[0]+z[1])/2,(z[1]+z[2])/2});
+        // change unit from Bohr to Angstroem
+	transform(x.begin(), x.end(), x.begin(), [bohr_to_ang](double c){ return c*bohr_to_ang;});
+	transform(y.begin(), y.end(), y.begin(), [bohr_to_ang](double c){ return c*bohr_to_ang;});
+	transform(z.begin(), z.end(), z.begin(), [bohr_to_ang](double c){ return c*bohr_to_ang;});
 	
+	// For elliptical grid uncomment code
+	//vector<vector<vector<double>>> foci;
+	//vector<vector<double>> center;
+	//for( int b = 0; b <nr_bonds ; b++){
+	//	vector<vector<double>> foc;
+	//	vector<double> f0{x[b], y[b], z[b]};
+	//       vector<double> f1{x[b+1], y[b+1], z[b+1]};
+	//	foc.push_back(f0);
+	//	foc.push_back(f1);
+	//      vector<double> cen{(f0[0]+f1[0])/2,(f0[1]+f1[1])/2, (f0[2]+f1[2])/2 };
+	//	center.push_back(cen);	
+	//	foci.push_back(foc);  
+	//}
+	//grid3D.set_ellgrid_wrapper(center,foci,x,y,z,n_points, dim);
+
+	grid3D.set_grid_wrapper(x, y, z, n_points, dim);
+	}
 	//when bool False - use grid from qchem
 	if(Becke==false){    
 	//here we use the grid from libdftn, which is a becke
@@ -242,7 +274,7 @@ namespace libqqc {
         double* mpts;
 	if(Becke==true) mpts = grid3D.get_mpts();
 	if(Becke==false) mpts = grid.get_mpts();
-	
+
 	libqints::array_view<double> av_pts(mpts, npts * 3);
 
         //we need both the cgto basis and the delta matrix
@@ -325,7 +357,6 @@ namespace libqqc {
         if (Becke==true) npts = grid3D.get_mnpts() ; // Grid3D.get_mnpts();
         // when bool False - use grid from Qchem
         if(Becke==false) npts = grid.get_mnpts();
-        cout << "loaded npts of coulomb\n";	
 	//First we need to set up the multipole object for each point which we
         //will pass to the digester for the integral
         std::vector< libqints::ftype_multipole > v_pts;

@@ -16,12 +16,9 @@ namespace libqqc {
 template<typename vec_type>
 class Voronoi {
 private:
-    multimap<vector<double>, vector<vector<double>>> voronoi_cells;
-    map<vector<double>, vector<double>> vertex_weights;
+    multimap<vector<double>, vector<vector<vector<double>>>> voronoi_cells;
   
 public:
-    //multimap<vector<double>, vector<vector<vector<double>>>> voronoi_cells;
-    //map<vector<double>, vector<double>> vertex_weights;
     
     ///
     /// @brief Function sorting the points 
@@ -87,7 +84,15 @@ public:
     ///
     /// @return Return voronoi cells 3D
     ///  
-    multimap<vector<double>, vector<vector<double>>>  getting_dual_graph_3D(vector<vector<vector<double>>> triangles);
+    multimap<vector<double>, vector<vector<vector<double>>>>  getting_dual_graph_3D(vector<vector<vector<double>>> triangles);
+    ///
+    /// @brief Function calculates weight for point in voronoi cell
+    ///
+    /// @details This function calculates the weight for one coordinate in space
+    ///
+    /// @return Return voronoi cells weight for point
+    ///  
+    double weight_generator(vector<double> pts, vector<double> vertex_pts, vector<vector<double>> sorted_pts);
     ///
     /// @brief Function calculates weights for voronoi cells
     ///
@@ -95,15 +100,7 @@ public:
     ///
     /// @return Return voronoi cells weights
     ///  
-    vector<double> weight_generation(vec_type x_pts);
-    ///
-    /// @brief Function calculates weights for voronoi cells
-    ///
-    /// @details This function calculates the weights for each dimension of voronoi cell
-    ///
-    /// @return Return voronoi cells weights
-    ///  
-    map<vector<double>, vector<double>> voronoi_weights(vec_type x_pts, vec_type y_pts, vec_type z_pts);
+    multimap<vector<double>, double> voronoi_weights(vector<vector<double>> sorted_pts, vector<vector<vector<double>>> gauss_cheb_pts, multimap<vector<double>, vector<double>> pts_in_cell);
     ///
     /// @brief Function calling all functions for constructing the voronoi cells
     ///
@@ -111,7 +108,7 @@ public:
     ///
     /// @return Return voronoi cells 3D with weights
     ///  
-    void construct_voronoi_3D(vec_type x_pts, vec_type y_pts, vec_type z_pts);  //, multimap<vector<double>, vector<vector<vector<double>>>> voronoi_cells, map<vector<double>, vector<double>> vertex_weights); 
+    void construct_voronoi_3D(vec_type x_pts, vec_type y_pts, vec_type z_pts); 
    
    ///
    /// @brief Getter for size of grid
@@ -120,7 +117,7 @@ public:
    ///
    /// @return size_t size of grid
    ///
-   multimap<vector<double>, vector<vector<double>>>  get_vcells() {
+   multimap<vector<double>, vector<vector<vector<double>>>>  get_vcells() {
    return voronoi_cells;
     };
    ///
@@ -130,8 +127,8 @@ public:
    ///
    /// @return size_t size of grid
    ///
-   map<vector<double>, vector<double>>  get_vweights() {
-   return vertex_weights;
+   multimap<vector<double>, double>  get_vweights(vector<vector<vector<double>>> gauss_cheb_pts, multimap<vector<double>, vector<double>> pts_in_cell, vector<vector<double>> sorted_pts) {
+   return voronoi_weights(sorted_pts, gauss_cheb_pts, pts_in_cell);
     };
 
 }; // Class Voronoi

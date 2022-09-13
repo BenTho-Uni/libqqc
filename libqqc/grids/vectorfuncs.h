@@ -13,6 +13,36 @@ class VectorFuncs {
     private:
 	
     public:
+   
+    ///
+    /// @brief Function calculating the min and max of a set of values
+    ///
+    /// @details Calculating the minimum and maximum of a set of values
+    ///
+    /// @return the minimum and maximum value
+    ///
+
+    vector<double> min_max(vector<double> pts){
+	double max = pts[0]; // finding interval of points, maximum
+        double min = pts[0]; // finding interval of points, minimum
+        vector<double> minmax;
+	//for loop to find max and min
+        for (int i = 1; i < pts.size(); i++) {
+            if (pts[i] < min) {
+                min = pts[i];
+            }
+            if (pts[i] > max) {
+                max = pts[i];
+            }
+        }
+	if( abs(min+max) < 0.00000001){
+	min = -1;
+	max = 1;
+	}
+	minmax.insert(minmax.end(),min);
+	minmax.insert(minmax.end(),max);
+ 	return minmax;
+    };
     ///
     /// @brief Function calculating the length between two points  
     ///
@@ -20,22 +50,10 @@ class VectorFuncs {
     ///
     /// @return the distance as a double
     ///
-    double Length(vector<double> a, vector<double> b) {
-      double l = pow(a[0] - b[0], 2) + pow(a[1] - b[1], 2) + pow(a[2] - b[2], 2);
+    double Length(vector<double> vect_a, vector<double> vect_b) {
+      double l = pow(vect_a[0] - vect_b[0], 2) + pow(vect_a[1] - vect_b[1], 2) + pow(vect_a[2] - vect_b[2], 2);
       double sqrt_l = sqrt(l);
       return sqrt_l;
-	};
-  
-    ///
-    /// @brief Function constructing the U vector 
-    ///
-    /// @details Function constructing the U vector for circumcenter calculations
-    ///
-    /// @return U vector returned 
-    ///
-    vector<double> U(vector<double> a, vector<double> b) {
-      vector<double> u{ a[0] - b[0], a[1] - b[1], a[2] - b[2] };
-      return u;
 	};
   
     ///
@@ -45,12 +63,12 @@ class VectorFuncs {
     ///
     /// @return A vector with the cross product
     ///
-    vector<double> crossProduct(vector<double> vect_A, vector<double> vect_B) {
-      vector<double> cross_P(3, 0);
-      cross_P[0] = vect_A[1] * vect_B[2] - vect_A[2] * vect_B[1];
-      cross_P[1] = vect_A[2] * vect_B[0] - vect_A[0] * vect_B[2];
-      cross_P[2] = vect_A[0] * vect_B[1] - vect_A[1] * vect_B[0];
-      return cross_P;
+    vector<double> crossProduct(vector<double> vect_a, vector<double> vect_b) {
+      vector<double> cross_p(3, 0);
+      cross_p[0] = vect_a[1] * vect_b[2] - vect_a[2] * vect_b[1];
+      cross_p[1] = vect_a[2] * vect_b[0] - vect_a[0] * vect_b[2];
+      cross_p[2] = vect_a[0] * vect_b[1] - vect_a[1] * vect_b[0];
+      return cross_p;
 	};
     ///
     /// @brief Function constructing the matrix used for circumcenter calculations 
@@ -92,7 +110,7 @@ class VectorFuncs {
     ///
     /// @return the determinant of the 4x4 matrix
     ///
-    double Determinant( vector<vector<double>>  mat){
+    double Determinant(vector<vector<double>>  mat){
             double det= 0;
             for (int a = 0; a < 4; a++) {
                     double sub_sum =  0;

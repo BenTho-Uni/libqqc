@@ -20,8 +20,9 @@ namespace libqqc {
 
     class Loader_qmp2_from_qchem {
         private:
-
-        public: 
+        
+	public: 
+            int counter = 0; //for ell grid
 
             ///
             /// @brief Constructor of loader_qmp2 class

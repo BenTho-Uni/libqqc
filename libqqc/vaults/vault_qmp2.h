@@ -186,34 +186,26 @@ namespace libqqc {
             ///
             Vault_qmp2(Loader_qmp2_from_qchem loader) {
 		bool Becke = rem_read(REM_QQC_GRID);
-                cout << "Qchem loader used\n";
 		// loading meta information
                 loader.load_nocc (mnocc);
                 loader.load_nvirt (mnvirt);
                 mnmo = mnocc + mnvirt;
                 loader.load_nao (mnao);
-		cout <<"values loaded\n";
                 // loading input information
                 loader.load_prnt_lvl (mprnt_lvl);
 
                 // load grid object
                 loader.load_1Dgrid(m1Dgrid);
-                cout << "1D grid loaded\n";
 	       	loader.load_3Dgrid(m3Dgrid, becke3Dgrid); // when bool is True - should load coded Becke Grid
-		cout << "loaded both grids\n";
                 // loading in matrices
                 size_t nao2 = mnao * mnao;
 		
 		size_t npts;
 		// if bool is True - use coded Becke grid
-		if(Becke== true){ npts = becke3Dgrid.get_mnpts();
-		cout <<"in if statement:" << npts;
-		}	
+		if(Becke== true) npts = becke3Dgrid.get_mnpts();	
 		// if bool is False - use grid from qchem
                 if(Becke==false) npts = m3Dgrid.get_mnpts();
-                cout <<"loaded npts\n";
-		cout << npts;
-		//cout << *npts;
+		
 		mmat_fock = new double[mnmo * mnmo];
                 loader.load_mat_fock (mmat_fock);
                 mmat_cgto = new double[npts * mnmo];
@@ -222,8 +214,6 @@ namespace libqqc {
                 loader.load_cube_coul (mcube_coul);
 
                 check_data_validity();
-		cout << "vault func worked";
-
             }; 
 #endif
 
@@ -306,8 +296,8 @@ namespace libqqc {
             /// @return pass the 3D grid as a reference
             ///
             Grid& get_m3Dgrid() {
-                if (!m3Dgrid.check_data_validity()) throw invalid_argument(
-                        "3D Grid data not valid.");
+               // if (!m3Dgrid.check_data_validity()) throw invalid_argument(
+               //         "3D Grid data not valid.");
 		return m3Dgrid; 
             };
 
@@ -317,8 +307,6 @@ namespace libqqc {
             /// @return pass the 3D coded becke grid as a reference
             ///
             Grid3D<vector<double>, size_t>& get_becke3Dgrid() {
-                //if (!becke3Dgrid.check_data_validity()) throw invalid_argument(
-                //        "3D Grid data not valid.");
                 return becke3Dgrid;
             };
 
